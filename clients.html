@@ -47,6 +47,15 @@
     @media (max-width: 900px) { .clients-grid { grid-template-columns: repeat(2, 1fr); } }
     @media (max-width: 768px) { nav { padding: 1.2rem 1.5rem; } .nav-links { display: none; } .page-wrap { padding: 7rem 1.5rem 4rem; } footer { padding: 1.5rem; flex-direction: column; gap: 0.5rem; text-align: center; } }
     @media (max-width: 480px) { .clients-grid { grid-template-columns: 1fr; } }
+
+    @keyframes fadeUp { from { opacity: 0; transform: translateY(24px); } to { opacity: 1; transform: translateY(0); } }
+    .cascade { opacity: 0; animation: fadeUp 0.7s ease forwards; }
+    .cascade-1 { animation-delay: 0.1s; }
+    .cascade-2 { animation-delay: 0.25s; }
+    .cascade-3 { animation-delay: 0.4s; }
+    .cascade-4 { animation-delay: 0.55s; }
+    .cascade-5 { animation-delay: 0.7s; }
+    .cascade-6 { animation-delay: 0.85s; }
   </style>
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><defs><linearGradient id='g' x1='0%25' y1='0%25' x2='100%25' y2='100%25'><stop offset='0%25' stop-color='%235de8ff'/><stop offset='100%25' stop-color='%23ff5c1a'/></linearGradient></defs><rect width='100' height='100' rx='18' fill='%23080a0f'/><text x='50' y='72' font-family='Georgia,serif' font-weight='700' font-size='44' fill='url(%23g)' text-anchor='middle'>NH</text></svg>">
 </head>
@@ -71,10 +80,10 @@
   </nav>
 
   <div class="page-wrap">
-    <p class="page-eyebrow">Who I've Worked With</p>
-    <h1 class="page-title">Clients</h1>
-    <p class="page-sub">Organizations and events I've had the privilege of producing for.</p>
-    <div class="clients-grid">
+    <p class="page-eyebrow cascade cascade-1">Who I've Worked With</p>
+    <h1 class="page-title cascade cascade-2">Clients</h1>
+    <p class="page-sub cascade cascade-3">Organizations and events I've had the privilege of producing for.</p>
+    <div class="clients-grid cascade cascade-4">
       <div class="client-card"><div class="client-logo-box"><img src="Risen Logo.webp" alt="Risen" /></div><div class="client-name">Risen</div></div>
       <div class="client-card"><div class="client-logo-box"><img src="Aegis Logo.png" alt="Aegis" /></div><div class="client-name">Aegis</div></div>
       <div class="client-card"><div class="client-logo-box"><img src="D1 Logo.png" alt="Division One" /></div><div class="client-name">Division One</div></div>
