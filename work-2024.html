@@ -120,8 +120,44 @@
   </div>
 
   <footer>
-    <span class="footer-logo">Icefireide</span>
-    <span class="footer-copy">© 2026 Nicholas Hall. All rights reserved.</span>
+    <div style="max-width:1200px; margin:0 auto; padding:2.5rem 4rem; width:100%;">
+      <div style="display:grid; grid-template-columns:1fr 1fr 1fr; gap:2rem; align-items:start; border-bottom:1px solid var(--border); padding-bottom:2rem; margin-bottom:1.5rem;">
+
+        <!-- Logo + status -->
+        <div style="display:flex; flex-direction:column; gap:1rem;">
+          <span class="footer-logo">Icefireide</span>
+          <div id="availability-badge" style="display:inline-flex; align-items:center; gap:0.5rem; padding:0.5rem 1rem; border-radius:2px; border:1px solid var(--border); background:var(--surface); width:fit-content;">
+            <span id="avail-dot" style="width:8px; height:8px; border-radius:50%; background:var(--muted); flex-shrink:0;"></span>
+            <span id="avail-text" style="font-family:'Barlow Condensed',sans-serif; font-size:0.75rem; letter-spacing:0.2em; text-transform:uppercase; color:var(--muted);">Checking status...</span>
+          </div>
+        </div>
+
+        <!-- Nav links -->
+        <div style="display:flex; flex-direction:column; gap:0.6rem;">
+          <p style="font-family:'Barlow Condensed',sans-serif; font-size:0.7rem; letter-spacing:0.25em; text-transform:uppercase; color:var(--muted); margin-bottom:0.4rem;">Pages</p>
+          <a href="index.html" style="font-family:'Barlow Condensed',sans-serif; font-size:0.85rem; letter-spacing:0.12em; text-transform:uppercase; color:var(--muted); text-decoration:none; transition:color 0.2s;" onmouseover="this.style.color='var(--ice)'" onmouseout="this.style.color='var(--muted)'">Home</a>
+          <a href="services.html" style="font-family:'Barlow Condensed',sans-serif; font-size:0.85rem; letter-spacing:0.12em; text-transform:uppercase; color:var(--muted); text-decoration:none; transition:color 0.2s;" onmouseover="this.style.color='var(--ice)'" onmouseout="this.style.color='var(--muted)'">Services</a>
+          <a href="clients.html" style="font-family:'Barlow Condensed',sans-serif; font-size:0.85rem; letter-spacing:0.12em; text-transform:uppercase; color:var(--muted); text-decoration:none; transition:color 0.2s;" onmouseover="this.style.color='var(--ice)'" onmouseout="this.style.color='var(--muted)'">Clients</a>
+          <a href="work.html" style="font-family:'Barlow Condensed',sans-serif; font-size:0.85rem; letter-spacing:0.12em; text-transform:uppercase; color:var(--muted); text-decoration:none; transition:color 0.2s;" onmouseover="this.style.color='var(--ice)'" onmouseout="this.style.color='var(--muted)'">Work</a>
+          <a href="contact.html" style="font-family:'Barlow Condensed',sans-serif; font-size:0.85rem; letter-spacing:0.12em; text-transform:uppercase; color:var(--muted); text-decoration:none; transition:color 0.2s;" onmouseover="this.style.color='var(--ice)'" onmouseout="this.style.color='var(--muted)'">Contact</a>
+        </div>
+
+        <!-- Twitter / X -->
+        <div style="display:flex; flex-direction:column; gap:0.6rem;">
+          <p style="font-family:'Barlow Condensed',sans-serif; font-size:0.7rem; letter-spacing:0.25em; text-transform:uppercase; color:var(--muted); margin-bottom:0.4rem;">Latest on X</p>
+          <a href="https://twitter.com/Icefireideprod" target="_blank" rel="noopener" style="display:inline-flex; align-items:center; gap:0.6rem; font-family:'Barlow Condensed',sans-serif; font-size:0.85rem; letter-spacing:0.12em; text-transform:uppercase; color:var(--ice); text-decoration:none; margin-bottom:0.5rem;">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+            @Icefireideprod
+          </a>
+          <a class="twitter-timeline" data-theme="dark" data-chrome="noheader nofooter noborders transparent" data-tweet-limit="2" data-dnt="true" href="https://twitter.com/Icefireideprod" style="color:var(--ice);">Tweets by Icefireideprod</a>
+        </div>
+
+      </div>
+      <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:0.5rem;">
+        <span style="font-size:0.78rem; color:var(--muted);">© 2026 Nicholas Hall. All rights reserved.</span>
+        <a href="https://twitter.com/Icefireideprod" target="_blank" rel="noopener" style="font-family:'Barlow Condensed',sans-serif; font-size:0.75rem; letter-spacing:0.15em; text-transform:uppercase; color:var(--muted); text-decoration:none;">@Icefireideprod</a>
+      </div>
+    </div>
   </footer>
 
   <script>
@@ -213,6 +249,33 @@
           menu.classList.contains('open') ? (dd.classList.remove('open'), menu.classList.remove('open')) : openMenu();
         });
         document.addEventListener('click', function() { dd.classList.remove('open'); menu.classList.remove('open'); });
+      });
+    })();
+  </script>
+
+  <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+  <script>
+    // Availability status from Google Sheets checkbox (A15 on totals tab)
+    (function() {
+      var CSV = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vR300p3G6_5hn7Ydez7mY6XVhfoWeLUBFpM0C9oJdd__WP8xhVVwZp4bxFZwvxJvODbJ3_o_p-I8EUe/pub?gid=0&single=true&output=csv';
+      fetch(CSV).then(function(r) { return r.text(); }).then(function(text) {
+        var rows = text.trim().split('\n');
+        // A15 = index 14 (0-based), column A = first value
+        if (rows.length >= 15) {
+          var val = rows[14].split(',')[0].trim().toUpperCase().replace(/"/g,'');
+          var available = val === 'TRUE';
+          var dot = document.getElementById('avail-dot');
+          var label = document.getElementById('avail-text');
+          if (dot && label) {
+            dot.style.background = available ? '#2ecc71' : '#e74c3c';
+            dot.style.boxShadow = available ? '0 0 8px #2ecc71' : '0 0 8px #e74c3c';
+            label.style.color = available ? '#2ecc71' : '#e74c3c';
+            label.textContent = available ? 'Available for Work' : 'Currently Unavailable';
+          }
+        }
+      }).catch(function() {
+        var label = document.getElementById('avail-text');
+        if (label) label.textContent = 'Get In Touch';
       });
     })();
   </script>
