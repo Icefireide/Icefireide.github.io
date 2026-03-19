@@ -5,11 +5,14 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Contact | Icefireide</title>
   <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow:ital,wght@0,300;0,400;0,600;1,300&family=Barlow+Condensed:wght@400;700&display=swap" rel="stylesheet"/>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><defs><linearGradient id='g' x1='0%25' y1='0%25' x2='100%25' y2='100%25'><stop offset='0%25' stop-color='%235de8ff'/><stop offset='100%25' stop-color='%23ff5c1a'/></linearGradient></defs><rect width='100' height='100' rx='18' fill='%23080a0f'/><text x='50' y='72' font-family='Georgia,serif' font-weight='700' font-size='44' fill='url(%23g)' text-anchor='middle'>NH</text></svg>">
   <style>
     :root { --bg: #080a0f; --bg2: #0d1018; --surface: #111520; --border: #1e2535; --ice: #5de8ff; --fire: #ff5c1a; --ice-dim: rgba(93,232,255,0.10); --text: #e8edf5; --muted: #6b7a96; --white: #ffffff; }
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     body { background: var(--bg); color: var(--text); font-family: 'Barlow', sans-serif; font-weight: 300; overflow-x: hidden; min-height: 100vh; display: flex; flex-direction: column; }
     body::before { content: ''; position: fixed; inset: 0; pointer-events: none; z-index: 1000; opacity: 0.35; background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E"); }
+
+    /* NAV */
     nav { position: fixed; top: 0; left: 0; right: 0; z-index: 100; display: flex; align-items: center; justify-content: space-between; padding: 1.4rem 4rem; background: rgba(8,10,15,0.97); backdrop-filter: blur(4px); border-bottom: 1px solid var(--border); }
     .nav-logo { font-family: 'Bebas Neue', sans-serif; font-size: 1.6rem; letter-spacing: 0.12em; background: linear-gradient(90deg, var(--ice), var(--fire)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; text-decoration: none; }
     .nav-links { display: flex; gap: 2.5rem; list-style: none; align-items: center; }
@@ -17,19 +20,22 @@
     .nav-links a:hover, .nav-links a.active { color: var(--ice); }
     .nav-dropdown { position: relative; }
     .nav-dropdown-toggle { font-family: 'Barlow Condensed', sans-serif; font-size: 0.85rem; letter-spacing: 0.18em; text-transform: uppercase; color: var(--muted); background: none; border: none; cursor: pointer; display: flex; align-items: center; gap: 0.35rem; padding: 0; transition: color 0.2s; }
-    .nav-dropdown:hover .nav-dropdown-toggle { color: var(--ice); }
     .nav-dropdown-toggle svg { transition: transform 0.2s; }
-    .nav-dropdown:hover .nav-dropdown-toggle svg { transform: rotate(180deg); }
+    .nav-dropdown.open .nav-dropdown-toggle { color: var(--ice); }
+    .nav-dropdown.open .nav-dropdown-toggle svg { transform: rotate(180deg); }
     .nav-dropdown-menu { position: absolute; top: calc(100% + 0.25rem); left: 50%; transform: translateX(-50%); background: #0f1420; border: 1px solid var(--border); border-radius: 2px; min-width: 160px; opacity: 0; pointer-events: none; transition: opacity 0.15s; overflow: hidden; padding-top: 0.5rem; }
     .nav-dropdown-menu.open { opacity: 1; pointer-events: all; }
-    .nav-dropdown.open .nav-dropdown-toggle svg { transform: rotate(180deg); }
     .nav-dropdown-menu a { display: block; padding: 0.7rem 1.2rem; font-family: 'Barlow Condensed', sans-serif; font-size: 0.82rem; letter-spacing: 0.15em; text-transform: uppercase; color: var(--muted); text-decoration: none; transition: background 0.15s, color 0.15s; border-bottom: 1px solid var(--border); }
     .nav-dropdown-menu a:last-child { border-bottom: none; }
     .nav-dropdown-menu a:hover { background: var(--surface); color: var(--ice); }
+
+    /* PAGE */
     .page-wrap { max-width: 800px; margin: 0 auto; padding: 9rem 4rem 6rem; flex: 1; display: flex; flex-direction: column; justify-content: center; }
     .page-eyebrow { font-family: 'Barlow Condensed', sans-serif; font-size: 0.75rem; letter-spacing: 0.35em; text-transform: uppercase; color: var(--ice); margin-bottom: 0.6rem; }
     .page-title { font-family: 'Bebas Neue', sans-serif; font-size: clamp(3rem, 7vw, 6rem); letter-spacing: 0.06em; color: var(--white); line-height: 0.9; margin-bottom: 1.5rem; }
     .page-sub { color: var(--muted); font-size: 0.95rem; line-height: 1.8; margin-bottom: 3rem; }
+
+    /* CONTACT LINKS */
     .contact-links { display: flex; flex-direction: column; gap: 1rem; }
     .contact-link { display: flex; align-items: center; gap: 1.2rem; padding: 1.5rem 2rem; background: var(--surface); border: 1px solid var(--border); text-decoration: none; color: var(--text); transition: all 0.2s; border-radius: 2px; position: relative; overflow: hidden; }
     .contact-link::before { content: ''; position: absolute; top: 0; left: 0; width: 3px; height: 0; background: linear-gradient(to bottom, var(--ice), var(--fire)); transition: height 0.3s; }
@@ -41,21 +47,22 @@
     .contact-link-info { display: flex; flex-direction: column; gap: 0.2rem; }
     .contact-link-type { font-family: 'Barlow Condensed', sans-serif; font-size: 0.7rem; letter-spacing: 0.25em; text-transform: uppercase; color: var(--muted); }
     .contact-link-value { font-family: 'Barlow Condensed', sans-serif; font-size: 1rem; letter-spacing: 0.1em; color: var(--white); }
-    footer { padding: 2rem 4rem; display: flex; justify-content: space-between; align-items: center; max-width: 1200px; margin: 0 auto; border-top: 1px solid var(--border); width: 100%; }
-    .footer-logo { font-family: 'Bebas Neue', sans-serif; font-size: 1.2rem; letter-spacing: 0.1em; background: linear-gradient(90deg, var(--ice), var(--fire)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
-    .footer-copy { font-size: 0.78rem; color: var(--muted); }
-    @media (max-width: 768px) { nav { padding: 1.2rem 1.5rem; } .nav-links { display: none; } .page-wrap { padding: 7rem 1.5rem 4rem; } footer { padding: 1.5rem; flex-direction: column; gap: 0.5rem; text-align: center; } }
 
+    /* CASCADE */
     @keyframes fadeUp { from { opacity: 0; transform: translateY(24px); } to { opacity: 1; transform: translateY(0); } }
     .cascade { opacity: 0; animation: fadeUp 0.7s ease forwards; }
     .cascade-1 { animation-delay: 0.1s; }
     .cascade-2 { animation-delay: 0.25s; }
     .cascade-3 { animation-delay: 0.4s; }
     .cascade-4 { animation-delay: 0.55s; }
-    .cascade-5 { animation-delay: 0.7s; }
-    .cascade-6 { animation-delay: 0.85s; }
+
+    /* FOOTER */
+    footer { padding: 2rem 4rem; display: flex; justify-content: space-between; align-items: center; max-width: 1200px; margin: 0 auto; border-top: 1px solid var(--border); width: 100%; }
+    .footer-logo { font-family: 'Bebas Neue', sans-serif; font-size: 1.2rem; letter-spacing: 0.1em; background: linear-gradient(90deg, var(--ice), var(--fire)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+    .footer-copy { font-size: 0.78rem; color: var(--muted); }
+
+    @media (max-width: 768px) { nav { padding: 1.2rem 1.5rem; } .nav-links { display: none; } .page-wrap { padding: 7rem 1.5rem 4rem; } footer { padding: 1.5rem; flex-direction: column; gap: 0.5rem; text-align: center; } }
   </style>
-  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><defs><linearGradient id='g' x1='0%25' y1='0%25' x2='100%25' y2='100%25'><stop offset='0%25' stop-color='%235de8ff'/><stop offset='100%25' stop-color='%23ff5c1a'/></linearGradient></defs><rect width='100' height='100' rx='18' fill='%23080a0f'/><text x='50' y='72' font-family='Georgia,serif' font-weight='700' font-size='44' fill='url(%23g)' text-anchor='middle'>NH</text></svg>">
 </head>
 <body>
   <nav>
@@ -104,3 +111,42 @@
   </div>
 
   <footer>
+    <span class="footer-logo">Icefireide</span>
+    <span class="footer-copy">© 2026 Nicholas Hall. All rights reserved.</span>
+  </footer>
+
+  <script>
+    // Email - built at runtime to avoid scraping
+    (function() {
+      var u = 'icefireideproduction';
+      var d = 'gmail.com';
+      var email = u + '@' + d;
+      var link = document.getElementById('email-link');
+      var display = document.getElementById('email-display');
+      if (link) link.href = 'mailto:' + email;
+      if (display) display.textContent = email;
+    })();
+
+    // Dropdown with delay
+    (function() {
+      var dropdowns = document.querySelectorAll('.nav-dropdown');
+      dropdowns.forEach(function(dd) {
+        var toggle = dd.querySelector('.nav-dropdown-toggle');
+        var menu = dd.querySelector('.nav-dropdown-menu');
+        var closeTimer;
+        function openMenu() { clearTimeout(closeTimer); dd.classList.add('open'); menu.classList.add('open'); }
+        function scheduleClose() { closeTimer = setTimeout(function() { dd.classList.remove('open'); menu.classList.remove('open'); }, 350); }
+        dd.addEventListener('mouseenter', openMenu);
+        dd.addEventListener('mouseleave', scheduleClose);
+        menu.addEventListener('mouseenter', openMenu);
+        menu.addEventListener('mouseleave', scheduleClose);
+        if (toggle) toggle.addEventListener('click', function(e) {
+          e.stopPropagation();
+          menu.classList.contains('open') ? (dd.classList.remove('open'), menu.classList.remove('open')) : openMenu();
+        });
+        document.addEventListener('click', function() { dd.classList.remove('open'); menu.classList.remove('open'); });
+      });
+    })();
+  </script>
+</body>
+</html>
