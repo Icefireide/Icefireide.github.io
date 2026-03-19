@@ -113,6 +113,20 @@
     <div class="scroll-hint"><span>Scroll</span><div class="scroll-line"></div></div>
   </div>
 
+  <!-- LATEST VOD -->
+  <section id="latest-vod" style="max-width:1200px; margin:0 auto; padding:5rem 4rem 0;">
+    <div id="vod-container" style="display:none;">
+      <p class="section-label cascade cascade-1">Latest Production</p>
+      <h2 class="section-title cascade cascade-2" id="vod-title" style="margin-bottom:1.5rem;"></h2>
+      <div class="cascade cascade-3" style="position:relative; width:100%; aspect-ratio:16/9; border:1px solid var(--border); border-radius:2px; overflow:hidden; background:var(--surface);">
+        <iframe id="vod-iframe" src="" title="Latest VOD" allowfullscreen style="position:absolute;inset:0;width:100%;height:100%;border:none;"></iframe>
+      </div>
+      <p class="cascade cascade-4" style="margin-top:1rem; font-size:0.8rem; color:var(--muted); font-family:'Barlow Condensed',sans-serif; letter-spacing:0.1em;">
+        Most recent show from my <a href="work.html" style="color:var(--ice); text-decoration:none;">production log</a>
+      </p>
+    </div>
+  </section>
+
   <section id="about">
     <div class="about-grid">
       <div class="about-visual">
@@ -133,6 +147,62 @@
     <span class="footer-logo">Icefireide</span>
     <span class="footer-copy">© 2026 Nicholas Hall. All rights reserved.</span>
   </footer>
+  <script>
+    // ── Latest VOD from 2026 sheet (falls back to 2025, then 2024) ──
+    const VOD_SHEETS = [
+      { url: 'https://docs.google.com/spreadsheets/d/e/2PACX-1vR300p3G6_5hn7Ydez7mY6XVhfoWeLUBFpM0C9oJdd__WP8xhVVwZp4bxFZwvxJvODbJ3_o_p-I8EUe/pub?gid=584832786&single=true&output=csv' },
+      { url: 'https://docs.google.com/spreadsheets/d/e/2PACX-1vR300p3G6_5hn7Ydez7mY6XVhfoWeLUBFpM0C9oJdd__WP8xhVVwZp4bxFZwvxJvODbJ3_o_p-I8EUe/pub?gid=1262254364&single=true&output=csv' },
+      { url: 'https://docs.google.com/spreadsheets/d/e/2PACX-1vR300p3G6_5hn7Ydez7mY6XVhfoWeLUBFpM0C9oJdd__WP8xhVVwZp4bxFZwvxJvODbJ3_o_p-I8EUe/pub?gid=106338310&single=true&output=csv' }
+    ];
+
+    function parseCSV(text) {
+      return text.trim().split('\n').slice(1).map(line => {
+        const cols = []; let cur = '', inQ = false;
+        for (const c of line) { if (c === '"') inQ = !inQ; else if (c === ',' && !inQ) { cols.push(cur.trim()); cur = ''; } else cur += c; }
+        cols.push(cur.trim()); return cols;
+      }).filter(r => r.some(c => c));
+    }
+
+    function cleanURL(s) {
+      if (!s) return '';
+      const cleaned = s.replace(/[_*`\s]/g, '');
+      return (cleaned.includes('http://') || cleaned.includes('https://')) ? cleaned : '';
+    }
+
+    function toEmbedURL(url) {
+      // Convert YouTube watch/live URLs to embed format
+      const ytMatch = url.match(/(?:youtube\.com\/(?:watch\?v=|live\/)|youtu\.be\/)([a-zA-Z0-9_-]{11})/);
+      if (ytMatch) return 'https://www.youtube.com/embed/' + ytMatch[1];
+      return url;
+    }
+
+    async function loadLatestVOD() {
+      for (const sheet of VOD_SHEETS) {
+        try {
+          const res = await fetch(sheet.url);
+          if (!res.ok) continue;
+          const rows = parseCSV(await res.text());
+          // Filter rows that have a valid link (col G, index 6)
+          const withLinks = rows.filter(r => cleanURL(r[6] || ''));
+          if (!withLinks.length) continue;
+          // Sort by date (col A, index 0) newest first
+          withLinks.sort((a, b) => {
+            const da = new Date(a[0]), db = new Date(b[0]);
+            return (isNaN(da) || isNaN(db)) ? 0 : db - da;
+          });
+          const latest = withLinks[0];
+          const embedURL = toEmbedURL(cleanURL(latest[6]));
+          const title = latest[1] || 'Latest Production';
+          document.getElementById('vod-title').textContent = title;
+          document.getElementById('vod-iframe').src = embedURL;
+          document.getElementById('vod-container').style.display = 'block';
+          return; // stop once we find one
+        } catch(e) { continue; }
+      }
+    }
+
+    loadLatestVOD();
+  </script>
   <script>
     (function() {
       var dropdowns = document.querySelectorAll('.nav-dropdown');
