@@ -44,6 +44,7 @@
     .td-event { font-weight: 600; color: var(--white); }
     .td-date { color: var(--muted); white-space: nowrap; }
     .td-game { font-family: 'Barlow Condensed', sans-serif; letter-spacing: 0.05em; color: var(--ice); }
+    .td-org { font-family: 'Barlow Condensed', sans-serif; letter-spacing: 0.05em; color: var(--text); }
     .td-role { font-family: 'Barlow Condensed', sans-serif; letter-spacing: 0.08em; color: var(--fire); text-transform: uppercase; font-size: 0.8rem; }
     .td-vod a { display: inline-flex; align-items: center; gap: 0.4rem; color: var(--ice); text-decoration: none; font-family: 'Barlow Condensed', sans-serif; font-size: 0.82rem; letter-spacing: 0.1em; text-transform: uppercase; opacity: 0.8; transition: opacity 0.2s; }
     .td-vod a:hover { opacity: 1; }
@@ -93,7 +94,7 @@
     <div class="table-wrap">
       <div class="table-state" id="loading"><div class="spinner"></div>Loading 2025 shows...</div>
       <table id="shows-table" style="display:none;">
-        <thead><tr><th>Event / Show</th><th>Date</th><th>Game</th><th>Role</th><th>VOD</th></tr></thead>
+        <thead><tr><th>Date</th><th>Event / Show</th><th>Game</th><th>Organization</th><th>Role</th><th>VOD</th></tr></thead>
         <tbody id="shows-tbody"></tbody>
       </table>
       <div class="table-state" id="error" style="display:none;">⚠️ Couldn't load 2025 shows right now.</div>
@@ -113,6 +114,7 @@
   </footer>
 
   <script>
+    // Column order: A=Date, B=Event Name, C=Game, D=Organization, E=Role, F=Hours, G=Link
     const CSV = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vR300p3G6_5hn7Ydez7mY6XVhfoWeLUBFpM0C9oJdd__WP8xhVVwZp4bxFZwvxJvODbJ3_o_p-I8EUe/pub?gid=1262254364&single=true&output=csv';
     function parseCSV(text) {
       return text.trim().split('\n').slice(1).map(line => {
@@ -127,16 +129,39 @@
         const res = await fetch(CSV);
         if (!res.ok) throw new Error();
         const rows = parseCSV(await res.text());
-        if (!rows.length) { document.getElementById('loading').style.display='none'; document.getElementById('error').style.display='block'; document.getElementById('error').textContent='No shows logged for 2025 yet.'; return; }
-        rows.sort((a,b) => { const da=new Date(a[1]),db=new Date(b[1]); return (isNaN(da)||isNaN(db))?0:db-da; });
+        if (!rows.length) {
+          document.getElementById('loading').style.display='none';
+          document.getElementById('error').style.display='block';
+          document.getElementById('error').textContent='No shows logged for 2025 yet.';
+          return;
+        }
+        // Sort newest first by date (col A, index 0)
+        rows.sort((a,b) => { const da=new Date(a[0]),db=new Date(b[0]); return (isNaN(da)||isNaN(db))?0:db-da; });
         const tbody = document.getElementById('shows-tbody');
         rows.forEach(r => {
-          const [ev='',dt='',gm='',rl='',vd=''] = r;
-          tbody.innerHTML += '<tr><td class="td-event">'+(ev||'—')+'</td><td class="td-date">'+(dt||'—')+'</td><td class="td-game">'+(gm||'—')+'</td><td class="td-role">'+(rl||'—')+'</td><td class="td-vod">'+(isURL(vd)?'<a href="'+vd+'" target="_blank" rel="noopener"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>Watch</a>':'<span style="color:var(--muted)">—</span>')+'</td></tr>';
+          const dt = r[0]||'—';   // A: Date
+          const ev = r[1]||'—';   // B: Event Name
+          const gm = r[2]||'—';   // C: Game
+          const org = r[3]||'—';  // D: Organization
+          const rl = r[4]||'—';   // E: Role
+          const vd = r[6]||'';    // G: Link (skip F=Hours)
+          tbody.innerHTML += '<tr>' +
+            '<td class="td-date">'+dt+'</td>' +
+            '<td class="td-event">'+ev+'</td>' +
+            '<td class="td-game">'+gm+'</td>' +
+            '<td class="td-org">'+org+'</td>' +
+            '<td class="td-role">'+rl+'</td>' +
+            '<td class="td-vod">'+(isURL(vd)
+              ? '<a href="'+vd+'" target="_blank" rel="noopener"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>Watch</a>'
+              : '<span style="color:var(--muted)">—</span>') +
+            '</td></tr>';
         });
         document.getElementById('loading').style.display='none';
         document.getElementById('shows-table').style.display='table';
-      } catch { document.getElementById('loading').style.display='none'; document.getElementById('error').style.display='block'; }
+      } catch {
+        document.getElementById('loading').style.display='none';
+        document.getElementById('error').style.display='block';
+      }
     }
     load();
   </script>
