@@ -29,8 +29,9 @@
     .nav-dropdown:hover .nav-dropdown-toggle { color: var(--ice); }
     .nav-dropdown-toggle svg { transition: transform 0.2s; }
     .nav-dropdown:hover .nav-dropdown-toggle svg { transform: rotate(180deg); }
-    .nav-dropdown-menu { position: absolute; top: calc(100% + 0.75rem); left: 50%; transform: translateX(-50%) translateY(-6px); background: #0f1420; border: 1px solid var(--border); border-radius: 2px; min-width: 140px; opacity: 0; pointer-events: none; transition: opacity 0.2s, transform 0.2s; overflow: hidden; }
-    .nav-dropdown:hover .nav-dropdown-menu { opacity: 1; pointer-events: all; transform: translateX(-50%) translateY(0); }
+    .nav-dropdown-menu { position: absolute; top: calc(100% + 0.25rem); left: 50%; transform: translateX(-50%); background: #0f1420; border: 1px solid var(--border); border-radius: 2px; min-width: 160px; opacity: 0; pointer-events: none; transition: opacity 0.15s; overflow: hidden; padding-top: 0.5rem; }
+    .nav-dropdown-menu.open { opacity: 1; pointer-events: all; }
+    .nav-dropdown.open .nav-dropdown-toggle svg { transform: rotate(180deg); }
     .nav-dropdown-menu a { display: block; padding: 0.7rem 1.2rem; font-family: 'Barlow Condensed', sans-serif; font-size: 0.82rem; letter-spacing: 0.15em; text-transform: uppercase; color: var(--muted); text-decoration: none; transition: background 0.15s, color 0.15s; border-bottom: 1px solid var(--border); }
     .nav-dropdown-menu a:last-child { border-bottom: none; }
     .nav-dropdown-menu a:hover { background: var(--surface); color: var(--ice); }
@@ -131,5 +132,26 @@
     <span class="footer-logo">Icefireide</span>
     <span class="footer-copy">© 2026 Nicholas Hall. All rights reserved.</span>
   </footer>
+  <script>
+    (function() {
+      var dropdowns = document.querySelectorAll('.nav-dropdown');
+      dropdowns.forEach(function(dd) {
+        var toggle = dd.querySelector('.nav-dropdown-toggle');
+        var menu = dd.querySelector('.nav-dropdown-menu');
+        var closeTimer;
+        function openMenu() { clearTimeout(closeTimer); dd.classList.add('open'); menu.classList.add('open'); }
+        function scheduleClose() { closeTimer = setTimeout(function() { dd.classList.remove('open'); menu.classList.remove('open'); }, 350); }
+        dd.addEventListener('mouseenter', openMenu);
+        dd.addEventListener('mouseleave', scheduleClose);
+        menu.addEventListener('mouseenter', openMenu);
+        menu.addEventListener('mouseleave', scheduleClose);
+        if (toggle) toggle.addEventListener('click', function(e) {
+          e.stopPropagation();
+          menu.classList.contains('open') ? (dd.classList.remove('open'), menu.classList.remove('open')) : openMenu();
+        });
+        document.addEventListener('click', function() { dd.classList.remove('open'); menu.classList.remove('open'); });
+      });
+    })();
+  </script>
 </body>
 </html>

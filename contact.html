@@ -20,8 +20,9 @@
     .nav-dropdown:hover .nav-dropdown-toggle { color: var(--ice); }
     .nav-dropdown-toggle svg { transition: transform 0.2s; }
     .nav-dropdown:hover .nav-dropdown-toggle svg { transform: rotate(180deg); }
-    .nav-dropdown-menu { position: absolute; top: calc(100% + 0.75rem); left: 50%; transform: translateX(-50%) translateY(-6px); background: #0f1420; border: 1px solid var(--border); border-radius: 2px; min-width: 140px; opacity: 0; pointer-events: none; transition: opacity 0.2s, transform 0.2s; overflow: hidden; }
-    .nav-dropdown:hover .nav-dropdown-menu { opacity: 1; pointer-events: all; transform: translateX(-50%) translateY(0); }
+    .nav-dropdown-menu { position: absolute; top: calc(100% + 0.25rem); left: 50%; transform: translateX(-50%); background: #0f1420; border: 1px solid var(--border); border-radius: 2px; min-width: 160px; opacity: 0; pointer-events: none; transition: opacity 0.15s; overflow: hidden; padding-top: 0.5rem; }
+    .nav-dropdown-menu.open { opacity: 1; pointer-events: all; }
+    .nav-dropdown.open .nav-dropdown-toggle svg { transform: rotate(180deg); }
     .nav-dropdown-menu a { display: block; padding: 0.7rem 1.2rem; font-family: 'Barlow Condensed', sans-serif; font-size: 0.82rem; letter-spacing: 0.15em; text-transform: uppercase; color: var(--muted); text-decoration: none; transition: background 0.15s, color 0.15s; border-bottom: 1px solid var(--border); }
     .nav-dropdown-menu a:last-child { border-bottom: none; }
     .nav-dropdown-menu a:hover { background: var(--surface); color: var(--ice); }
@@ -71,13 +72,13 @@
     <h1 class="page-title">Contact Me</h1>
     <p class="page-sub">Have a tournament, league, or broadcast project? Reach out — I'd love to be part of it.</p>
     <div class="contact-links">
-      <a href="mailto:icefireideproduction@gmail.com" class="contact-link">
+      <a href="/cdn-cgi/l/email-protection#b2dbd1d7d4dbc0d7dbd6d7c2c0ddd6c7d1c6dbdddcf2d5dfd3dbde9cd1dddf" class="contact-link">
         <div class="contact-link-icon">
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="M2 7l10 7 10-7"/></svg>
         </div>
         <div class="contact-link-info">
           <span class="contact-link-type">Email</span>
-          <span class="contact-link-value">icefireideproduction@gmail.com</span>
+          <span class="contact-link-value"><span class="__cf_email__" data-cfemail="9bf2f8fefdf2e9fef2fffeebe9f4ffeef8eff2f4f5dbfcf6faf2f7b5f8f4f6">[email&#160;protected]</span></span>
         </div>
       </a>
       <a href="https://discordapp.com/users/Icefireide" target="_blank" rel="noopener" class="contact-link">
@@ -93,8 +94,3 @@
   </div>
 
   <footer>
-    <span class="footer-logo">Icefireide</span>
-    <span class="footer-copy">© 2026 Nicholas Hall. All rights reserved.</span>
-  </footer>
-</body>
-</html>
