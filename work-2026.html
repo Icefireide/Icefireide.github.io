@@ -116,51 +116,70 @@
   <script>
     // Column order: A=Date, B=Event Name, C=Game, D=Organization, E=Role, F=Hours, G=Link
     const CSV = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vR300p3G6_5hn7Ydez7mY6XVhfoWeLUBFpM0C9oJdd__WP8xhVVwZp4bxFZwvxJvODbJ3_o_p-I8EUe/pub?gid=584832786&single=true&output=csv';
+
     function parseCSV(text) {
       return text.trim().split('\n').slice(1).map(line => {
         const cols = []; let cur = '', inQ = false;
-        for (const c of line) { if (c === '"') inQ = !inQ; else if (c === ',' && !inQ) { cols.push(cur.trim()); cur = ''; } else cur += c; }
-        cols.push(cur.trim()); return cols;
+        for (const c of line) {
+          if (c === '"') inQ = !inQ;
+          else if (c === ',' && !inQ) { cols.push(cur.trim()); cur = ''; }
+          else cur += c;
+        }
+        cols.push(cur.trim());
+        return cols;
       }).filter(r => r.some(c => c));
     }
-    function isURL(s) { return s && (s.startsWith('http://') || s.startsWith('https://')); }
+
+    // Strip any stray formatting characters and extract a clean URL
+    function cleanURL(s) {
+      if (!s) return '';
+      // Remove markdown bold/italic underscores, asterisks, backticks, whitespace
+      const cleaned = s.replace(/[_*`\s]/g, '');
+      // Return if it looks like a URL
+      return (cleaned.includes('http://') || cleaned.includes('https://')) ? cleaned : '';
+    }
+
     async function load() {
       try {
         const res = await fetch(CSV);
         if (!res.ok) throw new Error();
         const rows = parseCSV(await res.text());
         if (!rows.length) {
-          document.getElementById('loading').style.display='none';
-          document.getElementById('error').style.display='block';
-          document.getElementById('error').textContent='No shows logged for 2026 yet.';
+          document.getElementById('loading').style.display = 'none';
+          document.getElementById('error').style.display = 'block';
+          document.getElementById('error').textContent = 'No shows logged for 2026 yet.';
           return;
         }
         // Sort newest first by date (col A, index 0)
-        rows.sort((a,b) => { const da=new Date(a[0]),db=new Date(b[0]); return (isNaN(da)||isNaN(db))?0:db-da; });
+        rows.sort((a, b) => {
+          const da = new Date(a[0]), db = new Date(b[0]);
+          return (isNaN(da) || isNaN(db)) ? 0 : db - da;
+        });
         const tbody = document.getElementById('shows-tbody');
         rows.forEach(r => {
-          const dt = r[0]||'—';   // A: Date
-          const ev = r[1]||'—';   // B: Event Name
-          const gm = r[2]||'—';   // C: Game
-          const org = r[3]||'—';  // D: Organization
-          const rl = r[4]||'—';   // E: Role
-          const vd = r[6]||'';    // G: Link (skip F=Hours)
-          tbody.innerHTML += '<tr>' +
-            '<td class="td-date">'+dt+'</td>' +
-            '<td class="td-event">'+ev+'</td>' +
-            '<td class="td-game">'+gm+'</td>' +
-            '<td class="td-org">'+org+'</td>' +
-            '<td class="td-role">'+rl+'</td>' +
-            '<td class="td-vod">'+(isURL(vd)
-              ? '<a href="'+vd+'" target="_blank" rel="noopener"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>Watch</a>'
+          const dt  = r[0] || '—';  // A: Date
+          const ev  = r[1] || '—';  // B: Event Name
+          const gm  = r[2] || '—';  // C: Game
+          const org = r[3] || '—';  // D: Organization
+          const rl  = r[4] || '—';  // E: Role
+          const vd  = cleanURL(r[6] || ''); // G: Link (cleaned)
+          tbody.innerHTML +=
+            '<tr>' +
+            '<td class="td-date">' + dt + '</td>' +
+            '<td class="td-event">' + ev + '</td>' +
+            '<td class="td-game">' + gm + '</td>' +
+            '<td class="td-org">' + org + '</td>' +
+            '<td class="td-role">' + rl + '</td>' +
+            '<td class="td-vod">' + (vd
+              ? '<a href="' + vd + '" target="_blank" rel="noopener"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>Watch</a>'
               : '<span style="color:var(--muted)">—</span>') +
             '</td></tr>';
         });
-        document.getElementById('loading').style.display='none';
-        document.getElementById('shows-table').style.display='table';
+        document.getElementById('loading').style.display = 'none';
+        document.getElementById('shows-table').style.display = 'table';
       } catch {
-        document.getElementById('loading').style.display='none';
-        document.getElementById('error').style.display='block';
+        document.getElementById('loading').style.display = 'none';
+        document.getElementById('error').style.display = 'block';
       }
     }
     load();
