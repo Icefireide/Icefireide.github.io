@@ -45,6 +45,15 @@
     .footer-logo { font-family: 'Bebas Neue', sans-serif; font-size: 1.2rem; letter-spacing: 0.1em; background: linear-gradient(90deg, var(--ice), var(--fire)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
     .footer-copy { font-size: 0.78rem; color: var(--muted); }
     @media (max-width: 768px) { nav { padding: 1.2rem 1.5rem; } .nav-links { display: none; } .page-wrap { padding: 7rem 1.5rem 4rem; } footer { padding: 1.5rem; flex-direction: column; gap: 0.5rem; text-align: center; } }
+
+    @keyframes fadeUp { from { opacity: 0; transform: translateY(24px); } to { opacity: 1; transform: translateY(0); } }
+    .cascade { opacity: 0; animation: fadeUp 0.7s ease forwards; }
+    .cascade-1 { animation-delay: 0.1s; }
+    .cascade-2 { animation-delay: 0.25s; }
+    .cascade-3 { animation-delay: 0.4s; }
+    .cascade-4 { animation-delay: 0.55s; }
+    .cascade-5 { animation-delay: 0.7s; }
+    .cascade-6 { animation-delay: 0.85s; }
   </style>
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><defs><linearGradient id='g' x1='0%25' y1='0%25' x2='100%25' y2='100%25'><stop offset='0%25' stop-color='%235de8ff'/><stop offset='100%25' stop-color='%23ff5c1a'/></linearGradient></defs><rect width='100' height='100' rx='18' fill='%23080a0f'/><text x='50' y='72' font-family='Georgia,serif' font-weight='700' font-size='44' fill='url(%23g)' text-anchor='middle'>NH</text></svg>">
 </head>
@@ -69,10 +78,10 @@
   </nav>
 
   <div class="page-wrap">
-    <p class="page-eyebrow">Let's Work Together</p>
-    <h1 class="page-title">Contact Me</h1>
-    <p class="page-sub">Have a tournament, league, or broadcast project? Reach out — I'd love to be part of it.</p>
-    <div class="contact-links">
+    <p class="page-eyebrow cascade cascade-1">Let's Work Together</p>
+    <h1 class="page-title cascade cascade-2">Contact Me</h1>
+    <p class="page-sub cascade cascade-3">Have a tournament, league, or broadcast project? Reach out — I'd love to be part of it.</p>
+    <div class="contact-links cascade cascade-4">
       <a href="/cdn-cgi/l/email-protection#b2dbd1d7d4dbc0d7dbd6d7c2c0ddd6c7d1c6dbdddcf2d5dfd3dbde9cd1dddf" class="contact-link">
         <div class="contact-link-icon">
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="M2 7l10 7 10-7"/></svg>

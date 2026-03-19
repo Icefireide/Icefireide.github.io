@@ -54,6 +54,15 @@
     .footer-copy { font-size: 0.78rem; color: var(--muted); }
     @keyframes spin { to { transform: rotate(360deg); } }
     @media (max-width: 768px) { nav { padding: 1.2rem 1.5rem; } .nav-links { display: none; } .page-wrap { padding: 7rem 1.5rem 4rem; } footer { padding: 1.5rem; flex-direction: column; gap: 0.5rem; text-align: center; } }
+
+    @keyframes fadeUp { from { opacity: 0; transform: translateY(24px); } to { opacity: 1; transform: translateY(0); } }
+    .cascade { opacity: 0; animation: fadeUp 0.7s ease forwards; }
+    .cascade-1 { animation-delay: 0.1s; }
+    .cascade-2 { animation-delay: 0.25s; }
+    .cascade-3 { animation-delay: 0.4s; }
+    .cascade-4 { animation-delay: 0.55s; }
+    .cascade-5 { animation-delay: 0.7s; }
+    .cascade-6 { animation-delay: 0.85s; }
   </style>
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><defs><linearGradient id='g' x1='0%25' y1='0%25' x2='100%25' y2='100%25'><stop offset='0%25' stop-color='%235de8ff'/><stop offset='100%25' stop-color='%23ff5c1a'/></linearGradient></defs><rect width='100' height='100' rx='18' fill='%23080a0f'/><text x='50' y='72' font-family='Georgia,serif' font-weight='700' font-size='44' fill='url(%23g)' text-anchor='middle'>NH</text></svg>">
 </head>
@@ -78,20 +87,20 @@
   </nav>
 
   <div class="page-wrap">
-    <p class="page-eyebrow">Production Log</p>
-    <h1 class="page-title">Work Overview</h1>
-    <p class="page-sub">A live summary of every show I've produced. Totals pulled directly from my production log — select a year below to browse individual events.</p>
-    <p style="font-family:'Barlow Condensed',sans-serif; font-size:0.8rem; letter-spacing:0.2em; text-transform:uppercase; color:var(--fire); margin-bottom:2rem; margin-top:-1.5rem;">Numbers below reflect total broadcast hours per game</p>
+    <p class="page-eyebrow cascade cascade-1">Production Log</p>
+    <h1 class="page-title cascade cascade-2">Work Overview</h1>
+    <p class="page-sub cascade cascade-3">A live summary of every show I've produced. Totals pulled directly from my production log — select a year below to browse individual events.</p>
+    <p style="font-family:'Barlow Condensed',sans-serif; font-size:0.8rem; letter-spacing:0.2em; text-transform:uppercase; color:var(--fire); margin-bottom:2rem; margin-top:-1.5rem;" class="cascade cascade-3">Numbers below reflect total broadcast hours per game</p>
 
-    <div id="stats-loading" class="loading-state"><div class="spinner"></div>Loading totals...</div>
+    <div id="stats-loading" class="loading-state cascade cascade-4"><div class="spinner"></div>Loading totals...</div>
     <div id="stats-grid" class="stats-grid" style="display:none;"></div>
 
     <div style="margin-top:1.5rem; margin-bottom:4rem;">
       <p style="font-size:0.78rem; color:var(--muted); font-family:'Barlow Condensed',sans-serif; letter-spacing:0.1em;">Totals update automatically when the production log is updated.</p>
     </div>
 
-    <h2 class="year-links-title">Browse by Year</h2>
-    <div class="year-links">
+    <h2 class="year-links-title cascade cascade-5">Browse by Year</h2>
+    <div class="year-links cascade cascade-6">
       <a href="work-2026.html" class="year-link">
         <span class="year-link-year">2026</span>
         <span class="year-link-label">Current Season</span>
