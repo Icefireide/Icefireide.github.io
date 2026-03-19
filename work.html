@@ -68,7 +68,13 @@
 </head>
 <body>
   <nav>
-    <a href="index.html" class="nav-logo">Icefireide</a>
+    <div style="display:flex; align-items:center; gap:1rem;">
+      <a href="index.html" class="nav-logo">Icefireide</a>
+      <div id="avail-badge-nav" style="display:inline-flex; align-items:center; gap:0.4rem; padding:0.3rem 0.75rem; border-radius:2px; border:1px solid var(--border); background:var(--surface);">
+        <span id="avail-dot-nav" style="width:7px; height:7px; border-radius:50%; background:var(--muted); flex-shrink:0;"></span>
+        <span id="avail-text-nav" style="font-family:'Barlow Condensed',sans-serif; font-size:0.65rem; letter-spacing:0.2em; text-transform:uppercase; color:var(--muted);">...</span>
+      </div>
+    </div>
     <ul class="nav-links">
       <li><a href="index.html">Home</a></li>
       <li><a href="services.html">Services</a></li>
@@ -95,10 +101,6 @@
     <div id="stats-loading" class="loading-state cascade cascade-4"><div class="spinner"></div>Loading totals...</div>
     <div id="stats-grid" class="stats-grid" style="display:none;"></div>
 
-    <div style="margin-top:1.5rem; margin-bottom:4rem;">
-      <p style="font-size:0.78rem; color:var(--muted); font-family:'Barlow Condensed',sans-serif; letter-spacing:0.1em;">Totals update automatically when the production log is updated.</p>
-    </div>
-
     <h2 class="year-links-title cascade cascade-5">Browse by Year</h2>
     <div class="year-links cascade cascade-6">
       <a href="work-2026.html" class="year-link">
@@ -121,16 +123,12 @@
 
   <footer>
     <div style="max-width:1200px; margin:0 auto; padding:2.5rem 4rem; width:100%;">
-      <div style="display:grid; grid-template-columns:1fr 1fr 1fr; gap:2rem; align-items:start; border-bottom:1px solid var(--border); padding-bottom:2rem; margin-bottom:1.5rem;">
+      <div style="display:grid; grid-template-columns:1fr 1fr; gap:2rem; align-items:start; border-bottom:1px solid var(--border); padding-bottom:2rem; margin-bottom:1.5rem;">
 
         <!-- Logo + status -->
         <div style="display:flex; flex-direction:column; gap:1rem;">
           <span class="footer-logo">Icefireide</span>
-          <div id="availability-badge" style="display:inline-flex; align-items:center; gap:0.5rem; padding:0.5rem 1rem; border-radius:2px; border:1px solid var(--border); background:var(--surface); width:fit-content;">
-            <span id="avail-dot" style="width:8px; height:8px; border-radius:50%; background:var(--muted); flex-shrink:0;"></span>
-            <span id="avail-text" style="font-family:'Barlow Condensed',sans-serif; font-size:0.75rem; letter-spacing:0.2em; text-transform:uppercase; color:var(--muted);">Checking status...</span>
           </div>
-        </div>
 
         <!-- Nav links -->
         <div style="display:flex; flex-direction:column; gap:0.6rem;">
@@ -140,16 +138,6 @@
           <a href="clients.html" style="font-family:'Barlow Condensed',sans-serif; font-size:0.85rem; letter-spacing:0.12em; text-transform:uppercase; color:var(--muted); text-decoration:none; transition:color 0.2s;" onmouseover="this.style.color='var(--ice)'" onmouseout="this.style.color='var(--muted)'">Clients</a>
           <a href="work.html" style="font-family:'Barlow Condensed',sans-serif; font-size:0.85rem; letter-spacing:0.12em; text-transform:uppercase; color:var(--muted); text-decoration:none; transition:color 0.2s;" onmouseover="this.style.color='var(--ice)'" onmouseout="this.style.color='var(--muted)'">Work</a>
           <a href="contact.html" style="font-family:'Barlow Condensed',sans-serif; font-size:0.85rem; letter-spacing:0.12em; text-transform:uppercase; color:var(--muted); text-decoration:none; transition:color 0.2s;" onmouseover="this.style.color='var(--ice)'" onmouseout="this.style.color='var(--muted)'">Contact</a>
-        </div>
-
-        <!-- Twitter / X -->
-        <div style="display:flex; flex-direction:column; gap:0.6rem;">
-          <p style="font-family:'Barlow Condensed',sans-serif; font-size:0.7rem; letter-spacing:0.25em; text-transform:uppercase; color:var(--muted); margin-bottom:0.4rem;">Latest on X</p>
-          <a href="https://twitter.com/Icefireideprod" target="_blank" rel="noopener" style="display:inline-flex; align-items:center; gap:0.6rem; font-family:'Barlow Condensed',sans-serif; font-size:0.85rem; letter-spacing:0.12em; text-transform:uppercase; color:var(--ice); text-decoration:none; margin-bottom:0.5rem;">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
-            @Icefireideprod
-          </a>
-          <a class="twitter-timeline" data-theme="dark" data-chrome="noheader nofooter noborders transparent" data-tweet-limit="2" data-dnt="true" href="https://twitter.com/Icefireideprod" style="color:var(--ice);">Tweets by Icefireideprod</a>
         </div>
 
       </div>
@@ -207,7 +195,6 @@
     })();
   </script>
 
-  <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
   <script>
     // Availability status from Google Sheets checkbox (A15 on totals tab)
     (function() {
@@ -218,8 +205,8 @@
         if (rows.length >= 15) {
           var val = rows[14].split(',')[0].trim().toUpperCase().replace(/"/g,'');
           var available = val === 'TRUE';
-          var dot = document.getElementById('avail-dot');
-          var label = document.getElementById('avail-text');
+          var dot = document.getElementById('avail-dot-nav');
+          var label = document.getElementById('avail-text-nav');
           if (dot && label) {
             dot.style.background = available ? '#2ecc71' : '#e74c3c';
             dot.style.boxShadow = available ? '0 0 8px #2ecc71' : '0 0 8px #e74c3c';
@@ -228,7 +215,7 @@
           }
         }
       }).catch(function() {
-        var label = document.getElementById('avail-text');
+        var label = document.getElementById('avail-text-nav');
         if (label) label.textContent = 'Get In Touch';
       });
     })();
