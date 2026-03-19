@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Icefireide | Esports Production</title>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow:ital,wght@0,300;0,400;0,600;1,300&family=Barlow+Condensed:wght@400;700&display=swap" rel="stylesheet"/>
+  <style>
+    :root {
+      --bg: #080a0f; --bg2: #0d1018; --surface: #111520; --border: #1e2535;
+      --ice: #5de8ff; --fire: #ff5c1a; --ice-dim: rgba(93,232,255,0.10);
+      --text: #e8edf5; --muted: #6b7a96; --white: #ffffff;
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body { background: var(--bg); color: var(--text); font-family: 'Barlow', sans-serif; font-weight: 300; overflow-x: hidden; }
+    body::before {
+      content: ''; position: fixed; inset: 0; pointer-events: none; z-index: 1000; opacity: 0.35;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+    }
+    /* NAV */
+    nav { position: fixed; top: 0; left: 0; right: 0; z-index: 100; display: flex; align-items: center; justify-content: space-between; padding: 1.4rem 4rem; background: linear-gradient(to bottom, rgba(8,10,15,0.97), transparent); backdrop-filter: blur(4px); }
+    .nav-logo { font-family: 'Bebas Neue', sans-serif; font-size: 1.6rem; letter-spacing: 0.12em; background: linear-gradient(90deg, var(--ice), var(--fire)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; text-decoration: none; }
+    .nav-links { display: flex; gap: 2.5rem; list-style: none; align-items: center; }
+    .nav-links a { font-family: 'Barlow Condensed', sans-serif; font-size: 0.85rem; letter-spacing: 0.18em; text-transform: uppercase; color: var(--muted); text-decoration: none; transition: color 0.2s; }
+    .nav-links a:hover, .nav-links a.active { color: var(--ice); }
+    .nav-dropdown { position: relative; }
+    .nav-dropdown-toggle { font-family: 'Barlow Condensed', sans-serif; font-size: 0.85rem; letter-spacing: 0.18em; text-transform: uppercase; color: var(--muted); background: none; border: none; cursor: pointer; display: flex; align-items: center; gap: 0.35rem; padding: 0; transition: color 0.2s; }
+    .nav-dropdown:hover .nav-dropdown-toggle { color: var(--ice); }
+    .nav-dropdown-toggle svg { transition: transform 0.2s; }
+    .nav-dropdown:hover .nav-dropdown-toggle svg { transform: rotate(180deg); }
+    .nav-dropdown-menu { position: absolute; top: calc(100% + 0.75rem); left: 50%; transform: translateX(-50%) translateY(-6px); background: #0f1420; border: 1px solid var(--border); border-radius: 2px; min-width: 140px; opacity: 0; pointer-events: none; transition: opacity 0.2s, transform 0.2s; overflow: hidden; }
+    .nav-dropdown:hover .nav-dropdown-menu { opacity: 1; pointer-events: all; transform: translateX(-50%) translateY(0); }
+    .nav-dropdown-menu a { display: block; padding: 0.7rem 1.2rem; font-family: 'Barlow Condensed', sans-serif; font-size: 0.82rem; letter-spacing: 0.15em; text-transform: uppercase; color: var(--muted); text-decoration: none; transition: background 0.15s, color 0.15s; border-bottom: 1px solid var(--border); }
+    .nav-dropdown-menu a:last-child { border-bottom: none; }
+    .nav-dropdown-menu a:hover { background: var(--surface); color: var(--ice); }
+    /* HERO */
+    #hero { position: relative; min-height: 100vh; display: flex; align-items: center; justify-content: center; overflow: hidden; padding: 0 2rem; }
+    .hero-bg { position: absolute; inset: 0; background: radial-gradient(ellipse 60% 50% at 20% 50%, rgba(93,232,255,0.07), transparent 70%), radial-gradient(ellipse 50% 60% at 80% 50%, rgba(255,92,26,0.07), transparent 70%), var(--bg); }
+    .hero-bg::after { content: ''; position: absolute; inset: 0; background-image: repeating-linear-gradient(-55deg, transparent, transparent 80px, rgba(93,232,255,0.02) 80px, rgba(93,232,255,0.02) 81px); }
+    .hero-content { position: relative; z-index: 2; text-align: center; max-width: 900px; }
+    .hero-eyebrow { font-family: 'Barlow Condensed', sans-serif; font-size: 0.8rem; letter-spacing: 0.35em; text-transform: uppercase; color: var(--ice); margin-bottom: 1.2rem; opacity: 0; animation: fadeUp 0.8s 0.2s forwards; }
+    .hero-name { font-family: 'Bebas Neue', sans-serif; font-size: clamp(4.5rem, 12vw, 10rem); line-height: 0.9; letter-spacing: 0.04em; color: var(--white); opacity: 0; animation: fadeUp 0.8s 0.4s forwards; }
+    .hero-name .ice { color: var(--ice); } .hero-name .fire { color: var(--fire); }
+    .hero-tag { font-family: 'Barlow Condensed', sans-serif; font-size: clamp(1rem, 2.5vw, 1.5rem); letter-spacing: 0.2em; text-transform: uppercase; color: var(--muted); margin-top: 1rem; opacity: 0; animation: fadeUp 0.8s 0.6s forwards; }
+    .hero-divider { width: 60px; height: 2px; background: linear-gradient(90deg, var(--ice), var(--fire)); margin: 2rem auto; opacity: 0; animation: fadeUp 0.8s 0.8s forwards; }
+    .hero-desc { font-size: 1rem; color: var(--muted); line-height: 1.8; max-width: 520px; margin: 0 auto 2.5rem; opacity: 0; animation: fadeUp 0.8s 1s forwards; }
+    .hero-cta { display: inline-flex; gap: 1rem; flex-wrap: wrap; justify-content: center; opacity: 0; animation: fadeUp 0.8s 1.2s forwards; }
+    .btn { font-family: 'Barlow Condensed', sans-serif; font-size: 0.85rem; letter-spacing: 0.2em; text-transform: uppercase; padding: 0.85rem 2.2rem; border-radius: 2px; text-decoration: none; transition: all 0.2s; cursor: pointer; border: none; display: inline-block; }
+    .btn-primary { background: linear-gradient(135deg, var(--ice), #3ab8d4); color: #080a0f; font-weight: 600; }
+    .btn-primary:hover { box-shadow: 0 0 24px rgba(93,232,255,0.4); transform: translateY(-1px); }
+    .btn-outline { background: transparent; color: var(--text); border: 1px solid var(--border); }
+    .btn-outline:hover { border-color: var(--fire); color: var(--fire); transform: translateY(-1px); }
+    .scroll-hint { position: absolute; bottom: 2.5rem; left: 50%; transform: translateX(-50%); display: flex; flex-direction: column; align-items: center; gap: 0.5rem; opacity: 0; animation: fadeUp 1s 1.6s forwards; }
+    .scroll-hint span { font-family: 'Barlow Condensed', sans-serif; font-size: 0.7rem; letter-spacing: 0.25em; text-transform: uppercase; color: var(--muted); }
+    .scroll-line { width: 1px; height: 40px; background: linear-gradient(to bottom, var(--ice), transparent); animation: scrollPulse 2s 2s infinite; }
+    /* ABOUT */
+    #about { padding: 7rem 4rem; max-width: 1200px; margin: 0 auto; }
+    .about-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 6rem; align-items: center; }
+    .about-box { aspect-ratio: 4/5; background: var(--surface); border: 1px solid var(--border); position: relative; overflow: hidden; }
+    .about-box-inner { position: absolute; inset: 0; background: radial-gradient(ellipse at 30% 30%, rgba(93,232,255,0.08), transparent 60%), radial-gradient(ellipse at 70% 70%, rgba(255,92,26,0.08), transparent 60%); display: flex; align-items: center; justify-content: center; }
+    .about-monogram { font-family: 'Bebas Neue', sans-serif; font-size: 9rem; background: linear-gradient(135deg, rgba(93,232,255,0.2), rgba(255,92,26,0.2)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; user-select: none; }
+    .about-visual { position: relative; }
+    .about-accent { position: absolute; bottom: -1rem; right: -1rem; width: 80px; height: 80px; border-right: 2px solid var(--fire); border-bottom: 2px solid var(--fire); }
+    .about-accent-top { position: absolute; top: -1rem; left: -1rem; width: 80px; height: 80px; border-left: 2px solid var(--ice); border-top: 2px solid var(--ice); }
+    .section-label { font-family: 'Barlow Condensed', sans-serif; font-size: 0.75rem; letter-spacing: 0.35em; text-transform: uppercase; color: var(--ice); margin-bottom: 0.6rem; }
+    .section-title { font-family: 'Bebas Neue', sans-serif; font-size: clamp(2.5rem, 5vw, 4rem); letter-spacing: 0.06em; color: var(--white); line-height: 1; margin-bottom: 1rem; }
+    .section-sub { color: var(--muted); font-size: 0.95rem; line-height: 1.8; margin-bottom: 1.5rem; }
+    /* FOOTER */
+    footer { padding: 2rem 4rem; display: flex; justify-content: space-between; align-items: center; max-width: 1200px; margin: 0 auto; border-top: 1px solid var(--border); }
+    .footer-logo { font-family: 'Bebas Neue', sans-serif; font-size: 1.2rem; letter-spacing: 0.1em; background: linear-gradient(90deg, var(--ice), var(--fire)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+    .footer-copy { font-size: 0.78rem; color: var(--muted); }
+    @keyframes fadeUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+    @keyframes scrollPulse { 0%, 100% { opacity: 0.3; } 50% { opacity: 1; } }
+    @media (max-width: 768px) { nav { padding: 1.2rem 1.5rem; } .nav-links { display: none; } #about { padding: 4rem 1.5rem; } .about-grid { grid-template-columns: 1fr; gap: 3rem; } footer { padding: 1.5rem; flex-direction: column; gap: 0.5rem; text-align: center; } }
+  </style>
+</head>
+<body>
+  <nav>
+    <a href="index.html" class="nav-logo">Icefireide</a>
+    <ul class="nav-links">
+      <li><a href="index.html" class="active">Home</a></li>
+      <li><a href="services.html">Services</a></li>
+      <li><a href="clients.html">Clients</a></li>
+      <li class="nav-dropdown">
+        <button class="nav-dropdown-toggle">Work <svg width="10" height="6" viewBox="0 0 10 6" fill="none"><path d="M1 1l4 4 4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg></button>
+        <div class="nav-dropdown-menu">
+          <a href="work.html">Overview</a>
+          <a href="work-2026.html">2026</a>
+          <a href="work-2025.html">2025</a>
+          <a href="work-2024.html">2024</a>
+        </div>
+      </li>
+      <li><a href="contact.html">Contact</a></li>
+    </ul>
+  </nav>
+
+  <div id="hero">
+    <div class="hero-bg"></div>
+    <div class="hero-content">
+      <p class="hero-eyebrow">Esports Production</p>
+      <h1 class="hero-name"><span class="ice">Ice</span><span class="fire">fire</span>ide</h1>
+      <p class="hero-tag">Nicholas &ldquo;Icefireide&rdquo; Hall</p>
+      <div class="hero-divider"></div>
+      <p class="hero-desc">Broadcast production, live event coverage, and creative storytelling for the esports stage.</p>
+      <div class="hero-cta">
+        <a href="work.html" class="btn btn-primary">View My Work</a>
+        <a href="contact.html" class="btn btn-outline">Get In Touch</a>
+      </div>
+    </div>
+    <div class="scroll-hint"><span>Scroll</span><div class="scroll-line"></div></div>
+  </div>
+
+  <section id="about">
+    <div class="about-grid">
+      <div class="about-visual">
+        <div class="about-box"><div class="about-box-inner"><span class="about-monogram">NH</span></div></div>
+        <div class="about-accent-top"></div><div class="about-accent"></div>
+      </div>
+      <div>
+        <p class="section-label">About</p>
+        <h2 class="section-title">Nicholas<br>"Icefireide"<br>Hall</h2>
+        <p class="section-sub">Esports producer and broadcast specialist bringing competitive gaming moments to life. From stream overlays to full online broadcast productions — I handle the technical and creative side of the show so the players can focus on the game.</p>
+        <p class="section-sub">I also bring hands-on experience from small-scale LAN events, and I'm always looking to grow my on-site production work. Based in California and open to remote and on-site opportunities worldwide.</p>
+        <a href="services.html" class="btn btn-outline" style="margin-top:0.5rem;">View Services →</a>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <span class="footer-logo">Icefireide</span>
+    <span class="footer-copy">© 2026 Nicholas Hall. All rights reserved.</span>
+  </footer>
+</body>
+</html>

@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Work Overview | Icefireide</title>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow:ital,wght@0,300;0,400;0,600;1,300&family=Barlow+Condensed:wght@400;700&display=swap" rel="stylesheet"/>
+  <style>
+    :root { --bg: #080a0f; --bg2: #0d1018; --surface: #111520; --border: #1e2535; --ice: #5de8ff; --fire: #ff5c1a; --ice-dim: rgba(93,232,255,0.10); --text: #e8edf5; --muted: #6b7a96; --white: #ffffff; }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body { background: var(--bg); color: var(--text); font-family: 'Barlow', sans-serif; font-weight: 300; overflow-x: hidden; }
+    body::before { content: ''; position: fixed; inset: 0; pointer-events: none; z-index: 1000; opacity: 0.35; background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E"); }
+    nav { position: fixed; top: 0; left: 0; right: 0; z-index: 100; display: flex; align-items: center; justify-content: space-between; padding: 1.4rem 4rem; background: rgba(8,10,15,0.97); backdrop-filter: blur(4px); border-bottom: 1px solid var(--border); }
+    .nav-logo { font-family: 'Bebas Neue', sans-serif; font-size: 1.6rem; letter-spacing: 0.12em; background: linear-gradient(90deg, var(--ice), var(--fire)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; text-decoration: none; }
+    .nav-links { display: flex; gap: 2.5rem; list-style: none; align-items: center; }
+    .nav-links a { font-family: 'Barlow Condensed', sans-serif; font-size: 0.85rem; letter-spacing: 0.18em; text-transform: uppercase; color: var(--muted); text-decoration: none; transition: color 0.2s; }
+    .nav-links a:hover, .nav-links a.active { color: var(--ice); }
+    .nav-dropdown { position: relative; }
+    .nav-dropdown-toggle { font-family: 'Barlow Condensed', sans-serif; font-size: 0.85rem; letter-spacing: 0.18em; text-transform: uppercase; color: var(--ice); background: none; border: none; cursor: pointer; display: flex; align-items: center; gap: 0.35rem; padding: 0; transition: color 0.2s; }
+    .nav-dropdown-toggle svg { transition: transform 0.2s; }
+    .nav-dropdown:hover .nav-dropdown-toggle svg { transform: rotate(180deg); }
+    .nav-dropdown-menu { position: absolute; top: calc(100% + 0.75rem); left: 50%; transform: translateX(-50%) translateY(-6px); background: #0f1420; border: 1px solid var(--border); border-radius: 2px; min-width: 140px; opacity: 0; pointer-events: none; transition: opacity 0.2s, transform 0.2s; overflow: hidden; }
+    .nav-dropdown:hover .nav-dropdown-menu { opacity: 1; pointer-events: all; transform: translateX(-50%) translateY(0); }
+    .nav-dropdown-menu a { display: block; padding: 0.7rem 1.2rem; font-family: 'Barlow Condensed', sans-serif; font-size: 0.82rem; letter-spacing: 0.15em; text-transform: uppercase; color: var(--muted); text-decoration: none; transition: background 0.15s, color 0.15s; border-bottom: 1px solid var(--border); }
+    .nav-dropdown-menu a:last-child { border-bottom: none; }
+    .nav-dropdown-menu a:hover, .nav-dropdown-menu a.active { background: var(--surface); color: var(--ice); }
+    .page-wrap { max-width: 1200px; margin: 0 auto; padding: 9rem 4rem 6rem; }
+    .page-eyebrow { font-family: 'Barlow Condensed', sans-serif; font-size: 0.75rem; letter-spacing: 0.35em; text-transform: uppercase; color: var(--ice); margin-bottom: 0.6rem; }
+    .page-title { font-family: 'Bebas Neue', sans-serif; font-size: clamp(3rem, 7vw, 6rem); letter-spacing: 0.06em; color: var(--white); line-height: 0.9; margin-bottom: 1.5rem; }
+    .page-sub { color: var(--muted); font-size: 0.95rem; line-height: 1.8; max-width: 520px; margin-bottom: 4rem; }
+    /* Stat grid */
+    .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1px; background: var(--border); border: 1px solid var(--border); margin-bottom: 4rem; }
+    .stat-card { background: var(--surface); padding: 2.5rem 2rem; text-align: center; position: relative; overflow: hidden; transition: background 0.2s; }
+    .stat-card:hover { background: #131825; }
+    .stat-card::after { content: ''; position: absolute; bottom: 0; left: 0; right: 0; height: 2px; background: linear-gradient(90deg, var(--ice), var(--fire)); transform: scaleX(0); transition: transform 0.3s; transform-origin: left; }
+    .stat-card:hover::after { transform: scaleX(1); }
+    .stat-num { font-family: 'Bebas Neue', sans-serif; font-size: 3.5rem; line-height: 1; background: linear-gradient(135deg, var(--ice), var(--fire)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; margin-bottom: 0.5rem; }
+    .stat-label { font-family: 'Barlow Condensed', sans-serif; font-size: 0.75rem; letter-spacing: 0.25em; text-transform: uppercase; color: var(--muted); }
+    .loading-state { padding: 4rem; text-align: center; color: var(--muted); font-family: 'Barlow Condensed', sans-serif; letter-spacing: 0.1em; }
+    .spinner { width: 28px; height: 28px; border: 2px solid var(--border); border-top-color: var(--ice); border-radius: 50%; animation: spin 0.8s linear infinite; margin: 0 auto 1rem; }
+    /* Year links */
+    .year-links-title { font-family: 'Bebas Neue', sans-serif; font-size: 2rem; letter-spacing: 0.06em; color: var(--white); margin-bottom: 1.5rem; }
+    .year-links { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; }
+    .year-link { display: flex; flex-direction: column; align-items: flex-start; padding: 2rem; background: var(--surface); border: 1px solid var(--border); text-decoration: none; transition: all 0.2s; position: relative; overflow: hidden; }
+    .year-link::before { content: ''; position: absolute; top: 0; left: 0; width: 3px; height: 0; background: linear-gradient(to bottom, var(--ice), var(--fire)); transition: height 0.3s; }
+    .year-link:hover::before { height: 100%; }
+    .year-link:hover { background: #131825; border-color: var(--ice); transform: translateY(-2px); }
+    .year-link-year { font-family: 'Bebas Neue', sans-serif; font-size: 3rem; letter-spacing: 0.06em; color: var(--white); line-height: 1; }
+    .year-link-label { font-family: 'Barlow Condensed', sans-serif; font-size: 0.75rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--muted); margin-top: 0.4rem; }
+    .year-link-arrow { margin-top: auto; padding-top: 1.5rem; color: var(--ice); font-family: 'Barlow Condensed', sans-serif; font-size: 0.8rem; letter-spacing: 0.15em; text-transform: uppercase; }
+    footer { padding: 2rem 4rem; display: flex; justify-content: space-between; align-items: center; max-width: 1200px; margin: 0 auto; border-top: 1px solid var(--border); }
+    .footer-logo { font-family: 'Bebas Neue', sans-serif; font-size: 1.2rem; letter-spacing: 0.1em; background: linear-gradient(90deg, var(--ice), var(--fire)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+    .footer-copy { font-size: 0.78rem; color: var(--muted); }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    @media (max-width: 768px) { nav { padding: 1.2rem 1.5rem; } .nav-links { display: none; } .page-wrap { padding: 7rem 1.5rem 4rem; } footer { padding: 1.5rem; flex-direction: column; gap: 0.5rem; text-align: center; } }
+  </style>
+</head>
+<body>
+  <nav>
+    <a href="index.html" class="nav-logo">Icefireide</a>
+    <ul class="nav-links">
+      <li><a href="index.html">Home</a></li>
+      <li><a href="services.html">Services</a></li>
+      <li><a href="clients.html">Clients</a></li>
+      <li class="nav-dropdown">
+        <button class="nav-dropdown-toggle">Work <svg width="10" height="6" viewBox="0 0 10 6" fill="none"><path d="M1 1l4 4 4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg></button>
+        <div class="nav-dropdown-menu">
+          <a href="work.html" class="active">Overview</a>
+          <a href="work-2026.html">2026</a>
+          <a href="work-2025.html">2025</a>
+          <a href="work-2024.html">2024</a>
+        </div>
+      </li>
+      <li><a href="contact.html">Contact</a></li>
+    </ul>
+  </nav>
+
+  <div class="page-wrap">
+    <p class="page-eyebrow">Production Log</p>
+    <h1 class="page-title">Work Overview</h1>
+    <p class="page-sub">A live summary of every show I've produced. Totals pulled directly from my production log — select a year below to browse individual events.</p>
+
+    <div id="stats-loading" class="loading-state"><div class="spinner"></div>Loading totals...</div>
+    <div id="stats-grid" class="stats-grid" style="display:none;"></div>
+
+    <div style="margin-top:1.5rem; margin-bottom:4rem;">
+      <p style="font-size:0.78rem; color:var(--muted); font-family:'Barlow Condensed',sans-serif; letter-spacing:0.1em;">Totals update automatically when the production log is updated.</p>
+    </div>
+
+    <h2 class="year-links-title">Browse by Year</h2>
+    <div class="year-links">
+      <a href="work-2026.html" class="year-link">
+        <span class="year-link-year">2026</span>
+        <span class="year-link-label">Current Season</span>
+        <span class="year-link-arrow">View Shows →</span>
+      </a>
+      <a href="work-2025.html" class="year-link">
+        <span class="year-link-year">2025</span>
+        <span class="year-link-label">Full Season</span>
+        <span class="year-link-arrow">View Shows →</span>
+      </a>
+      <a href="work-2024.html" class="year-link">
+        <span class="year-link-year">2024</span>
+        <span class="year-link-label">Full Season</span>
+        <span class="year-link-arrow">View Shows →</span>
+      </a>
+    </div>
+  </div>
+
+  <footer>
+    <span class="footer-logo">Icefireide</span>
+    <span class="footer-copy">© 2026 Nicholas Hall. All rights reserved.</span>
+  </footer>
+
+  <script>
+    const CSV = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vR300p3G6_5hn7Ydez7mY6XVhfoWeLUBFpM0C9oJdd__WP8xhVVwZp4bxFZwvxJvODbJ3_o_p-I8EUe/pub?gid=0&single=true&output=csv';
+    function parseCSV(text) {
+      return text.trim().split('\n').slice(1).map(line => {
+        const cols = []; let cur = '', inQ = false;
+        for (const c of line) { if (c === '"') inQ = !inQ; else if (c === ',' && !inQ) { cols.push(cur.trim()); cur = ''; } else cur += c; }
+        cols.push(cur.trim()); return cols;
+      }).filter(r => r.some(c => c));
+    }
+    async function loadStats() {
+      try {
+        const res = await fetch(CSV);
+        if (!res.ok) throw new Error();
+        const rows = parseCSV(await res.text());
+        const grid = document.getElementById('stats-grid');
+        rows.forEach(r => {
+          if (!r[0] || !r[1]) return;
+          grid.innerHTML += `<div class="stat-card"><div class="stat-num">${r[1]}</div><div class="stat-label">${r[0]}</div></div>`;
+        });
+        document.getElementById('stats-loading').style.display = 'none';
+        grid.style.display = 'grid';
+      } catch { document.getElementById('stats-loading').textContent = '⚠️ Couldn\'t load totals right now.'; }
+    }
+    loadStats();
+  </script>
+</body>
+</html>
