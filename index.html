@@ -127,8 +127,41 @@
     <div class="scroll-hint"><span>Scroll</span><div class="scroll-line"></div></div>
   </div>
 
+  <!-- FEATURED PRODUCTIONS CAROUSEL -->
+  <section style="max-width:1200px; margin:0 auto; padding:5rem 4rem 0;">
+    <p class="section-label cascade cascade-1">Featured Productions</p>
+    <h2 class="section-title cascade cascade-2" style="margin-bottom:2rem;">Highlights</h2>
+    <div class="cascade cascade-3" style="position:relative;">
+      <!-- Carousel track -->
+      <div id="carousel-track" style="position:relative; width:100%; aspect-ratio:16/9; border-radius:2px; overflow:hidden; background:var(--surface); padding:2px; background:linear-gradient(135deg, var(--ice), var(--fire));">
+        <div style="position:relative; width:100%; height:100%; border-radius:1px; overflow:hidden; background:var(--surface);">
+          <iframe id="carousel-iframe" src="https://www.youtube.com/embed/IcmEY9MfYTs" title="Featured VOD" allowfullscreen style="position:absolute;inset:0;width:100%;height:100%;border:none;"></iframe>
+        </div>
+      </div>
+
+      <!-- Title + controls -->
+      <div style="display:flex; align-items:center; justify-content:space-between; margin-top:1rem; flex-wrap:wrap; gap:1rem;">
+        <div>
+          <p id="carousel-title" style="font-family:'Bebas Neue',sans-serif; font-size:1.3rem; letter-spacing:0.06em; color:var(--white);">Division One Esports Valorant Grand Finals</p>
+          <p style="font-family:'Barlow Condensed',sans-serif; font-size:0.75rem; letter-spacing:0.2em; text-transform:uppercase; color:var(--fire); margin-top:0.2rem;">Featured</p>
+        </div>
+        <div style="display:flex; align-items:center; gap:1rem;">
+          <!-- Dot indicators -->
+          <div id="carousel-dots" style="display:flex; gap:0.5rem;"></div>
+          <!-- Arrows -->
+          <button onclick="carouselPrev()" style="width:38px; height:38px; border:1px solid var(--border); background:var(--surface); color:var(--text); border-radius:2px; cursor:pointer; display:flex; align-items:center; justify-content:center; transition:all 0.2s;" onmouseover="this.style.borderColor='var(--ice)';this.style.color='var(--ice)'" onmouseout="this.style.borderColor='var(--border)';this.style.color='var(--text)'">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 18l-6-6 6-6"/></svg>
+          </button>
+          <button onclick="carouselNext()" style="width:38px; height:38px; border:1px solid var(--border); background:var(--surface); color:var(--text); border-radius:2px; cursor:pointer; display:flex; align-items:center; justify-content:center; transition:all 0.2s;" onmouseover="this.style.borderColor='var(--ice)';this.style.color='var(--ice)'" onmouseout="this.style.borderColor='var(--border)';this.style.color='var(--text)'">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+          </button>
+        </div>
+      </div>
+    </div>
+  </section>
+
   <!-- LATEST VOD -->
-  <section id="latest-vod" style="max-width:1200px; margin:0 auto; padding:5rem 4rem 0;">
+  <section id="latest-vod" style="max-width:1200px; margin:0 auto; padding:4rem 4rem 0;">
     <div id="vod-container" style="display:none;">
       <p class="section-label cascade cascade-1">Latest Production</p>
       <h2 class="section-title cascade cascade-2" id="vod-title" style="margin-bottom:1.5rem;"></h2>
@@ -140,30 +173,6 @@
       <p class="cascade cascade-4" style="margin-top:1rem; font-size:0.8rem; color:var(--muted); font-family:'Barlow Condensed',sans-serif; letter-spacing:0.1em;">
         Most recent show from my <a href="work.html" style="color:var(--ice); text-decoration:none;">production log</a>
       </p>
-    </div>
-  </section>
-
-  <!-- FEATURED PRODUCTIONS -->
-  <section style="max-width:1200px; margin:0 auto; padding:4rem 4rem 0;">
-    <p class="section-label cascade cascade-1">Featured Productions</p>
-    <h2 class="section-title cascade cascade-2" style="margin-bottom:2rem;">Highlights</h2>
-    <div class="cascade cascade-3" style="display:grid; grid-template-columns:repeat(auto-fit, minmax(340px, 1fr)); gap:1.5rem;">
-
-      <!-- Division One Esports Valorant Grand Finals -->
-      <div style="display:flex; flex-direction:column; gap:0.75rem;">
-        <div style="position:relative; width:100%; aspect-ratio:16/9; border-radius:2px; overflow:hidden; background:var(--surface); padding:2px; background:linear-gradient(135deg, var(--ice), var(--fire));">
-          <div style="position:relative; width:100%; height:100%; border-radius:1px; overflow:hidden; background:var(--surface);">
-            <iframe src="https://www.youtube.com/embed/IcmEY9MfYTs" title="Division One Esports Valorant Grand Finals" allowfullscreen style="position:absolute;inset:0;width:100%;height:100%;border:none;"></iframe>
-          </div>
-        </div>
-        <div>
-          <p style="font-family:'Bebas Neue',sans-serif; font-size:1.2rem; letter-spacing:0.06em; color:var(--white);">Division One Esports Valorant Grand Finals</p>
-          <p style="font-family:'Barlow Condensed',sans-serif; font-size:0.75rem; letter-spacing:0.2em; text-transform:uppercase; color:var(--fire); margin-top:0.2rem;">Featured</p>
-        </div>
-      </div>
-
-      <!-- Add more featured VODs here following the same pattern -->
-
     </div>
   </section>
 
@@ -209,6 +218,44 @@
       </div>
     </div>
   </footer>
+  <script>
+    // ── Featured VOD Carousel ──
+    const FEATURED = [
+      { id: 'IcmEY9MfYTs', title: 'Division One Esports Valorant Grand Finals' },
+      { id: 'buqcU4sN5mc', title: 'Division One Esports League of Legends Grand Finals' },
+      // Add more: { id: 'YOUTUBE_ID', title: 'Event Name' },
+    ];
+
+    let current = 0;
+
+    function renderDots() {
+      const dots = document.getElementById('carousel-dots');
+      dots.innerHTML = '';
+      FEATURED.forEach(function(_, i) {
+        const dot = document.createElement('button');
+        dot.style.cssText = 'width:8px;height:8px;border-radius:50%;border:none;cursor:pointer;transition:all 0.2s;padding:0;background:' + (i === current ? 'var(--ice)' : 'var(--border)');
+        dot.onclick = function() { goTo(i); };
+        dots.appendChild(dot);
+      });
+    }
+
+    function goTo(index) {
+      current = (index + FEATURED.length) % FEATURED.length;
+      const item = FEATURED[current];
+      const iframe = document.getElementById('carousel-iframe');
+      const title = document.getElementById('carousel-title');
+      // Reload iframe with new src
+      iframe.src = 'https://www.youtube.com/embed/' + item.id;
+      title.textContent = item.title;
+      renderDots();
+    }
+
+    function carouselNext() { goTo(current + 1); }
+    function carouselPrev() { goTo(current - 1); }
+
+    // Init dots
+    renderDots();
+  </script>
   <script>
     // ── Latest VOD from 2026 sheet (falls back to 2025, then 2024) ──
     const VOD_SHEETS = [
