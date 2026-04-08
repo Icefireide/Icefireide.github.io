@@ -191,9 +191,9 @@
       var CSV = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vR300p3G6_5hn7Ydez7mY6XVhfoWeLUBFpM0C9oJdd__WP8xhVVwZp4bxFZwvxJvODbJ3_o_p-I8EUe/pub?gid=0&single=true&output=csv';
       fetch(CSV).then(function(r) { return r.text(); }).then(function(text) {
         var rows = text.trim().split('\n');
-        // A15 = index 14 (0-based), column A = first value
-        if (rows.length >= 15) {
-          var val = rows[14].split(',')[0].trim().toUpperCase().replace(/"/g,'');
+        // J2 = row index 1 (0-based), column J = index 9
+        if (rows.length >= 2) {
+          var val = rows[1].split(',')[9].trim().toUpperCase().replace(/"/g,'');
           var available = val === 'TRUE';
           var dot = document.getElementById('avail-dot-nav');
           var label = document.getElementById('avail-text-nav');
