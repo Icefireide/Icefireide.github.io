@@ -96,7 +96,7 @@
   <div class="page-wrap">
     <p class="page-eyebrow cascade cascade-1">Who I've Worked With</p>
     <h1 class="page-title cascade cascade-2">Clients</h1>
-    <p class="page-sub cascade cascade-3">Organizations and events I've had the privilege of working with.</p>
+    <p class="page-sub cascade cascade-3">Organizations and events I've had the privilege of producing for.</p>
     <div class="clients-grid cascade cascade-4">
       <div class="client-card"><div class="client-logo-box"><img src="Risen Logo.webp" alt="Risen" /></div><div class="client-name">Risen</div></div>
       <div class="client-card"><div class="client-logo-box" style="width:70px;height:92px;"><img src="Aegis Logo.png" alt="Aegis" /></div><div class="client-name">Aegis</div></div>
@@ -164,9 +164,9 @@
       var CSV = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vR300p3G6_5hn7Ydez7mY6XVhfoWeLUBFpM0C9oJdd__WP8xhVVwZp4bxFZwvxJvODbJ3_o_p-I8EUe/pub?gid=0&single=true&output=csv';
       fetch(CSV).then(function(r) { return r.text(); }).then(function(text) {
         var rows = text.trim().split('\n');
-        // A15 = index 14 (0-based), column A = first value
-        if (rows.length >= 15) {
-          var val = rows[14].split(',')[0].trim().toUpperCase().replace(/"/g,'');
+        // J2 = row index 1 (0-based), column J = index 9
+        if (rows.length >= 2) {
+          var val = rows[1].split(',')[9].trim().toUpperCase().replace(/"/g,'');
           var available = val === 'TRUE';
           var dot = document.getElementById('avail-dot-nav');
           var label = document.getElementById('avail-text-nav');
