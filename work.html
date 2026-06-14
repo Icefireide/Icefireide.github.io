@@ -11,6 +11,7 @@
   </script>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="description" content="Icefireide's complete esports production log — every show produced since 2024 with live totals by game. Browse by year."/>
   <title>Work Overview | Icefireide</title>
   <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow:ital,wght@0,300;0,400;0,600;1,300&family=Barlow+Condensed:wght@400;700&display=swap" rel="stylesheet"/>
   <style>
@@ -57,11 +58,11 @@
     .year-link-year { font-family: 'Bebas Neue', sans-serif; font-size: 3rem; letter-spacing: 0.06em; color: var(--white); line-height: 1; }
     .year-link-label { font-family: 'Barlow Condensed', sans-serif; font-size: 0.75rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--muted); margin-top: 0.4rem; }
     .year-link-arrow { margin-top: auto; padding-top: 1.5rem; color: var(--ice); font-family: 'Barlow Condensed', sans-serif; font-size: 0.8rem; letter-spacing: 0.15em; text-transform: uppercase; }
-    footer { padding: 2rem 4rem; display: flex; justify-content: space-between; align-items: center; max-width: 1200px; margin: 0 auto; border-top: 1px solid var(--border); }
+    footer { display: flex; justify-content: space-between; align-items: center; max-width: 1200px; margin: 0 auto; border-top: 1px solid var(--border); }
     .footer-logo { font-family: 'Bebas Neue', sans-serif; font-size: 1.2rem; letter-spacing: 0.1em; background: linear-gradient(90deg, var(--ice), var(--fire)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
     .footer-copy { font-size: 0.78rem; color: var(--muted); }
     @keyframes spin { to { transform: rotate(360deg); } }
-    @media (max-width: 768px) { nav { padding: 1.2rem 1.5rem; } .nav-links { display: none; } .page-wrap { padding: 7rem 1.5rem 4rem; } footer { padding: 1.5rem; flex-direction: column; gap: 0.5rem; text-align: center; } }
+    @media (max-width: 768px) { nav { padding: 1.2rem 1.5rem; } .nav-links { display: none; } .page-wrap { padding: 7rem 1.5rem 4rem; } footer { flex-direction: column; gap: 0.5rem; text-align: center; } }
 
     @keyframes fadeUp { from { opacity: 0; transform: translateY(24px); } to { opacity: 1; transform: translateY(0); } }
     .cascade { opacity: 0; animation: fadeUp 0.7s ease forwards; }
@@ -169,16 +170,22 @@
         cols.push(cur.trim()); return cols;
       }).filter(r => r.some(c => c));
     }
+    function escapeHTML(s) {
+      return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+    }
+
     async function loadStats() {
       try {
         const res = await fetch(CSV);
         if (!res.ok) throw new Error();
         const rows = parseCSV(await res.text());
         const grid = document.getElementById('stats-grid');
+        let html = '';
         rows.forEach(r => {
           if (!r[0] || !r[1]) return;
-          grid.innerHTML += `<div class="stat-card"><div class="stat-num">${r[1]}</div><div class="stat-label">${r[0]}</div></div>`;
+          html += `<div class="stat-card"><div class="stat-num">${escapeHTML(r[1])}</div><div class="stat-label">${escapeHTML(r[0])}</div></div>`;
         });
+        grid.innerHTML = html;
         document.getElementById('stats-loading').style.display = 'none';
         grid.style.display = 'grid';
       } catch { document.getElementById('stats-loading').textContent = '⚠️ Couldn\'t load totals right now.'; }
