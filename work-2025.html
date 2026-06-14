@@ -11,6 +11,7 @@
   </script>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="description" content="All esports shows produced by Icefireide in 2025 — pulled live from the production log."/>
   <title>2025 Shows | Icefireide</title>
   <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow:ital,wght@0,300;0,400;0,600;1,300&family=Barlow+Condensed:wght@400;700&display=swap" rel="stylesheet"/>
   <style>
@@ -63,11 +64,11 @@
     .year-nav a { font-family: 'Barlow Condensed', sans-serif; font-size: 0.8rem; letter-spacing: 0.2em; text-transform: uppercase; padding: 0.6rem 1.2rem; border: 1px solid var(--border); color: var(--muted); text-decoration: none; border-radius: 2px; transition: all 0.2s; }
     .year-nav a:hover { border-color: var(--ice); color: var(--ice); }
     .year-nav a.active { border-color: var(--ice); color: var(--ice); background: var(--ice-dim); }
-    footer { padding: 2rem 4rem; display: flex; justify-content: space-between; align-items: center; max-width: 1200px; margin: 0 auto; border-top: 1px solid var(--border); }
+    footer { display: flex; justify-content: space-between; align-items: center; max-width: 1200px; margin: 0 auto; border-top: 1px solid var(--border); }
     .footer-logo { font-family: 'Bebas Neue', sans-serif; font-size: 1.2rem; letter-spacing: 0.1em; background: linear-gradient(90deg, var(--ice), var(--fire)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
     .footer-copy { font-size: 0.78rem; color: var(--muted); }
     @keyframes spin { to { transform: rotate(360deg); } }
-    @media (max-width: 768px) { nav { padding: 1.2rem 1.5rem; } .nav-links { display: none; } .page-wrap { padding: 7rem 1.5rem 4rem; } footer { padding: 1.5rem; flex-direction: column; gap: 0.5rem; text-align: center; } }
+    @media (max-width: 768px) { nav { padding: 1.2rem 1.5rem; } .nav-links { display: none; } .page-wrap { padding: 7rem 1.5rem 4rem; } footer { flex-direction: column; gap: 0.5rem; text-align: center; } }
 
     @keyframes fadeUp { from { opacity: 0; transform: translateY(24px); } to { opacity: 1; transform: translateY(0); } }
     .cascade { opacity: 0; animation: fadeUp 0.7s ease forwards; }
@@ -177,12 +178,13 @@
       }).filter(r => r.some(c => c));
     }
 
-    // Strip any stray formatting characters and extract a clean URL
+    function escapeHTML(s) {
+      return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+    }
+
     function cleanURL(s) {
       if (!s) return '';
-      // Remove markdown bold/italic underscores, asterisks, backticks, whitespace
       const cleaned = s.replace(/[_*`\s]/g, '');
-      // Return if it looks like a URL
       return (cleaned.includes('http://') || cleaned.includes('https://')) ? cleaned : '';
     }
 
@@ -197,20 +199,20 @@
           document.getElementById('error').textContent = 'No shows logged for 2025 yet.';
           return;
         }
-        // Sort newest first by date (col A, index 0)
         rows.sort((a, b) => {
           const da = new Date(a[0]), db = new Date(b[0]);
           return (isNaN(da) || isNaN(db)) ? 0 : db - da;
         });
         const tbody = document.getElementById('shows-tbody');
+        let html = '';
         rows.forEach(r => {
-          const dt  = r[0] || '—';  // A: Date
-          const ev  = r[1] || '—';  // B: Event Name
-          const gm  = r[2] || '—';  // C: Game
-          const org = r[3] || '—';  // D: Organization
-          const rl  = r[4] || '—';  // E: Role
-          const vd  = cleanURL(r[6] || ''); // G: Link (cleaned)
-          tbody.innerHTML +=
+          const dt  = escapeHTML(r[0] || '—');
+          const ev  = escapeHTML(r[1] || '—');
+          const gm  = escapeHTML(r[2] || '—');
+          const org = escapeHTML(r[3] || '—');
+          const rl  = escapeHTML(r[4] || '—');
+          const vd  = cleanURL(r[6] || '');
+          html +=
             '<tr>' +
             '<td class="td-date">' + dt + '</td>' +
             '<td class="td-event">' + ev + '</td>' +
@@ -218,10 +220,11 @@
             '<td class="td-org">' + org + '</td>' +
             '<td class="td-role">' + rl + '</td>' +
             '<td class="td-vod">' + (vd
-              ? '<a href="' + vd + '" target="_blank" rel="noopener"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>Watch</a>'
+              ? '<a href="' + escapeHTML(vd) + '" target="_blank" rel="noopener"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>Watch</a>'
               : '<span style="color:var(--muted)">—</span>') +
             '</td></tr>';
         });
+        tbody.innerHTML = html;
         document.getElementById('loading').style.display = 'none';
         document.getElementById('shows-table').style.display = 'table';
       } catch {
