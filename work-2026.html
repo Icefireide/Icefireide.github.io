@@ -163,7 +163,15 @@
 
   <script>
     // Column order: A=Date, B=Event Name, C=Game, D=Organization, E=Role, F=Hours, G=Link
-    const CSV = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vR300p3G6_5hn7Ydez7mY6XVhfoWeLUBFpM0C9oJdd__WP8xhVVwZp4bxFZwvxJvODbJ3_o_p-I8EUe/pub?gid=584832786&single=true&output=csv';
+    // Pulls all three season tabs and buckets each row by its own Date column,
+    // so a show logged in the wrong tab (e.g. paid late, pasted into the wrong
+    // season) still lands on the year page that matches its real event date.
+    const TARGET_YEAR = 2026;
+    const CSV_URLS = [
+      'https://docs.google.com/spreadsheets/d/e/2PACX-1vR300p3G6_5hn7Ydez7mY6XVhfoWeLUBFpM0C9oJdd__WP8xhVVwZp4bxFZwvxJvODbJ3_o_p-I8EUe/pub?gid=584832786&single=true&output=csv',
+      'https://docs.google.com/spreadsheets/d/e/2PACX-1vR300p3G6_5hn7Ydez7mY6XVhfoWeLUBFpM0C9oJdd__WP8xhVVwZp4bxFZwvxJvODbJ3_o_p-I8EUe/pub?gid=1262254364&single=true&output=csv',
+      'https://docs.google.com/spreadsheets/d/e/2PACX-1vR300p3G6_5hn7Ydez7mY6XVhfoWeLUBFpM0C9oJdd__WP8xhVVwZp4bxFZwvxJvODbJ3_o_p-I8EUe/pub?gid=106338310&single=true&output=csv'
+    ];
 
     function parseCSV(text) {
       return text.trim().split('\n').slice(1).map(line => {
@@ -190,9 +198,21 @@
 
     async function load() {
       try {
-        const res = await fetch(CSV);
-        if (!res.ok) throw new Error();
-        const rows = parseCSV(await res.text());
+        const results = await Promise.all(CSV_URLS.map(url => fetch(url).then(r => r.ok ? r.text() : '')));
+        const allRows = results.flatMap(text => text ? parseCSV(text) : []);
+        const yearRows = allRows.filter(r => {
+          const d = new Date(r[0]);
+          return !isNaN(d) && d.getFullYear() === TARGET_YEAR;
+        });
+        // De-duplicate: if the same event/date shows up more than once (e.g. logged
+        // twice while moving between sheets), keep the version with hours logged.
+        const seen = new Map();
+        yearRows.forEach(r => {
+          const key = r[0] + '|' + r[1];
+          const existing = seen.get(key);
+          if (!existing || (!existing[5] && r[5])) seen.set(key, r);
+        });
+        const rows = Array.from(seen.values());
         if (!rows.length) {
           document.getElementById('loading').style.display = 'none';
           document.getElementById('error').style.display = 'block';
