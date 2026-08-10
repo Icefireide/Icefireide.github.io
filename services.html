@@ -11,7 +11,7 @@
   </script>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <meta name="description" content="Esports production services by Icefireide — broadcast production, LAN production, and vMix replay operation for competitive gaming events."/>
+  <meta name="description" content="Esports production services and rates by Icefireide — broadcast production, multi-day events, LAN production and custom broadcast tooling for competitive gaming events. Replay operation and observing also available."/>
   <title>Services | Icefireide</title>
   <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow:ital,wght@0,300;0,400;0,600;1,300&family=Barlow+Condensed:wght@400;700&display=swap" rel="stylesheet"/>
   <style>
@@ -57,6 +57,48 @@
     .footer-logo { font-family: 'Bebas Neue', sans-serif; font-size: 1.2rem; letter-spacing: 0.1em; background: linear-gradient(90deg, var(--ice), var(--fire)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
     .footer-copy { font-size: 0.78rem; color: var(--muted); }
     @media (max-width: 768px) { nav { padding: 1.2rem 1.5rem; } .nav-links { display: none; } .page-wrap { padding: 7rem 1.5rem 4rem; } footer { flex-direction: column; gap: 0.5rem; text-align: center; } }
+
+    .also-avail { margin-top: 2.5rem; padding: 2.2rem 2.4rem; background: var(--bg2); border: 1px solid var(--border); }
+    .also-label { font-family: 'Barlow Condensed', sans-serif; font-size: 0.72rem; letter-spacing: 0.32em; text-transform: uppercase; color: var(--ice); margin-bottom: 1.4rem; }
+    .also-items { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 1.6rem 3rem; }
+    .also-item { display: flex; flex-direction: column; gap: 0.4rem; }
+    .also-name { font-family: 'Barlow Condensed', sans-serif; font-size: 1rem; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: var(--text); }
+    .also-name em { font-style: normal; font-weight: 400; color: var(--muted); letter-spacing: 0.08em; }
+    .also-desc { font-size: 0.88rem; color: var(--muted); line-height: 1.75; }
+    .also-foot { font-size: 0.82rem; color: var(--muted); line-height: 1.7; margin-top: 1.6rem; padding-top: 1.4rem; border-top: 1px solid var(--border); }
+
+    .cover-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 2.5rem 3rem; }
+    .cover-col h4 { font-family: 'Barlow Condensed', sans-serif; font-size: 0.72rem; letter-spacing: 0.3em; text-transform: uppercase; color: var(--ice); font-weight: 400; margin-bottom: 1.1rem; }
+    .tag-row { display: flex; flex-wrap: wrap; gap: 0.5rem; }
+    .tag { font-family: 'Barlow Condensed', sans-serif; font-size: 0.8rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--text); background: var(--surface); border: 1px solid var(--border); border-radius: 2px; padding: 0.45rem 0.9rem; }
+    .cover-foot { font-size: 0.85rem; color: var(--muted); line-height: 1.75; margin-top: 2rem; }
+    .process-list { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1.5px; border: 1.5px solid var(--border); }
+    .process-item { background: var(--surface); padding: 2.5rem 2.2rem; position: relative; overflow: hidden; transition: background 0.3s; }
+    .process-item::before { content: ''; position: absolute; top: 0; left: 0; width: 3px; height: 0; background: linear-gradient(to bottom, var(--ice), var(--fire)); transition: height 0.4s; }
+    .process-item:hover::before { height: 100%; }
+    .process-item:hover { background: #131825; }
+    .process-num { font-family: 'Bebas Neue', sans-serif; font-size: 1.6rem; letter-spacing: 0.06em; background: linear-gradient(90deg, var(--ice), var(--fire)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; display: block; margin-bottom: 0.6rem; }
+    .process-name { font-family: 'Bebas Neue', sans-serif; font-size: 1.35rem; letter-spacing: 0.08em; color: var(--white); margin-bottom: 0.8rem; }
+    .process-desc { font-size: 0.9rem; color: var(--muted); line-height: 1.8; }
+
+    .section-head { margin: 6rem 0 1rem; }
+    .section-eyebrow { font-family: 'Barlow Condensed', sans-serif; font-size: 0.75rem; letter-spacing: 0.35em; text-transform: uppercase; color: var(--ice); margin-bottom: 0.6rem; }
+    .section-title { font-family: 'Bebas Neue', sans-serif; font-size: clamp(2rem, 4vw, 3rem); letter-spacing: 0.06em; color: var(--white); line-height: 1; }
+    .section-sub { color: var(--muted); font-size: 0.95rem; line-height: 1.8; max-width: 560px; margin-top: 1rem; margin-bottom: 3rem; }
+    .rates-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(290px, 1fr)); gap: 1.5px; border: 1.5px solid var(--border); }
+    .rate-card { background: var(--surface); padding: 2.5rem 2.2rem; position: relative; overflow: hidden; transition: background 0.3s; display: flex; flex-direction: column; }
+    .rate-card::before { content: ''; position: absolute; top: 0; left: 0; width: 3px; height: 0; background: linear-gradient(to bottom, var(--ice), var(--fire)); transition: height 0.4s; }
+    .rate-card:hover::before { height: 100%; }
+    .rate-card:hover { background: #131825; }
+    .rate-name { font-family: 'Bebas Neue', sans-serif; font-size: 1.5rem; letter-spacing: 0.08em; color: var(--white); margin-bottom: 1rem; }
+    .rate-price { font-family: 'Bebas Neue', sans-serif; font-size: 2.6rem; letter-spacing: 0.02em; line-height: 1; background: linear-gradient(90deg, var(--ice), var(--fire)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+    .rate-from { font-family: 'Barlow Condensed', sans-serif; font-size: 0.7rem; letter-spacing: 0.28em; text-transform: uppercase; color: var(--muted); display: block; margin-bottom: 0.35rem; }
+    .rate-unit { font-family: 'Barlow Condensed', sans-serif; font-size: 0.78rem; letter-spacing: 0.16em; text-transform: uppercase; color: var(--muted); margin-top: 0.5rem; }
+    .rate-desc { font-size: 0.9rem; color: var(--muted); line-height: 1.75; margin-top: 1.4rem; padding-top: 1.4rem; border-top: 1px solid var(--border); }
+    .rate-note { margin-top: 2.5rem; padding: 2rem 2.2rem; background: var(--bg2); border: 1px solid var(--border); }
+    .rate-note p { font-size: 0.88rem; color: var(--muted); line-height: 1.9; }
+    .rate-note p + p { margin-top: 0.9rem; }
+    .rate-note strong { color: var(--text); font-weight: 600; }
 
     @keyframes fadeUp { from { opacity: 0; transform: translateY(24px); } to { opacity: 1; transform: translateY(0); } }
     .cascade { opacity: 0; animation: fadeUp 0.7s ease forwards; }
@@ -111,12 +153,133 @@
         <p class="service-desc">On-site production support for local and small-scale LAN events, from setup to show execution. Hands-on experience with live environments and real-time troubleshooting.</p>
       </div>
       <div class="service-card">
-        <div class="service-icon">🎞️</div>
-        <div class="service-name">Replay Operator</div>
-        <p class="service-desc">Operating vMix to capture, manage, and deliver instant replays during live broadcasts. I keep the replay pipeline running smoothly so your production never misses a moment.</p>
+        <div class="service-icon">⚙️</div>
+        <div class="service-name">Custom Broadcast Tooling</div>
+        <p class="service-desc">Purpose-built software for your broadcast — live graphics control, map ban and draft displays, roster and stats overlays wired straight into game APIs. Built for your show rather than bent out of an off-the-shelf template, and operable by a single producer mid-show. <a href="work.html" style="color:var(--ice); text-decoration:none;">See the tools →</a></p>
       </div>
     </div>
-    <div class="cta-bar cascade cascade-5">
+
+    <div class="also-avail cascade cascade-5">
+      <p class="also-label">Also available</p>
+      <div class="also-items">
+        <div class="also-item">
+          <span class="also-name">Replay Operator</span>
+          <span class="also-desc">Running the replay pipeline in vMix — capture, cue and deliver, without the show ever waiting on it.</span>
+        </div>
+        <div class="also-item">
+          <span class="also-name">Observing <em>(game dependent)</em></span>
+          <span class="also-desc">In-game camera work on titles that support a dedicated observer. Availability varies by game.</span>
+        </div>
+      </div>
+      <p class="also-foot">Crew roles like these are usually booked alongside a production, and are quoted per series or per day depending on the event.</p>
+    </div>
+
+    <div class="section-head cascade cascade-6">
+      <p class="section-eyebrow">Coverage</p>
+      <h2 class="section-title">Games &amp; Formats</h2>
+    </div>
+    <p class="section-sub cascade cascade-6">Five years across collegiate and sub-tier-2 competitive gaming. If your title isn&rsquo;t listed, ask &mdash; the production doesn&rsquo;t change nearly as much as the game does.</p>
+
+    <div class="cover-grid cascade cascade-6">
+      <div class="cover-col">
+        <h4>Games</h4>
+        <div class="tag-row">
+          <span class="tag">League of Legends</span>
+          <span class="tag">Valorant</span>
+          <span class="tag">Rocket League</span>
+          <span class="tag">COD Mobile</span>
+          <span class="tag">Marvel Rivals</span>
+          <span class="tag">Counter-Strike</span>
+          <span class="tag">Rainbow Six Siege</span>
+        </div>
+      </div>
+      <div class="cover-col">
+        <h4>Formats</h4>
+        <div class="tag-row">
+          <span class="tag">Season-long leagues</span>
+          <span class="tag">Tournaments</span>
+          <span class="tag">Finals weekends</span>
+          <span class="tag">Multi-day events</span>
+          <span class="tag">LANs</span>
+          <span class="tag">Showmatches</span>
+        </div>
+      </div>
+    </div>
+    <p class="cover-foot cascade cascade-6">Collegiate esports is where most of my work lives, and the leagues I work with run like leagues &mdash; paid casters, fixed weekly slots built around class schedules and held consistently week to week, a season structure everyone plans against. Rosters shift more than they would elsewhere; that&rsquo;s the nature of student teams, and the production is built to absorb it.</p>
+
+    <div class="section-head cascade cascade-6">
+      <p class="section-eyebrow">Process</p>
+      <h2 class="section-title">How I Work</h2>
+    </div>
+    <p class="section-sub cascade cascade-6">Most problems on a broadcast are decided days before anyone goes live. This is how I keep show day boring.</p>
+
+    <div class="process-list cascade cascade-6">
+      <div class="process-item">
+        <span class="process-num">01</span>
+        <div class="process-name">The build is finished two days out</div>
+        <p class="process-desc">Scenes, music, transitions and graphics are complete and frozen 48 hours before doors. That isn&rsquo;t a target, it&rsquo;s a deadline &mdash; it means rehearsal exists to find problems while there&rsquo;s still time to fix them, rather than being the first time anyone sees the show.</p>
+      </div>
+      <div class="process-item">
+        <span class="process-num">02</span>
+        <div class="process-name">The show runs off a live control sheet</div>
+        <p class="process-desc">Graphics are driven from a Google Sheet wired into the broadcast. Team names, scores, rosters, lower thirds &mdash; change a cell and it changes on air. Nothing gets re-exported, nothing gets rebuilt mid-show, and anyone on the crew with the link can update the broadcast without touching the production machine.</p>
+      </div>
+      <div class="process-item">
+        <span class="process-num">03</span>
+        <div class="process-name">Scope is agreed in writing first</div>
+        <p class="process-desc">A contractor agreement and a statement of work before anything starts &mdash; deliverables, timeline and price settled up front. Anything added later goes through a change order, so nobody discovers a disagreement on invoice day.</p>
+      </div>
+      <div class="process-item">
+        <span class="process-num">04</span>
+        <div class="process-name">Documented, not dependent on me</div>
+        <p class="process-desc">Tooling ships with an operator manual, and the control sheet means the broadcast is driven from something your team already knows how to use. If they need to run it without me &mdash; a scheduling clash, a second stage, next season &mdash; they can. I&rsquo;d rather be rebooked than be a single point of failure.</p>
+      </div>
+    </div>
+
+    <div class="section-head cascade cascade-6">
+      <p class="section-eyebrow">Investment</p>
+      <h2 class="section-title">Rates</h2>
+    </div>
+    <p class="section-sub cascade cascade-5">Every show is different, so these are starting points rather than fixed prices. Tell me the format, the number of days, and what you want the broadcast to look like, and I&rsquo;ll quote it properly.</p>
+
+    <div class="rates-grid cascade cascade-5">
+      <div class="rate-card">
+        <div class="rate-name">Production Day</div>
+        <span class="rate-from">From</span>
+        <div class="rate-price">$500</div>
+        <div class="rate-unit">per day</div>
+        <p class="rate-desc">Producing, directing and technical directing a single show day, up to eight hours. Includes call time, rehearsal and post-show wrap.</p>
+      </div>
+      <div class="rate-card">
+        <div class="rate-name">Multi-Day Event</div>
+        <span class="rate-from">From</span>
+        <div class="rate-price">$1,200</div>
+        <div class="rate-unit">two days</div>
+        <p class="rate-desc">Tournaments, finals weekends and LANs. Longer events are quoted as a package rather than day-by-day, so overruns don&rsquo;t become surprise invoices.</p>
+      </div>
+      <div class="rate-card">
+        <div class="rate-name">Show Build</div>
+        <span class="rate-from">From</span>
+        <div class="rate-price">$350</div>
+        <div class="rate-unit">per show configuration</div>
+        <p class="rate-desc">Scene construction in vMix or OBS, music, transitions, graphics setup, and a live control sheet wired into the show so your team can drive the graphics themselves — delivered and tested before show day, not during it.</p>
+      </div>
+      <div class="rate-card">
+        <div class="rate-name">Custom Tooling</div>
+        <span class="rate-from">From</span>
+        <div class="rate-price">$1,000</div>
+        <div class="rate-unit">or leased per event</div>
+        <p class="rate-desc">Bespoke broadcast software. Available as a one-off build, or leased per event at a lower rate if you&rsquo;d rather not carry the build cost up front.</p>
+      </div>
+    </div>
+
+    <div class="rate-note cascade cascade-6">
+      <p><strong>Crew and series-only work</strong> &mdash; replay, observing, or a single series rather than a full show day &mdash; is quoted separately. Get in touch and I&rsquo;ll price it against your format.</p>
+      <p><strong>On-site and travel</strong> are quoted case by case. Remote production is the default; I&rsquo;m based in the Los Angeles area and available to travel.</p>
+      <p><strong>Terms.</strong> Net 30 as standard. Larger projects run on a 50% deposit. Every engagement is covered by a written contractor agreement and a statement of work, so scope and price are agreed before anything starts.</p>
+    </div>
+
+    <div class="cta-bar cascade cascade-6">
       <div class="cta-bar-text">
         <h3>Ready to work together?</h3>
         <p>Reach out and let's talk about your next event.</p>

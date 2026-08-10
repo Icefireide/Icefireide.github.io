@@ -48,6 +48,20 @@
     .stat-label { font-family: 'Barlow Condensed', sans-serif; font-size: 0.75rem; letter-spacing: 0.25em; text-transform: uppercase; color: var(--muted); }
     .loading-state { padding: 4rem; text-align: center; color: var(--muted); font-family: 'Barlow Condensed', sans-serif; letter-spacing: 0.1em; }
     .spinner { width: 28px; height: 28px; border: 2px solid var(--border); border-top-color: var(--ice); border-radius: 50%; animation: spin 0.8s linear infinite; margin: 0 auto 1rem; }
+    /* Tooling gallery */
+    #tooling-section { margin-bottom: 4.5rem; }
+    .tooling-head { font-family: 'Bebas Neue', sans-serif; font-size: 2rem; letter-spacing: 0.06em; color: var(--white); margin-bottom: 0.8rem; }
+    .tooling-eyebrow { font-family: 'Barlow Condensed', sans-serif; font-size: 0.75rem; letter-spacing: 0.35em; text-transform: uppercase; color: var(--ice); margin-bottom: 0.6rem; }
+    .tooling-sub { color: var(--muted); font-size: 0.92rem; line-height: 1.8; max-width: 620px; margin-bottom: 2.2rem; }
+    .tooling-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 1.5rem; }
+    .tool-card { background: var(--surface); border: 1px solid var(--border); overflow: hidden; display: flex; flex-direction: column; transition: border-color 0.2s, transform 0.2s; text-decoration: none; }
+    .tool-card:hover { border-color: var(--ice); transform: translateY(-2px); }
+    .tool-shot { display: block; width: 100%; aspect-ratio: 16/9; object-fit: cover; background: var(--bg2); border-bottom: 1px solid var(--border); }
+    .tool-body { padding: 1.4rem 1.5rem 1.6rem; }
+    .tool-client { font-family: 'Barlow Condensed', sans-serif; font-size: 0.68rem; letter-spacing: 0.28em; text-transform: uppercase; color: var(--ice); display: block; margin-bottom: 0.45rem; }
+    .tool-title { font-family: 'Bebas Neue', sans-serif; font-size: 1.3rem; letter-spacing: 0.07em; color: var(--white); margin-bottom: 0.5rem; }
+    .tool-caption { font-size: 0.87rem; color: var(--muted); line-height: 1.75; }
+    .tooling-foot { font-size: 0.82rem; color: var(--muted); line-height: 1.75; margin-top: 1.8rem; }
     /* Year links */
     .year-links-title { font-family: 'Bebas Neue', sans-serif; font-size: 2rem; letter-spacing: 0.06em; color: var(--white); margin-bottom: 1.5rem; }
     .year-links { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; }
@@ -114,6 +128,16 @@
       <p style="font-size:0.78rem; color:var(--muted); font-family:'Barlow Condensed',sans-serif; letter-spacing:0.1em;">Totals update automatically when the production log is updated.</p>
     </div>
 
+    <!-- Tooling gallery. Hidden until at least one screenshot loads.
+         To add a shot: drop the image in /tooling/ and add an entry to TOOLING below. -->
+    <div id="tooling-section" class="cascade cascade-5" style="display:none;">
+      <p class="tooling-eyebrow">Built In-House</p>
+      <h2 class="tooling-head">Broadcast Tooling</h2>
+      <p class="tooling-sub">Software I wrote for my own shows &mdash; graphics control, draft and map-ban displays, roster and stats overlays wired into game APIs. Captured directly from the tools at full quality rather than pulled from a stream, so what you&rsquo;re seeing is what the broadcast actually renders.</p>
+      <div class="tooling-grid" id="tooling-grid"></div>
+      <p class="tooling-foot">Every one of these was built for a specific show and is reused season to season. If your broadcast needs something that doesn&rsquo;t exist yet, that&rsquo;s the interesting part of the job &mdash; <a href="contact.html" style="color:var(--ice); text-decoration:none;">get in touch</a>.</p>
+    </div>
+
     <h2 class="year-links-title cascade cascade-5">Browse by Year</h2>
     <div class="year-links cascade cascade-6">
       <a href="work-2026.html" class="year-link">
@@ -162,6 +186,55 @@
   </footer>
 
   <script>
+    // ── Broadcast Tooling gallery ──────────────────────────────────────────
+    // Drop screenshots into a /tooling/ folder next to this file, then list
+    // them here. Cards whose image is missing are removed automatically, and
+    // the whole section stays hidden until at least one image loads — so it is
+    // always safe to leave entries in place before the images exist.
+    const TOOLING = [
+      { file: 'tooling/mtb-map-ban.png',      client: 'MilkTeaBoards', title: 'Bo3 Map Ban',        caption: 'Live map ban and pick display driven by the operator panel, with per-team state and side selection reflected on air as it happens.' },
+      { file: 'tooling/mtb-map-entrance.png', client: 'MilkTeaBoards', title: 'Map Entrance',       caption: 'Animated entrance sequence for the selected map, triggered from the control panel and cut to automatically as the segment ends.' },
+      { file: 'tooling/mtb-operator.png',     client: 'MilkTeaBoards', title: 'Operator Panel',     caption: 'The producer-facing control surface. Built to be driven mid-show by someone already directing and switching, not by a dedicated graphics operator.' },
+      { file: 'tooling/d1-lineup.png',        client: 'Division One',  title: 'Team Lineups',       caption: 'Roster graphics populated from the league data rather than typed per show, so week-to-week changes cannot desync from what goes on screen.' },
+      { file: 'tooling/d1-scoreboard.png',    client: 'Division One',  title: 'Series Scoreboard',  caption: 'Series state and score carried across games, so the broadcast stays correct even when a series runs long or a game is remade.' },
+      { file: 'tooling/d1-control.png',       client: 'Division One',  title: 'Control Panel',      caption: 'Single-window control for every graphic in the show, laid out to match the run of show so the next action is always the next button.' },
+    ];
+
+    (function() {
+      var grid = document.getElementById('tooling-grid');
+      var section = document.getElementById('tooling-section');
+      if (!grid || !section) return;
+      var shown = 0;
+      TOOLING.forEach(function(t) {
+        var a = document.createElement('a');
+        a.className = 'tool-card';
+        a.href = t.file;
+        a.target = '_blank';
+        a.rel = 'noopener';
+        var img = document.createElement('img');
+        img.className = 'tool-shot';
+        img.loading = 'lazy';
+        img.alt = t.client + ' — ' + t.title;
+        img.onerror = function() { a.remove(); };
+        img.onload = function() {
+          shown++;
+          section.style.display = '';
+        };
+        img.src = t.file;
+        var body = document.createElement('div');
+        body.className = 'tool-body';
+        var c = document.createElement('span');
+        c.className = 'tool-client'; c.textContent = t.client;
+        var h = document.createElement('div');
+        h.className = 'tool-title'; h.textContent = t.title;
+        var p = document.createElement('p');
+        p.className = 'tool-caption'; p.textContent = t.caption;
+        body.appendChild(c); body.appendChild(h); body.appendChild(p);
+        a.appendChild(img); a.appendChild(body);
+        grid.appendChild(a);
+      });
+    })();
+
     const CSV = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vR300p3G6_5hn7Ydez7mY6XVhfoWeLUBFpM0C9oJdd__WP8xhVVwZp4bxFZwvxJvODbJ3_o_p-I8EUe/pub?gid=0&single=true&output=csv';
     function parseCSV(text) {
       return text.trim().split('\n').slice(1).map(line => {
