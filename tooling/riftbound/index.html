@@ -1,0 +1,263 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>Riftbound Broadcast Overlay — Interactive Demo | Icefireide</title>
+<meta name="description" content="Interactive demo of the Riftbound broadcast overlay: the real production overlay code, driven live in the browser."/>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow:ital,wght@0,300;0,400;0,600;1,300&family=Barlow+Condensed:wght@400;700&display=swap" rel="stylesheet"/>
+
+<!-- Installs the transport mocks. MUST run before the deferred overlay.js
+     below, which calls connect() and applyBranding() as soon as it executes. -->
+<script src="demo.js"></script>
+
+<!-- The production overlay, copied byte-for-byte from the tool. Not modified. -->
+<link rel="stylesheet" href="overlay.css"/>
+<script src="overlay.js" defer></script>
+
+<style>
+  :root { --bg:#080a0f; --bg2:#0d1018; --surface:#111520; --border:#1e2535;
+          --ice:#5de8ff; --fire:#ff5c1a; --text:#e8edf5; --muted:#6b7a96; --white:#fff; }
+  *,*::before,*::after { box-sizing:border-box; margin:0; padding:0; }
+
+  /* overlay.css sets html,body{background:transparent;overflow:hidden} because
+     it is built to sit over a video feed. This page is a document, so both are
+     put back — scoped here rather than by editing the copied stylesheet. */
+  html, body { background:var(--bg); overflow:auto; height:auto; }
+  body { color:var(--text); font-family:'Barlow',sans-serif; font-weight:300;
+         line-height:1.7; }
+
+  .wrap { max-width:1200px; margin:0 auto; padding:3rem 2rem 5rem; }
+  .back { display:inline-block; font-family:'Barlow Condensed',sans-serif;
+          font-size:.78rem; letter-spacing:.28em; text-transform:uppercase;
+          color:var(--ice); text-decoration:none; margin-bottom:2rem; }
+  .back:hover { color:var(--white); }
+  .eyebrow { font-family:'Barlow Condensed',sans-serif; font-size:.72rem;
+             letter-spacing:.35em; text-transform:uppercase; color:var(--ice);
+             margin-bottom:.6rem; }
+  h1 { font-family:'Bebas Neue',sans-serif; font-size:clamp(2rem,5vw,3rem);
+       letter-spacing:.05em; color:var(--white); line-height:1.05;
+       margin-bottom:.9rem; font-weight:400; }
+  .lede { color:var(--muted); max-width:70ch; margin-bottom:.9rem; font-size:.95rem; }
+  .lede strong { color:var(--text); font-weight:400; }
+
+  /* ---- the stage ---- */
+  #stage-box { position:relative; width:100%; margin:2rem 0 0;
+               border:1px solid var(--border); background:#05070c;
+               overflow:hidden; }
+  #stage-frame { position:absolute; top:0; left:0; width:1920px; height:1080px;
+                 transform-origin:top left; }
+
+  /* Stands in for the board camera / capture feed the overlay is designed to
+     sit over. The centre region genuinely has no overlay element in it — that
+     absence is the design, so showing something behind it is the honest way to
+     demonstrate the layout. */
+  .feed { position:absolute; inset:0; z-index:0;
+          background:
+            radial-gradient(ellipse at 50% 45%, #1a2436 0%, #0b1018 55%, #05070c 100%);
+          display:flex; align-items:center; justify-content:center; }
+  .feed span { font-family:'Barlow Condensed',sans-serif; font-size:34px;
+               letter-spacing:.42em; text-transform:uppercase;
+               color:rgba(232,237,245,.13); }
+  #stage-frame > #stage { z-index:1; }
+
+  /* ---- controls ---- */
+  .controls { display:flex; flex-wrap:wrap; gap:.5rem; margin-top:1.2rem; }
+  .grp { display:flex; align-items:stretch; border:1px solid var(--border);
+         background:var(--surface); }
+  .grp .cap { display:flex; align-items:center; padding:0 .85rem;
+              font-family:'Barlow Condensed',sans-serif; font-size:.7rem;
+              letter-spacing:.2em; text-transform:uppercase; color:var(--muted);
+              border-right:1px solid var(--border); }
+  button { font-family:'Barlow Condensed',sans-serif; font-size:.8rem;
+           letter-spacing:.14em; text-transform:uppercase; color:var(--text);
+           background:transparent; border:0; padding:.7rem 1rem; cursor:pointer;
+           transition:background .15s,color .15s; }
+  button:hover { background:var(--ice); color:#04070d; }
+  button + button { border-left:1px solid var(--border); }
+  .hint { color:var(--muted); font-size:.8rem; margin-top:.9rem; }
+
+  /* ---- notes + disclaimer ---- */
+  .notes { display:grid; grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
+           gap:1.2rem; margin-top:2.6rem; }
+  .note { border:1px solid var(--border); background:var(--surface); padding:1.3rem 1.4rem; }
+  .note h3 { font-family:'Bebas Neue',sans-serif; font-size:1.05rem;
+             letter-spacing:.06em; color:var(--white); margin-bottom:.5rem; font-weight:400; }
+  .note p { font-size:.86rem; color:var(--muted); line-height:1.75; }
+
+  .legal { margin-top:2.6rem; border:1px solid var(--border);
+           border-left:3px solid var(--fire); background:var(--bg2);
+           padding:1.3rem 1.5rem; }
+  .legal h3 { font-family:'Barlow Condensed',sans-serif; font-size:.72rem;
+              letter-spacing:.28em; text-transform:uppercase; color:var(--fire);
+              margin-bottom:.6rem; }
+  .legal p { font-size:.83rem; color:var(--muted); line-height:1.8; }
+  .legal p + p { margin-top:.6rem; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <a class="back" href="../../work.html">&larr; Back to work</a>
+
+  <p class="eyebrow">Riftbound &middot; Broadcast Tooling</p>
+  <h1>Riftbound Broadcast Overlay</h1>
+  <p class="lede">The on-air overlay for Riftbound tabletop broadcasts &mdash; persistent side columns, a shared victory track, and structural gaps left open for the player cameras.</p>
+  <p class="lede"><strong>This is the real thing.</strong> The stylesheet and the render code on this page are byte-for-byte copies of the production tool, unmodified. What stands in is the transport: instead of the tool&rsquo;s WebSocket feeding state and its API serving client branding, the buttons below push the same snapshots through the same code path. Nothing here is a mockup of the overlay &mdash; it <em>is</em> the overlay.</p>
+
+  <div id="stage-box">
+    <div id="stage-frame">
+      <div class="feed"><span>Board camera</span></div>
+
+      <!-- ===== Overlay markup, reproduced exactly from the production tool ===== -->
+      <div id="stage">
+        <div class="track" id="track" aria-hidden="true"></div>
+
+        <div class="col col-a" id="colA">
+          <div class="col-rule"></div>
+          <div class="panel panel-top" id="panelTopA">
+            <div class="void-glow"></div>
+            <div class="tex tex-smoke"></div>
+            <div class="tex tex-etch"></div>
+            <div class="champ-wash" id="washTopA"></div>
+            <div class="panel-body">
+              <div class="pname" id="pnameA"><span class="turn-dot" id="turnDotA"></span><span id="nameA"></span></div>
+              <div class="series" id="seriesA"></div>
+            </div>
+          </div>
+          <div class="cam-gap" id="camGapA"></div>
+          <div class="panel panel-main" id="panelMainA">
+            <div class="void-glow"></div>
+            <div class="tex tex-smoke"></div>
+            <div class="tex tex-etch"></div>
+            <div class="champ-wash" id="washMainA"></div>
+            <div class="panel-body">
+              <div class="card card-champ" id="champWrapA">
+                <img class="card-img" id="champImgA" alt="" />
+                <div class="card-missing" id="champMissA">
+                  <div class="miss-name" id="champMissNameA"></div>
+                  <div class="miss-mark">IMAGE MISSING</div>
+                </div>
+              </div>
+              <div class="card card-bf" id="bfWrapA">
+                <div class="ctrl-bar" id="ctrlBarA"></div>
+                <img class="card-img" id="bfImgA" alt="" />
+                <div class="card-missing" id="bfMissA">
+                  <div class="miss-name" id="bfMissNameA"></div>
+                  <div class="miss-mark">IMAGE MISSING</div>
+                </div>
+              </div>
+              <div class="spacer"></div>
+              <div class="event-block" id="eventBlock">
+                <div class="event-name" id="eventName"></div>
+                <img class="event-logo" id="eventLogo" alt="" />
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="col col-b" id="colB">
+          <div class="col-rule"></div>
+          <div class="panel panel-top" id="panelTopB">
+            <div class="void-glow"></div>
+            <div class="tex tex-smoke"></div>
+            <div class="tex tex-etch"></div>
+            <div class="champ-wash" id="washTopB"></div>
+            <div class="panel-body">
+              <div class="pname" id="pnameB"><span class="turn-dot" id="turnDotB"></span><span id="nameB"></span></div>
+              <div class="series" id="seriesB"></div>
+            </div>
+          </div>
+          <div class="cam-gap" id="camGapB"></div>
+          <div class="panel panel-main" id="panelMainB">
+            <div class="void-glow"></div>
+            <div class="tex tex-smoke"></div>
+            <div class="tex tex-etch"></div>
+            <div class="champ-wash" id="washMainB"></div>
+            <div class="panel-body">
+              <div class="card card-champ" id="champWrapB">
+                <img class="card-img" id="champImgB" alt="" />
+                <div class="card-missing" id="champMissB">
+                  <div class="miss-name" id="champMissNameB"></div>
+                  <div class="miss-mark">IMAGE MISSING</div>
+                </div>
+              </div>
+              <div class="card card-bf" id="bfWrapB">
+                <div class="ctrl-bar" id="ctrlBarB"></div>
+                <img class="card-img" id="bfImgB" alt="" />
+                <div class="card-missing" id="bfMissB">
+                  <div class="miss-name" id="bfMissNameB"></div>
+                  <div class="miss-mark">IMAGE MISSING</div>
+                </div>
+              </div>
+              <div class="spacer"></div>
+              <div class="card card-highlight" id="hlWrap">
+                <div class="flipper" id="hlFlip">
+                  <div class="face face-back">
+                    <div class="back-device"></div>
+                    <img class="back-logo" id="hlBackLogo" alt="" />
+                  </div>
+                  <div class="face face-front">
+                    <img class="card-img" id="hlImg" alt="" />
+                    <div class="card-missing" id="hlMiss">
+                      <div class="miss-name" id="hlMissName"></div>
+                      <div class="miss-mark">IMAGE MISSING</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- ===== end overlay markup ===== -->
+    </div>
+  </div>
+
+  <div class="controls">
+    <div class="grp">
+      <span class="cap">Vanguard</span>
+      <button data-act="score-a-down">&minus;</button>
+      <button data-act="score-a-up">+</button>
+    </div>
+    <div class="grp">
+      <span class="cap">Eclipse</span>
+      <button data-act="score-b-down">&minus;</button>
+      <button data-act="score-b-up">+</button>
+    </div>
+    <div class="grp"><button data-act="turn"><span class="lbl">Turn</span></button></div>
+    <div class="grp"><button data-act="control">Battlefield control</button></div>
+    <div class="grp"><button data-act="highlight"><span class="lbl">Highlight</span></button></div>
+    <div class="grp"><button data-act="cameras"><span class="lbl">Cameras</span></button></div>
+    <div class="grp"><button data-act="palette"><span class="lbl">Palette</span></button></div>
+    <div class="grp"><button data-act="reset">Reset</button></div>
+  </div>
+  <p class="hint">Victory points cap at 8 per side &mdash; the track is the only place they render, deliberately never also as a numeral, so the same number can never be shown two ways that disagree mid-change.</p>
+
+  <div class="notes">
+    <div class="note">
+      <h3>The centre is empty on purpose</h3>
+      <p>No overlay element exists in the middle of the canvas at all. A board camera and a digital capture are the same empty box to this page, so one layout serves both without a mode switch.</p>
+    </div>
+    <div class="note">
+      <h3>The camera gaps are real absence</h3>
+      <p>Each column is two separate opaque panels with genuinely nothing between them, not a transparent-styled element. Turn the cameras off and the panels close up rather than leaving a framed hole.</p>
+    </div>
+    <div class="note">
+      <h3>Themed per client</h3>
+      <p>Every colour comes from a token resolved from the active client profile. Cycling the palette here runs the same branding path a profile switch runs on air.</p>
+    </div>
+    <div class="note">
+      <h3>Nothing is rebuilt</h3>
+      <p>Every element is created once. Updates only ever touch text, a class, or an attribute &mdash; so the overlay can never flicker or tear down mid-show.</p>
+    </div>
+  </div>
+
+  <div class="legal">
+    <h3>Card art &mdash; ownership</h3>
+    <p>All Riftbound card art shown in this demo is the property of <strong>Riot Games, Inc.</strong> I do not own it and claim no rights to it. It appears here solely to demonstrate the function of broadcast software I built, and is reproduced at reduced resolution for that purpose.</p>
+    <p>This demo is not endorsed by Riot Games and does not reflect the views or opinions of Riot Games or anyone officially involved in producing or managing Riot Games properties. Riot Games, Riftbound, and all associated properties are trademarks or registered trademarks of Riot Games, Inc.</p>
+    <p>The overlay software, its layout, and its design are my own work.</p>
+  </div>
+</div>
+</body>
+</html>

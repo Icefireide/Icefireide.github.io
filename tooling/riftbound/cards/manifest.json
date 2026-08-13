@@ -1,0 +1,27 @@
+{
+  "champ-a": {
+    "name": "Vi - Piltover Enforcer (Signature)",
+    "rarity": "Rare",
+    "riftbound_id": "unl-229*-219"
+  },
+  "champ-b": {
+    "name": "Pyke - Bloodharbor Ripper",
+    "rarity": "Rare",
+    "riftbound_id": "unl-185-219"
+  },
+  "highlight": {
+    "name": "LeBlanc - Deceiver (Signature)",
+    "rarity": "Rare",
+    "riftbound_id": "unl-235*-219"
+  },
+  "bf-a": {
+    "name": "Star Spring",
+    "rarity": "Uncommon",
+    "riftbound_id": "unl-215-219"
+  },
+  "bf-b": {
+    "name": "Black Flame Altar",
+    "rarity": "Uncommon",
+    "riftbound_id": "unl-208-219"
+  }
+}
