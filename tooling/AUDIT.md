@@ -2,6 +2,14 @@
 
 Written 2026-08-13. Not published; a working note for whoever picks this up.
 
+## Where the gallery lives
+
+**`tools.html`**, its own top-level page, reachable from the `Tools` tab in the
+nav. It was moved out of `work.html` on 2026-08-13 — that page now carries only
+the production-log stats and the year links, and does not link to the gallery.
+References to `work.html` below describe the old location; the behaviour they
+describe carried over unchanged.
+
 ## The bug that mattered more than the missing images
 
 `work.html` built each card with `img.loading = 'lazy'`, inside a
