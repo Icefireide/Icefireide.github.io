@@ -136,6 +136,7 @@
       <p class="tooling-sub">Software I wrote for my own shows &mdash; graphics control, draft and map-ban displays, roster and stats overlays wired into game APIs. Captured directly from the tools at full quality rather than pulled from a stream, so what you&rsquo;re seeing is what the broadcast actually renders.</p>
       <div class="tooling-grid" id="tooling-grid"></div>
       <p class="tooling-foot">Every one of these was built for a specific show and is reused season to season. If your broadcast needs something that doesn&rsquo;t exist yet, that&rsquo;s the interesting part of the job &mdash; <a href="contact.html" style="color:var(--ice); text-decoration:none;">get in touch</a>.</p>
+      <p class="tooling-foot" style="font-size:0.76rem; opacity:0.75;">Card art shown in the Riftbound overlay is the property of Riot Games, Inc. I do not own it and claim no rights to it; it appears only to demonstrate software I built. Not endorsed by Riot Games. <a href="tooling/riftbound/" style="color:var(--ice); text-decoration:none;">Full notice</a>.</p>
     </div>
 
     <h2 class="year-links-title cascade cascade-5">Browse by Year</h2>
@@ -191,7 +192,12 @@
     // them here. Cards whose image is missing are removed automatically, and
     // the whole section stays hidden until at least one image loads — so it is
     // always safe to leave entries in place before the images exist.
+    // `link` is optional. Without it a card opens its own screenshot, which is
+    // the original behaviour. With it the card opens that page instead — used
+    // for the Riftbound entry, which has a live interactive demo rather than a
+    // still. The image is still what the card shows.
     const TOOLING = [
+      { file: 'tooling/riftbound-overlay.webp', link: 'tooling/riftbound/', client: 'Riftbound', title: 'Broadcast Overlay', caption: 'Persistent side columns with a shared victory track, and structural gaps left open for the player cameras. Interactive demo — the real overlay code, driven live in your browser.' },
       { file: 'tooling/mtb-map-ban.png',      client: 'MilkTeaBoards', title: 'Bo3 Map Ban',        caption: 'Live map ban and pick display driven by the operator panel, with per-team state and side selection reflected on air as it happens.' },
       { file: 'tooling/mtb-map-entrance.png', client: 'MilkTeaBoards', title: 'Map Entrance',       caption: 'Animated entrance sequence for the selected map, triggered from the control panel and cut to automatically as the segment ends.' },
       { file: 'tooling/mtb-operator.png',     client: 'MilkTeaBoards', title: 'Operator Panel',     caption: 'The producer-facing control surface. Built to be driven mid-show by someone already directing and switching, not by a dedicated graphics operator.' },
@@ -208,12 +214,18 @@
       TOOLING.forEach(function(t) {
         var a = document.createElement('a');
         a.className = 'tool-card';
-        a.href = t.file;
+        a.href = t.link || t.file;
         a.target = '_blank';
         a.rel = 'noopener';
         var img = document.createElement('img');
         img.className = 'tool-shot';
-        img.loading = 'lazy';
+        // NOT loading="lazy". The section starts at display:none and is revealed
+        // by the first onload below — but a lazy image inside a display:none
+        // subtree is never fetched, so onload never fires to reveal the section
+        // and onerror never fires to drop the broken cards. That deadlock is why
+        // this gallery never appeared. Eager is correct here: the whole point is
+        // that these images decide whether the section exists at all.
+        img.loading = 'eager';
         img.alt = t.client + ' — ' + t.title;
         img.onerror = function() { a.remove(); };
         img.onload = function() {

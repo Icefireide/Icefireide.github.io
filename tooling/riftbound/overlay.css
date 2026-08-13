@@ -1,0 +1,720 @@
+/* Riftbound Broadcast Tool — Display overlay.
+ *
+ * Redesigned per ADR-0023/0024/0025/0026/0028/0029.
+ *
+ * EVERY COLOUR IN THIS FILE COMES FROM A TOKEN (ADR-0026). The palette is
+ * resolved per-client from the active Profile and pushed onto :root by
+ * overlay.js. There are exactly two literals, both deliberate and marked
+ * below: the missing-asset marker, which must look wrong in every client
+ * palette rather than blending into one.
+ *
+ * If a colour ever refuses to change when a client palette is applied, the
+ * first thing to check is whether something has redefined a token further
+ * down the tree instead of reading it.
+ */
+
+* { box-sizing: border-box; }
+
+html, body {
+  margin: 0;
+  padding: 0;
+  /* The one rule that must hold in every state: no opaque full-bleed element
+     anywhere. Panel backgrounds are scoped to each panel, never to body. */
+  background: transparent;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+}
+
+:root {
+  /* Seeded with the Void Magenta defaults so the overlay renders correctly
+     for the instant before the first branding fetch lands, and continues to
+     render if that fetch ever fails. services/branding.js owns the real
+     defaults; these mirror them. */
+  --side-a: #E63DFF;
+  --side-b: #FFB020;
+  --bg-void: #0D0518;
+  --bg-void-2: #1C0A30;
+  --glow-3: #8C3CDC;
+  --text-bright: #F3ECFF;
+  --text-dim: #B7A9D6;
+  --bf-neutral: #5B5770;
+  --ink: #170314;
+
+  /* rgb triples for the same colours, so glows at arbitrary alpha work
+     without color-mix() — which is not safe to assume in the older Chromium
+     builds OBS and vMix embed (C20). overlay.js derives these. */
+  --side-a-rgb: 230, 61, 255;
+  --side-b-rgb: 255, 176, 32;
+  --glow-3-rgb: 140, 60, 220;
+  --text-bright-rgb: 243, 236, 255;
+
+  /* Champion identity colours (ADR-0028), per side, set from the snapshot.
+     Transparent means "no champion set" and renders as no wash at all. */
+  --champ-a: transparent;
+  --champ-b: transparent;
+
+  /* Baked noise (ADR-0029), generated once at startup by overlay.js. */
+  --tex-smoke: none;
+  --tex-grain: none;
+}
+
+#stage {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 1920px;
+  height: 1080px;
+  background: transparent;
+  pointer-events: none; /* a broadcast overlay is never an input surface */
+  font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+}
+
+/* ============================ COLUMNS ============================ */
+
+.col {
+  position: absolute;
+  top: 0;
+  width: 260px;
+  height: 1080px;
+}
+.col-a { left: 0; }
+.col-b { left: 1660px; }
+
+/* The identity rule runs the full column height as its own element so it
+   stays continuous across the camera gap (ADR-0025). If it were a border on
+   the panels it would break wherever the gap is. */
+.col-rule {
+  position: absolute;
+  top: 0;
+  width: 2px;
+  height: 1080px;
+  z-index: 4;
+}
+.col-a .col-rule { right: 0; background: var(--side-a); }
+.col-b .col-rule { left: 0; background: var(--side-b); }
+
+/* ============================ PANELS ============================ */
+
+.panel {
+  position: absolute;
+  left: 0;
+  width: 258px;
+  overflow: hidden;
+  background: radial-gradient(ellipse at center, var(--bg-void-2) 0%, var(--bg-void) 72%);
+}
+.col-b .panel { left: 2px; }
+
+/* Cameras ON: two segments with a real gap between them.
+   Cameras OFF: the top segment grows to meet the main one and the gap is
+   display:none, so there is no hole at all. Both states are pure geometry —
+   no opacity trickery, because a translucent "gap" would show the panel
+   behind it rather than the vMix layer underneath. */
+.panel-top  { top: 0;     height: 104px; }
+.cam-gap    { position: absolute; left: 0; top: 104px; width: 258px; height: 145px;
+              border-top: 2px solid; border-bottom: 2px solid; z-index: 3; }
+.panel-main { top: 249px; height: 831px; }
+
+.col-b .cam-gap { left: 2px; }
+.col-a .cam-gap { border-color: var(--side-a); }
+.col-b .cam-gap { border-color: var(--side-b); }
+
+/* No cameras: close the column up. */
+#stage.no-cams .cam-gap    { display: none; }
+#stage.no-cams .panel-top  { height: 104px; }
+#stage.no-cams .panel-main { top: 104px; height: 976px; }
+
+.panel-body {
+  position: relative;
+  z-index: 2;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 20px 18px;
+}
+.panel-top .panel-body { padding-bottom: 0; }
+.spacer { flex: 1 1 auto; }
+
+/* --------------------------- TEXTURE (ADR-0029) --------------------------
+   Smoke for depth, etch for structure. The etch is the load-bearing half —
+   the columns already carry several soft atmospheric effects, so smoke partly
+   duplicates existing work while the hatch is the only thing contributing
+   hard edges. It is also the cheaper half (pure CSS, no raster).
+
+   DEGRADATION PATH, if the Stage 9 soak shows encoder trouble: delete the
+   .tex-smoke rule and keep .tex-etch. Depth is lost, character is retained.
+
+   Noise is BAKED ONCE at startup, never computed per frame. These were live
+   SVG feTurbulence filters and that was wrong for a page that is never
+   reloaded during a show: feTurbulence is CPU-evaluated in most browsers and
+   re-runs whenever a filtered element transforms, which these do continuously.
+   ------------------------------------------------------------------------ */
+/* --------------------------- VOID ENERGY (ADR-0029) ----------------------
+   Two counter-moving bands of blurred light drifting through each column.
+   This is the layer that makes the panels feel alive rather than merely
+   textured, and it was accidentally dropped when this stylesheet was written
+   from scratch — smoke/etch/grain carried over, these did not, which left the
+   panels sitting on a static gradient. Restored 2026-08-13.
+
+   Tuned for the SHAPE it lives in: a 260px-wide column has no room to show
+   rotation or scale, so these travel vertically. The two speeds are
+   deliberately not multiples of each other (11s and 17s) so they never sync
+   up and the column reads as flowing rather than sliding as one piece.
+
+   Oversized and clipped by the panel's own overflow:hidden, so no transform
+   can push a visible edge into frame regardless of where the keyframes go —
+   which is also what keeps them out of the camera gap (ADR-0025).
+
+   Colours come from palette tokens, so a client theme repaints these too. */
+.void-glow {
+  position: absolute;
+  inset: -30%;
+  z-index: 0;
+  pointer-events: none;
+  filter: blur(26px);
+  animation: void-rise 11s ease-in-out infinite alternate;
+  will-change: transform;
+}
+.col-a .void-glow {
+  background:
+    radial-gradient(64% 16% at 50% 16%, rgba(var(--side-a-rgb), 0.52), transparent 72%),
+    radial-gradient(72% 13% at 50% 47%, rgba(var(--glow-3-rgb), 0.44), transparent 74%),
+    radial-gradient(64% 15% at 50% 80%, rgba(var(--side-b-rgb), 0.30), transparent 72%);
+}
+.col-b .void-glow {
+  background:
+    radial-gradient(64% 16% at 50% 16%, rgba(var(--side-b-rgb), 0.52), transparent 72%),
+    radial-gradient(72% 13% at 50% 47%, rgba(var(--glow-3-rgb), 0.44), transparent 74%),
+    radial-gradient(64% 15% at 50% 80%, rgba(var(--side-a-rgb), 0.30), transparent 72%);
+}
+@keyframes void-rise {
+  from { transform: translateY(-26%); }
+  to   { transform: translateY(26%); }
+}
+
+/* The counter-moving band. A pseudo-element so no panel needs a second node
+   for it, and slower + opposite so the two never line up. */
+.panel::before {
+  content: '';
+  position: absolute;
+  inset: -35% -20%;
+  z-index: 0;
+  pointer-events: none;
+  filter: blur(30px);
+  background:
+    radial-gradient(80% 12% at 50% 30%, rgba(var(--glow-3-rgb), 0.34), transparent 74%),
+    radial-gradient(70% 11% at 50% 68%, rgba(var(--side-a-rgb), 0.26), transparent 74%);
+  animation: void-fall 17s ease-in-out infinite alternate;
+  will-change: transform;
+}
+.col-b .panel::before {
+  background:
+    radial-gradient(80% 12% at 50% 30%, rgba(var(--glow-3-rgb), 0.34), transparent 74%),
+    radial-gradient(70% 11% at 50% 68%, rgba(var(--side-b-rgb), 0.26), transparent 74%);
+}
+@keyframes void-fall {
+  from { transform: translateY(22%); }
+  to   { transform: translateY(-22%); }
+}
+
+.tex {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+}
+.tex-smoke {
+  background-color: var(--glow-3);
+  -webkit-mask-image: var(--tex-smoke); mask-image: var(--tex-smoke);
+  -webkit-mask-size: 100% 100%; mask-size: 100% 100%;
+  mix-blend-mode: screen;
+  opacity: 0.34;
+  animation: smoke-drift 26s ease-in-out infinite alternate;
+  will-change: transform;
+}
+@keyframes smoke-drift {
+  from { transform: translate3d(-6%, -5%, 0) scale(1.25); }
+  to   { transform: translate3d(5%, 6%, 0) scale(1.42); }
+}
+
+/* 2px, NEVER 1px. A hairline hatch is among the most compression-fragile
+   things that can be put on a broadcast feed — it shimmers and crawls. */
+.tex-etch {
+  opacity: 0.30;
+  mix-blend-mode: overlay;
+  background-image:
+    repeating-linear-gradient(58deg,  rgba(var(--text-bright-rgb), 0.065) 0 2px, transparent 2px 13px),
+    repeating-linear-gradient(-58deg, rgba(var(--side-a-rgb), 0.055) 0 2px, transparent 2px 21px);
+}
+.col-b .tex-etch {
+  background-image:
+    repeating-linear-gradient(58deg,  rgba(var(--text-bright-rgb), 0.065) 0 2px, transparent 2px 13px),
+    repeating-linear-gradient(-58deg, rgba(var(--side-b-rgb), 0.055) 0 2px, transparent 2px 21px);
+}
+
+/* Film grain, on every panel. Baked, static, neutral — no tint. */
+.panel::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  background-image: var(--tex-grain);
+  background-repeat: repeat;
+  opacity: 0.07;
+  mix-blend-mode: overlay;
+}
+
+/* Champion identity wash (ADR-0028) — light, not fill. Real card art is
+   opaque, so a wash BEHIND it would be invisible; this sits over the panel
+   ground and around the card instead. Never used to answer "which side is
+   this" — that is the fixed rule's job. */
+.champ-wash {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  mix-blend-mode: screen;
+  animation: champ-breathe 8s ease-in-out infinite alternate;
+  will-change: transform, opacity;
+}
+.col-a .champ-wash {
+  background: radial-gradient(70% 40% at 50% 22%, var(--champ-a), transparent 72%);
+}
+.col-b .champ-wash {
+  background: radial-gradient(70% 40% at 50% 22%, var(--champ-b), transparent 72%);
+}
+@keyframes champ-breathe {
+  from { opacity: 0.55; transform: translateY(-3%) scale(1.02); }
+  to   { opacity: 0.95; transform: translateY(3%) scale(1.10); }
+}
+
+/* ============================ TYPE ============================ */
+
+.pname {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  max-width: 100%;
+  font-size: 18px;
+  font-weight: 700;
+  letter-spacing: 0.4px;
+  text-transform: uppercase;
+  color: var(--text-bright);
+}
+
+/* NO leading dot in this row, deliberately — see .turn-dot below. Anything
+   asymmetric here throws the name off the axis the pips use, and no amount of
+   spacer-balancing fixes it: padding the trailing side centres the TEXT but
+   then the dot+name cluster the eye actually reads sits left instead. Measured
+   both ways in a 258px column: text 137 vs pips 129 unbalanced, cluster 121 vs
+   pips 129 balanced. The only stable answer is to keep the row symmetric. */
+
+/* Ellipsis moves onto the text itself: as a flex child it needs its own
+   min-width:0 to be allowed to shrink, otherwise a long name overflows the
+   column instead of truncating. */
+.pname span:not(.turn-dot) {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* Active-turn cue. NULL activeTurnSide lights neither side and dims neither
+   column — a turn the operator forgot to advance reads as absent, not as the
+   wrong player.
+
+   The dot takes NO layout space: it is the name itself that lights up. A dot
+   in the text flow is unavoidably asymmetric and drags the name off the pips'
+   axis (see .pname above). Glowing the name is symmetric by construction, is
+   impossible to knock out of alignment by any name length, and is a stronger
+   read on a compressed feed than a 9px dot was. ADR-0023 requires a turn
+   indicator but does not prescribe its form, so this stays within it. */
+.turn-dot {
+  display: none;
+}
+.col-a .pname.live { color: var(--side-a); text-shadow: 0 0 14px rgba(var(--side-a-rgb), 0.75); }
+.col-b .pname.live { color: var(--side-b); text-shadow: 0 0 14px rgba(var(--side-b-rgb), 0.75); }
+
+/* The idle column sits back via BRIGHTNESS, not opacity. opacity on a
+   container makes its whole subtree translucent, which stops opaque card art
+   occluding the texture behind it — the active side would block it and the
+   idle side would not, which looks like a rendering bug because it is one. */
+.col.idle .panel-body { filter: brightness(0.62) saturate(0.88); }
+
+/* Series score as pips, not a numeral. A bare number under a player's name is
+   readable as a point total by a viewer who just tuned in (ADR-0023). */
+.series { display: flex; gap: 7px; margin-top: 10px; }
+.series-pip {
+  width: 13px; height: 13px;
+  transform: rotate(45deg);
+  background: transparent;
+  border: 1.5px solid var(--bf-neutral);
+  flex: 0 0 auto;
+}
+.col-a .series-pip.won { background: var(--side-a); border-color: var(--side-a); box-shadow: 0 0 7px 1px rgba(var(--side-a-rgb), 0.75); }
+.col-b .series-pip.won { background: var(--side-b); border-color: var(--side-b); box-shadow: 0 0 7px 1px rgba(var(--side-b-rgb), 0.75); }
+
+/* Numeral fallback when seriesLength is 0 — pips need a denominator, and
+   ADR-0014 forbids the tool assuming one. */
+.series-num { font-size: 26px; font-weight: 800; line-height: 1; }
+.col-a .series-num { color: var(--side-a); text-shadow: 0 0 12px rgba(var(--side-a-rgb), 0.85); }
+.col-b .series-num { color: var(--side-b); text-shadow: 0 0 12px rgba(var(--side-b-rgb), 0.85); }
+
+/* ============================ VICTORY TRACK ============================ */
+
+.track {
+  position: absolute;
+  left: 660px;
+  top: 26px;
+  width: 600px;
+  height: 46px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  filter: drop-shadow(0 2px 6px rgba(0, 0, 0, 0.6));
+}
+.track-pip {
+  width: 22px; height: 22px;
+  border-radius: 50%;
+  background: var(--bf-neutral);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 11px; font-weight: 700;
+  color: var(--text-dim);
+  flex: 0 0 auto;
+  position: relative;
+}
+.track-pip.eight { width: 26px; height: 26px; font-size: 12px; }
+
+/* A filled trail behind the leading pip, so "how close to 8" reads as a
+   LENGTH rather than requiring the eye to find one lit circle among sixteen. */
+.track-pip.trail-a { background: rgba(var(--side-a-rgb), 0.42); color: var(--text-bright); }
+.track-pip.trail-b { background: rgba(var(--side-b-rgb), 0.42); color: var(--text-bright); }
+.track-pip.lead-a  { background: var(--side-a); color: var(--ink); box-shadow: 0 0 10px 2px rgba(var(--side-a-rgb), 0.8); }
+.track-pip.lead-b  { background: var(--side-b); color: var(--ink); box-shadow: 0 0 10px 2px rgba(var(--side-b-rgb), 0.8); }
+
+/* Pulse ring on the leading pip. transform/opacity only — animating a
+   box-shadow instead would repaint a blur every frame for the length of a
+   show, on a page that never reloads. */
+.track-pip.lead-a::after,
+.track-pip.lead-b::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  border: 2px solid currentColor;
+  animation: pip-pulse 2.4s ease-out infinite;
+  pointer-events: none;
+}
+.track-pip.lead-a::after { color: var(--side-a); }
+.track-pip.lead-b::after { color: var(--side-b); }
+@keyframes pip-pulse {
+  0%   { transform: scale(1);   opacity: 0.85; }
+  70%  { transform: scale(1.9); opacity: 0; }
+  100% { transform: scale(1.9); opacity: 0; }
+}
+
+/* ============================ CARDS ============================ */
+
+.card {
+  position: relative;
+  flex: 0 0 auto;
+  border: 2px solid;
+  border-radius: 10px;
+  overflow: hidden;
+  background: linear-gradient(160deg, var(--bg-void-2), var(--bg-void));
+}
+.col-a .card { border-color: var(--side-a); }
+.col-b .card { border-color: var(--side-b); }
+
+/* Portrait champion above a landscape battlefield (ADR-0032's shapes).
+   ADR-0033: A CARD IS NEVER CROPPED. Riftbound battlefield art carries rules
+   text and zone markings out to its own edges, so any crop removes information
+   that is the reason the card is on screen at all.
+
+   Every frame below is therefore sized so its IMAGE BOX matches the real art's
+   aspect, measured across all 1308 downloaded cards rather than assumed:
+   portrait clusters at 744x1039 (0.71607) and landscape at 1039x744 (1.39651),
+   with total spread under 0.4% — small enough that one fixed aspect per
+   orientation fits every card to well under a pixel.
+
+   Working from the 186px image width every card has (190 minus the 2px frame
+   on each side):
+     portrait   186 / 1.39651 = 259.8 -> 260, + 4px border          = 264
+     landscape  186 * 0.71607 = 133.2 -> 133, + 26px bar + 4px      = 163
+   Change the frame width and BOTH heights have to be recomputed, or the art
+   starts letterboxing inside its own frame. */
+.card-champ     { width: 190px; height: 264px; }
+.card-bf        { width: 190px; height: 163px; margin-top: 12px; padding-top: 26px; }
+.card-highlight { width: 190px; height: 264px; }
+
+/* The champion card carries the identity bloom OUTWARD, so it still reads
+   with fully opaque art in the box. The frame border stays the side colour. */
+.col-a .card-champ { box-shadow: 0 0 34px 5px var(--champ-a), 0 6px 18px rgba(0, 0, 0, 0.5); }
+.col-b .card-champ { box-shadow: 0 0 34px 5px var(--champ-b), 0 6px 18px rgba(0, 0, 0, 0.5); }
+
+/* contain, NEVER cover (ADR-0033). With the frames above already matching the
+   art's aspect this paints identically to cover for every real card — but it
+   is what guarantees that an off-aspect card from a future set letterboxes
+   inside its frame instead of silently losing its edges. A card that does not
+   fit should look wrong, not look fine while missing its rules text. */
+.card-img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+/* No height override for .card-bf: padding-top on the frame already reserves
+   the control bar's 26px, so the image's 100% is 100% of what is left. The
+   previous calc(100% - 26px) here subtracted that same bar a SECOND time,
+   squeezing landscape art into a 186x80 box (aspect 2.33 against the art's
+   1.40) and cropping 40% of every battlefield card's height away. */
+
+/* A card with nothing set collapses entirely rather than showing an empty
+   frame — same don't-render-a-placeholder discipline as ADR-0015. */
+.card.empty { display: none; }
+
+/* EXCEPTION: the highlight card keeps its frame at all times (Ice, 2026-08-13).
+   This is chrome, not data, so it does not conflict with ADR-0015 — that rule
+   is about never showing a fake VALUE (a 0 score, a placeholder name), and an
+   empty frame asserts nothing about the match. It earns its place by reserving
+   the space: without it the column's whole lower block shifts every time a card
+   is triggered or dismissed, which is a visible jump on air during exactly the
+   moment attention is on that corner.
+
+   THE FRAME IS SOLID, NOT DASHED (Ice, 2026-08-13, revising his own earlier
+   call). A dashed outline is the only place on this overlay that a border did
+   not mean the same thing it means everywhere else — the column rule, the
+   camera-gap edges and every other card frame are all 2px solid in the side
+   colour, so a dashed one read as a different kind of object rather than as
+   the same object waiting. It inherits .card's border wholesale now, which is
+   also why there is no border declaration left here to drift out of sync.
+
+   The faint wash that used to sit here is gone (ADR-0034): the back face now
+   covers the whole frame, so the wash painted nowhere. What it was for —
+   separating "nothing triggered yet" from a card mid-load — the back does far
+   better by actually saying so. */
+.card-highlight.empty {
+  display: block;
+}
+
+/* ====================== HIGHLIGHT CARD FLIP (ADR-0034) ======================
+   The frame is permanent and always shows one of two faces: a brandable card
+   back at rest, the real card when one is triggered.
+
+   overflow is VISIBLE here, deliberately, against .card's own overflow:hidden.
+   An `overflow` other than visible forces transform-style back to `flat` on the
+   element that carries it, and this element carries the perspective — leaving
+   it hidden collapses the flip to a flat horizontal squash in Chromium. Each
+   face therefore clips ITSELF, and the wrapper only draws the border.
+
+   The motion here is DRIVEN BY STATE, unlike every other animation in this
+   file, which is why it needed an ADR of its own. It is safe under ADR-0016
+   for one reason and it is worth stating precisely: applyCardSlot() flips only
+   when the card's URL actually CHANGES, so a reconnect, a redelivered
+   snapshot, or a discarded stale one moves nothing. A flip therefore always
+   means "the operator triggered something", never "the connection did
+   something." Break that guard and this becomes an ADR-0016 violation. */
+.card-highlight {
+  overflow: visible;
+  perspective: 900px;
+}
+
+.flipper {
+  position: absolute;
+  inset: 0;
+  transform-style: preserve-3d;
+  /* 1800ms — a quarter of the original 450ms speed (Ice, 2026-08-13). A fast
+     rotation is the most compression-hostile thing on this overlay — every
+     frame of it is full-frame motion with a moving edge, on a feed with a
+     fixed bitrate — so slower is cheaper here as well as calmer, which is the
+     rare case where the look and the encoder want the same thing.
+
+     overlay.js reads this value back rather than repeating it, so changing it
+     here changes the whole sequence: the deferred src clear on dismiss and the
+     back-then-out timing of a replace all follow from it. */
+  transition: transform 1800ms cubic-bezier(0.2, 0.7, 0.3, 1);
+  will-change: transform;
+}
+.card-highlight.revealed .flipper { transform: rotateY(180deg); }
+
+.face {
+  position: absolute;
+  inset: 0;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+  overflow: hidden;
+  /* 8px, not the frame's 10px: this sits inside a 2px border. */
+  border-radius: 8px;
+}
+.face-front { transform: rotateY(180deg); }
+
+/* --------------------------- THE CARD BACK ---------------------------------
+   Drawn entirely from palette tokens, so a client theme repaints it exactly
+   like everything else (ADR-0026) — which is the whole reason it is CSS and
+   not a raster scan. A fixed image would sit in one client's colours forever.
+
+   Shapes are large and edges are 2px minimum, same discipline as the etch:
+   this element is on screen for most of a show and has to survive the encoder. */
+.face-back {
+  background-color: var(--bg-void);
+  background-image:
+    repeating-linear-gradient(58deg,  rgba(var(--text-bright-rgb), 0.05) 0 2px, transparent 2px 13px),
+    repeating-linear-gradient(-58deg, rgba(var(--side-b-rgb), 0.05) 0 2px, transparent 2px 21px),
+    radial-gradient(120% 70% at 50% 42%, var(--bg-void-2), var(--bg-void) 74%);
+}
+/* Grain, same baked raster and same strength as the panels use, so the back
+   belongs to the same surface as everything around it. */
+.face-back::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background-image: var(--tex-grain);
+  background-repeat: repeat;
+  opacity: 0.07;
+  mix-blend-mode: overlay;
+}
+
+/* The emblem: two concentric 45deg squares, deliberately the same rotated-square
+   shape the series pips use, so the back reads as part of this overlay's own
+   language rather than a generic playing-card back. Two pseudo-elements, so the
+   whole device costs one node. */
+.back-device { position: absolute; inset: 0; }
+.back-device::before,
+.back-device::after {
+  content: '';
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  border: 2px solid;
+  transform: translate(-50%, -50%) rotate(45deg);
+}
+.back-device::before {
+  width: 118px; height: 118px;
+  border-color: rgba(var(--side-b-rgb), 0.85);
+  box-shadow: 0 0 18px rgba(var(--side-b-rgb), 0.30),
+              inset 0 0 22px rgba(var(--side-b-rgb), 0.16);
+}
+.back-device::after {
+  width: 86px; height: 86px;
+  border-color: rgba(var(--side-b-rgb), 0.32);
+}
+
+/* The client's own logo, the same asset the event block shows (ADR-0022).
+   contain, and bounded on BOTH axes, because a TO logo can be any shape and
+   this one has to sit inside the emblem rather than fight it. */
+.back-logo {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  width: 96px;
+  max-height: 64px;
+  object-fit: contain;
+}
+/* No logo on the Profile is a valid, common state: the emblem alone is still a
+   deliberate card back. Same no-src rule the event logo uses. */
+.back-logo:not([src]),
+.back-logo[src=""] { display: none; }
+.card-highlight.empty .card-img,
+.card-highlight.empty .card-missing { display: none; }
+
+/* Battlefield control (ADR-0008 "display-only for the ledger", ADR-0023).
+   The only element on this overlay that changes with play. */
+.ctrl-bar {
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 26px;
+  z-index: 2;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 9px; font-weight: 800; letter-spacing: 0.1em;
+  text-transform: uppercase;
+  background: var(--bf-neutral);
+  color: var(--text-bright);
+}
+.ctrl-bar.ctrl-a { background: var(--side-a); color: var(--ink); }
+.ctrl-bar.ctrl-b { background: var(--side-b); color: var(--ink); }
+
+/* Missing-asset fallback (C16/ADR-0010). Hidden by default, shown only when
+   the real <img> fires 'error'. This is the one on-air visual change ADR-0016
+   permits — it reports ABSENT DATA, not an uncertain connection. */
+.card-missing {
+  display: none;
+  position: absolute;
+  inset: 0;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  padding: 10px;
+  text-align: center;
+  background: rgba(255, 255, 255, 0.04);
+}
+.card.asset-missing .card-missing { display: flex; }
+.card.asset-missing .card-img { display: none; }
+.miss-name {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text-bright);
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+/* THE TWO DELIBERATE LITERALS (ADR-0026). A missing asset has to look wrong in
+   EVERY client palette rather than blending into one, so this marker is not
+   themeable and must not be converted to a token. */
+.miss-mark {
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 1px;
+  color: #170314;
+  background: #FF4D4D;
+  padding: 3px 8px;
+  border-radius: 4px;
+}
+
+/* ============================ EVENT BLOCK ============================ */
+
+.event-block {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 14px;
+}
+.event-block.empty { display: none; }
+
+.event-name {
+  font-size: 21px;
+  font-weight: 700;
+  line-height: 1.2;
+  text-align: center;
+  color: var(--text-bright);
+  max-width: 100%;
+  overflow: hidden;
+}
+.event-name:empty { display: none; }
+
+.event-logo {
+  width: 190px;
+  max-height: 190px;
+  object-fit: contain;
+}
+/* An <img> with no src (or an empty one) stays invisible, so applying branding
+   only has to set a real src — no JS visibility toggle needed here. */
+.event-logo:not([src]),
+.event-logo[src=""] { display: none; }
+
+/* Ambient motion is state-independent by construction, so it can never be
+   mistaken for a state signal (ADR-0016). Honouring reduced-motion costs
+   nothing and the overlay reads correctly without it. */
+@media (prefers-reduced-motion: reduce) {
+  .void-glow, .panel::before, .tex-smoke, .champ-wash,
+  .track-pip.lead-a::after, .track-pip.lead-b::after { animation: none; }
+  /* The flip becomes an instant face swap rather than being disabled: the
+     card still has to reveal, it just stops rotating to do it. */
+  .flipper { transition: none; }
+}
