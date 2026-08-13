@@ -11,8 +11,8 @@
   </script>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <meta name="description" content="Icefireide's complete esports production log — every show produced since 2024 with live totals by game. Browse by year."/>
-  <title>Work Overview | Icefireide</title>
+  <meta name="description" content="Broadcast software built in-house by Icefireide — graphics control, draft and map-ban displays, roster and stats overlays wired into game APIs. Captured directly from the tools."/>
+  <title>Broadcast Tooling | Icefireide</title>
   <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow:ital,wght@0,300;0,400;0,600;1,300&family=Barlow+Condensed:wght@400;700&display=swap" rel="stylesheet"/>
   <style>
     :root { --bg: #080a0f; --bg2: #0d1018; --surface: #111520; --border: #1e2535; --ice: #5de8ff; --fire: #ff5c1a; --ice-dim: rgba(93,232,255,0.10); --text: #e8edf5; --muted: #6b7a96; --white: #ffffff; }
@@ -25,7 +25,8 @@
     .nav-links a { font-family: 'Barlow Condensed', sans-serif; font-size: 0.85rem; letter-spacing: 0.18em; text-transform: uppercase; color: var(--muted); text-decoration: none; transition: color 0.2s; }
     .nav-links a:hover, .nav-links a.active { color: var(--ice); }
     .nav-dropdown { position: relative; }
-    .nav-dropdown-toggle { font-family: 'Barlow Condensed', sans-serif; font-size: 0.85rem; letter-spacing: 0.18em; text-transform: uppercase; color: var(--ice); background: none; border: none; cursor: pointer; display: flex; align-items: center; gap: 0.35rem; padding: 0; transition: color 0.2s; }
+    .nav-dropdown-toggle { font-family: 'Barlow Condensed', sans-serif; font-size: 0.85rem; letter-spacing: 0.18em; text-transform: uppercase; color: var(--muted); background: none; border: none; cursor: pointer; display: flex; align-items: center; gap: 0.35rem; padding: 0; transition: color 0.2s; }
+    .nav-dropdown-toggle:hover { color: var(--ice); }
     .nav-dropdown-toggle svg { transition: transform 0.2s; }
     .nav-dropdown:hover .nav-dropdown-toggle svg { transform: rotate(180deg); }
     .nav-dropdown-menu { position: absolute; top: calc(100% + 0.25rem); left: 50%; transform: translateX(-50%); background: #0f1420; border: 1px solid var(--border); border-radius: 2px; min-width: 160px; opacity: 0; pointer-events: none; transition: opacity 0.15s; overflow: hidden; padding-top: 0.5rem; }
@@ -37,27 +38,20 @@
     .page-wrap { max-width: 1200px; margin: 0 auto; padding: 9rem 4rem 6rem; }
     .page-eyebrow { font-family: 'Barlow Condensed', sans-serif; font-size: 0.75rem; letter-spacing: 0.35em; text-transform: uppercase; color: var(--ice); margin-bottom: 0.6rem; }
     .page-title { font-family: 'Bebas Neue', sans-serif; font-size: clamp(3rem, 7vw, 6rem); letter-spacing: 0.06em; color: var(--white); line-height: 0.9; margin-bottom: 1.5rem; }
-    .page-sub { color: var(--muted); font-size: 0.95rem; line-height: 1.8; max-width: 520px; margin-bottom: 4rem; }
-    /* Stat grid */
-    .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1px; background: var(--border); border: 1px solid var(--border); margin-bottom: 4rem; }
-    .stat-card { background: var(--surface); padding: 2.5rem 2rem; text-align: center; position: relative; overflow: hidden; transition: background 0.2s; }
-    .stat-card:hover { background: #131825; }
-    .stat-card::after { content: ''; position: absolute; bottom: 0; left: 0; right: 0; height: 2px; background: linear-gradient(90deg, var(--ice), var(--fire)); transform: scaleX(0); transition: transform 0.3s; transform-origin: left; }
-    .stat-card:hover::after { transform: scaleX(1); }
-    .stat-num { font-family: 'Bebas Neue', sans-serif; font-size: 3.5rem; line-height: 1; background: linear-gradient(135deg, var(--ice), var(--fire)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; margin-bottom: 0.5rem; }
-    .stat-label { font-family: 'Barlow Condensed', sans-serif; font-size: 0.75rem; letter-spacing: 0.25em; text-transform: uppercase; color: var(--muted); }
+    .page-sub { color: var(--muted); font-size: 0.95rem; line-height: 1.8; max-width: 620px; margin-bottom: 3.5rem; }
     .loading-state { padding: 4rem; text-align: center; color: var(--muted); font-family: 'Barlow Condensed', sans-serif; letter-spacing: 0.1em; }
     .spinner { width: 28px; height: 28px; border: 2px solid var(--border); border-top-color: var(--ice); border-radius: 50%; animation: spin 0.8s linear infinite; margin: 0 auto 1rem; }
-    /* Year links */
-    .year-links-title { font-family: 'Bebas Neue', sans-serif; font-size: 2rem; letter-spacing: 0.06em; color: var(--white); margin-bottom: 1.5rem; }
-    .year-links { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; }
-    .year-link { display: flex; flex-direction: column; align-items: flex-start; padding: 2rem; background: var(--surface); border: 1px solid var(--border); text-decoration: none; transition: all 0.2s; position: relative; overflow: hidden; }
-    .year-link::before { content: ''; position: absolute; top: 0; left: 0; width: 3px; height: 0; background: linear-gradient(to bottom, var(--ice), var(--fire)); transition: height 0.3s; }
-    .year-link:hover::before { height: 100%; }
-    .year-link:hover { background: #131825; border-color: var(--ice); transform: translateY(-2px); }
-    .year-link-year { font-family: 'Bebas Neue', sans-serif; font-size: 3rem; letter-spacing: 0.06em; color: var(--white); line-height: 1; }
-    .year-link-label { font-family: 'Barlow Condensed', sans-serif; font-size: 0.75rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--muted); margin-top: 0.4rem; }
-    .year-link-arrow { margin-top: auto; padding-top: 1.5rem; color: var(--ice); font-family: 'Barlow Condensed', sans-serif; font-size: 0.8rem; letter-spacing: 0.15em; text-transform: uppercase; }
+    /* Tooling gallery */
+    .tooling-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 1.5rem; }
+    .tool-card { background: var(--surface); border: 1px solid var(--border); overflow: hidden; display: flex; flex-direction: column; transition: border-color 0.2s, transform 0.2s; text-decoration: none; }
+    .tool-card:hover { border-color: var(--ice); transform: translateY(-2px); }
+    .tool-shot { display: block; width: 100%; aspect-ratio: 16/9; object-fit: cover; background: var(--bg2); border-bottom: 1px solid var(--border); }
+    .tool-body { padding: 1.4rem 1.5rem 1.6rem; }
+    .tool-client { font-family: 'Barlow Condensed', sans-serif; font-size: 0.68rem; letter-spacing: 0.28em; text-transform: uppercase; color: var(--ice); display: block; margin-bottom: 0.45rem; }
+    .tool-title { font-family: 'Bebas Neue', sans-serif; font-size: 1.3rem; letter-spacing: 0.07em; color: var(--white); margin-bottom: 0.5rem; }
+    .tool-caption { font-size: 0.87rem; color: var(--muted); line-height: 1.75; }
+    .tool-tag { display: inline-block; margin-top: 0.9rem; font-family: 'Barlow Condensed', sans-serif; font-size: 0.68rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--fire); }
+    .tooling-foot { font-size: 0.82rem; color: var(--muted); line-height: 1.75; margin-top: 2.4rem; max-width: 720px; }
     footer { display: flex; justify-content: space-between; align-items: center; max-width: 1200px; margin: 0 auto; border-top: 1px solid var(--border); }
     .footer-logo { font-family: 'Bebas Neue', sans-serif; font-size: 1.2rem; letter-spacing: 0.1em; background: linear-gradient(90deg, var(--ice), var(--fire)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
     .footer-copy { font-size: 0.78rem; color: var(--muted); }
@@ -70,8 +64,6 @@
     .cascade-2 { animation-delay: 0.25s; }
     .cascade-3 { animation-delay: 0.4s; }
     .cascade-4 { animation-delay: 0.55s; }
-    .cascade-5 { animation-delay: 0.7s; }
-    .cascade-6 { animation-delay: 0.85s; }
   </style>
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><defs><linearGradient id='g' x1='0%25' y1='0%25' x2='100%25' y2='100%25'><stop offset='0%25' stop-color='%235de8ff'/><stop offset='100%25' stop-color='%23ff5c1a'/></linearGradient></defs><rect width='100' height='100' rx='18' fill='%23080a0f'/><text x='50' y='72' font-family='Georgia,serif' font-weight='700' font-size='44' fill='url(%23g)' text-anchor='middle'>NH</text></svg>">
 </head>
@@ -91,47 +83,37 @@
       <li class="nav-dropdown">
         <button class="nav-dropdown-toggle">Work <svg width="10" height="6" viewBox="0 0 10 6" fill="none"><path d="M1 1l4 4 4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg></button>
         <div class="nav-dropdown-menu">
-          <a href="work.html" class="active">Overview</a>
+          <a href="work.html">Overview</a>
           <a href="work-2026.html">2026</a>
           <a href="work-2025.html">2025</a>
           <a href="work-2024.html">2024</a>
         </div>
       </li>
-      <li><a href="tools.html">Tools</a></li>
+      <li><a href="tools.html" class="active">Tools</a></li>
       <li><a href="contact.html">Contact</a></li>
     </ul>
   </nav>
 
   <div class="page-wrap">
-    <p class="page-eyebrow cascade cascade-1">Production Log</p>
-    <h1 class="page-title cascade cascade-2">Work Overview</h1>
-    <p class="page-sub cascade cascade-3">Every show I've produced, totalled up straight out of my production log. Pick a year to see the individual events.</p>
-    <p style="font-family:'Barlow Condensed',sans-serif; font-size:0.8rem; letter-spacing:0.2em; text-transform:uppercase; color:var(--fire); margin-bottom:2rem; margin-top:-1.5rem;" class="cascade cascade-3">Numbers below reflect total broadcast hours per game</p>
+    <p class="page-eyebrow cascade cascade-1">Built In-House</p>
+    <h1 class="page-title cascade cascade-2">Broadcast Tooling</h1>
+    <p class="page-sub cascade cascade-3">Software I&rsquo;ve written for my own shows and for clients. Graphics control, map bans, rosters and stats pulled straight out of the game&rsquo;s API. The shots here come off the tools themselves rather than off a stream, so this is what actually goes on air.</p>
 
-    <div id="stats-loading" class="loading-state cascade cascade-4"><div class="spinner"></div>Loading totals...</div>
-    <div id="stats-grid" class="stats-grid" style="display:none;"></div>
+    <!-- Gallery. Entries whose screenshot is missing remove themselves, so it is
+         always safe to leave an entry listed before its capture exists.
+         To add one: drop the image in /tooling/ and add an entry to TOOLING. -->
+    <div id="tooling-loading" class="loading-state cascade cascade-4"><div class="spinner"></div>Loading tools&hellip;</div>
+    <div class="tooling-grid cascade cascade-4" id="tooling-grid"></div>
 
-    <div style="margin-top:1.5rem; margin-bottom:4rem;">
-      <p style="font-size:0.78rem; color:var(--muted); font-family:'Barlow Condensed',sans-serif; letter-spacing:0.1em;">Totals update automatically when the production log is updated.</p>
+    <!-- Shown only if every entry failed to load, so the page never sits blank
+         and silently pretends there was nothing to show. -->
+    <div id="tooling-empty" class="loading-state" style="display:none;">
+      The gallery didn&rsquo;t load. <a href="contact.html" style="color:var(--ice); text-decoration:none;">Get in touch</a> and I&rsquo;ll walk you through the tools directly.
     </div>
 
-    <h2 class="year-links-title cascade cascade-5">Browse by Year</h2>
-    <div class="year-links cascade cascade-6">
-      <a href="work-2026.html" class="year-link">
-        <span class="year-link-year">2026</span>
-        <span class="year-link-label">Current Season</span>
-        <span class="year-link-arrow">View Shows →</span>
-      </a>
-      <a href="work-2025.html" class="year-link">
-        <span class="year-link-year">2025</span>
-        <span class="year-link-label">Full Season</span>
-        <span class="year-link-arrow">View Shows →</span>
-      </a>
-      <a href="work-2024.html" class="year-link">
-        <span class="year-link-year">2024</span>
-        <span class="year-link-label">Full Season</span>
-        <span class="year-link-arrow">View Shows →</span>
-      </a>
+    <div id="tooling-notes" style="display:none;">
+      <p class="tooling-foot">Each of these started out as something one show needed, and most have been running every season since.</p>
+      <p class="tooling-foot" style="font-size:0.76rem; opacity:0.75;">Card art shown in the Riftbound overlay is the property of Riot Games, Inc. I do not own it and claim no rights to it; it appears only to demonstrate software I built. Not endorsed by Riot Games. <a href="tooling/riftbound/" style="color:var(--ice); text-decoration:none;">Full notice</a>.</p>
     </div>
   </div>
 
@@ -164,36 +146,83 @@
   </footer>
 
   <script>
-    const CSV = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vR300p3G6_5hn7Ydez7mY6XVhfoWeLUBFpM0C9oJdd__WP8xhVVwZp4bxFZwvxJvODbJ3_o_p-I8EUe/pub?gid=0&single=true&output=csv';
-    function parseCSV(text) {
-      return text.trim().split('\n').slice(1).map(line => {
-        const cols = []; let cur = '', inQ = false;
-        for (const c of line) { if (c === '"') inQ = !inQ; else if (c === ',' && !inQ) { cols.push(cur.trim()); cur = ''; } else cur += c; }
-        cols.push(cur.trim()); return cols;
-      }).filter(r => r.some(c => c));
-    }
-    function escapeHTML(s) {
-      return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
-    }
+    // ── Broadcast Tooling gallery ──────────────────────────────────────────
+    // Drop screenshots into /tooling/ next to this file, then list them here.
+    // Cards whose image is missing are removed automatically, so entries can
+    // sit here before their captures exist.
+    // `link` is optional. Without it a card opens its own screenshot. With it
+    // the card opens that page instead — used for the Riftbound entry, which
+    // has a live interactive demo rather than a still. The image is still what
+    // the card shows.
+    // `tag` is optional and prints a small line under the caption.
+    const TOOLING = [
+      { file: 'tooling/riftbound-overlay.webp', link: 'tooling/riftbound/', client: 'Riftbound', title: 'Broadcast Overlay', tag: 'Interactive demo', caption: 'Persistent side columns with a shared victory track, and structural gaps left open for the player cameras. Interactive demo — the real overlay code, driven live in your browser.' },
+      { file: 'tooling/mtb-map-ban.png',      client: 'MilkTeaBoards', title: 'Bo3 Map Ban',        caption: 'Live map ban and pick display driven by the operator panel, with per-team state and side selection reflected on air as it happens.' },
+      { file: 'tooling/mtb-map-entrance.png', client: 'MilkTeaBoards', title: 'Map Entrance',       caption: 'Animated entrance sequence for the selected map, triggered from the control panel and cut to automatically as the segment ends.' },
+      { file: 'tooling/mtb-operator.png',     client: 'MilkTeaBoards', title: 'Operator Panel',     caption: 'The producer-facing control surface. Built to be driven mid-show by someone already directing and switching, not by a dedicated graphics operator.' },
+      { file: 'tooling/d1-lineup.png',        client: 'Division One',  title: 'Team Lineups',       caption: 'Roster graphics populated from the league data rather than typed per show, so week-to-week changes cannot desync from what goes on screen.' },
+      { file: 'tooling/d1-scoreboard.png',    client: 'Division One',  title: 'Series Scoreboard',  caption: 'Series state and score carried across games, so the broadcast stays correct even when a series runs long or a game is remade.' },
+      { file: 'tooling/d1-control.png',       client: 'Division One',  title: 'Control Panel',      caption: 'Single-window control for every graphic in the show, laid out to match the run of show so the next action is always the next button.' },
+    ];
 
-    async function loadStats() {
-      try {
-        const res = await fetch(CSV);
-        if (!res.ok) throw new Error();
-        const rows = parseCSV(await res.text());
-        const grid = document.getElementById('stats-grid');
-        let html = '';
-        rows.forEach(r => {
-          if (!r[0] || !r[1]) return;
-          html += `<div class="stat-card"><div class="stat-num">${escapeHTML(r[1])}</div><div class="stat-label">${escapeHTML(r[0])}</div></div>`;
-        });
-        grid.innerHTML = html;
-        document.getElementById('stats-loading').style.display = 'none';
-        grid.style.display = 'grid';
-      } catch { document.getElementById('stats-loading').textContent = '⚠️ Couldn\'t load totals right now.'; }
-    }
-    loadStats();
+    (function() {
+      var grid    = document.getElementById('tooling-grid');
+      var loading = document.getElementById('tooling-loading');
+      var empty   = document.getElementById('tooling-empty');
+      var notes   = document.getElementById('tooling-notes');
+      if (!grid) return;
+
+      var shown = 0, settled = 0;
+
+      // Every image either loads or errors, so this fires exactly once per
+      // entry. When the last one settles, decide between the gallery and the
+      // failure message — never leave the spinner spinning or the page blank.
+      function settle() {
+        settled++;
+        if (settled < TOOLING.length) return;
+        loading.style.display = 'none';
+        if (shown > 0) { notes.style.display = ''; }
+        else { empty.style.display = ''; }
+      }
+
+      TOOLING.forEach(function(t) {
+        var a = document.createElement('a');
+        a.className = 'tool-card';
+        a.href = t.link || t.file;
+        a.target = '_blank';
+        a.rel = 'noopener';
+        var img = document.createElement('img');
+        img.className = 'tool-shot';
+        // NOT loading="lazy" — these images decide whether their own card
+        // survives, so they have to be fetched rather than deferred. (In the
+        // old work.html gallery this was lazy inside a display:none section,
+        // which deadlocked: nothing loaded because the section was hidden, and
+        // the section stayed hidden because nothing loaded.)
+        img.loading = 'eager';
+        img.alt = t.client + ' — ' + t.title;
+        img.onerror = function() { a.remove(); settle(); };
+        img.onload  = function() { shown++; settle(); };
+        img.src = t.file;
+        var body = document.createElement('div');
+        body.className = 'tool-body';
+        var c = document.createElement('span');
+        c.className = 'tool-client'; c.textContent = t.client;
+        var h = document.createElement('div');
+        h.className = 'tool-title'; h.textContent = t.title;
+        var p = document.createElement('p');
+        p.className = 'tool-caption'; p.textContent = t.caption;
+        body.appendChild(c); body.appendChild(h); body.appendChild(p);
+        if (t.tag) {
+          var tag = document.createElement('span');
+          tag.className = 'tool-tag'; tag.textContent = t.tag;
+          body.appendChild(tag);
+        }
+        a.appendChild(img); a.appendChild(body);
+        grid.appendChild(a);
+      });
+    })();
   </script>
+
   <script>
     (function() {
       var dropdowns = document.querySelectorAll('.nav-dropdown');
@@ -217,7 +246,7 @@
   </script>
 
   <script>
-    // Availability status from Google Sheets checkbox (A15 on totals tab)
+    // Availability status from Google Sheets checkbox (J2 on totals tab)
     (function() {
       var CSV = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vR300p3G6_5hn7Ydez7mY6XVhfoWeLUBFpM0C9oJdd__WP8xhVVwZp4bxFZwvxJvODbJ3_o_p-I8EUe/pub?gid=0&single=true&output=csv';
       fetch(CSV).then(function(r) { return r.text(); }).then(function(text) {
