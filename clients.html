@@ -1,190 +1,66 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <!-- Google tag (gtag.js) -->
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Clients · Icefireide</title>
+  <meta name="description" content="Organizations and events Nicholas “Icefireide” Hall has produced for: Division One, MilkTeaBoards, LPL English, EUniverse, LANFest, NECC, Risen, Aegis and more.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600&family=Barlow+Semi+Condensed:wght@600;700&display=swap">
+  <link rel="stylesheet" href="site.css">
+  <link rel="icon" href="favicon.svg" type="image/svg+xml">
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-920XP9KWHX"></script>
-  <script>
-    window.dataLayer = window.dataLayer || [];
-    function gtag(){dataLayer.push(arguments);}
-    gtag('js', new Date());
-    gtag('config', 'G-920XP9KWHX');
-  </script>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <meta name="description" content="Esports organizations and events produced by Nicholas 'Icefireide' Hall — Division One, Risen, Aegis, LANFest, NECC, LPL English, and more."/>
-  <title>Clients | Icefireide</title>
-  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow:ital,wght@0,300;0,400;0,600;1,300&family=Barlow+Condensed:wght@400;700&display=swap" rel="stylesheet"/>
-  <style>
-    :root { --bg: #080a0f; --bg2: #0d1018; --surface: #111520; --border: #1e2535; --ice: #5de8ff; --fire: #ff5c1a; --ice-dim: rgba(93,232,255,0.10); --text: #e8edf5; --muted: #6b7a96; --white: #ffffff; }
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-    body { background: var(--bg); color: var(--text); font-family: 'Barlow', sans-serif; font-weight: 300; overflow-x: hidden; }
-    body::before { content: ''; position: fixed; inset: 0; pointer-events: none; z-index: 1000; opacity: 0.35; background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E"); }
-    nav { position: fixed; top: 0; left: 0; right: 0; z-index: 100; display: flex; align-items: center; justify-content: space-between; padding: 1.4rem 4rem; background: rgba(8,10,15,0.97); backdrop-filter: blur(4px); border-bottom: 1px solid var(--border); }
-    .nav-logo { font-family: 'Bebas Neue', sans-serif; font-size: 1.6rem; letter-spacing: 0.12em; background: linear-gradient(90deg, var(--ice), var(--fire)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; text-decoration: none; }
-    .nav-links { display: flex; gap: 2.5rem; list-style: none; align-items: center; }
-    .nav-links a { font-family: 'Barlow Condensed', sans-serif; font-size: 0.85rem; letter-spacing: 0.18em; text-transform: uppercase; color: var(--muted); text-decoration: none; transition: color 0.2s; }
-    .nav-links a:hover, .nav-links a.active { color: var(--ice); }
-    .nav-dropdown { position: relative; }
-    .nav-dropdown-toggle { font-family: 'Barlow Condensed', sans-serif; font-size: 0.85rem; letter-spacing: 0.18em; text-transform: uppercase; color: var(--muted); background: none; border: none; cursor: pointer; display: flex; align-items: center; gap: 0.35rem; padding: 0; transition: color 0.2s; }
-    .nav-dropdown:hover .nav-dropdown-toggle { color: var(--ice); }
-    .nav-dropdown-toggle svg { transition: transform 0.2s; }
-    .nav-dropdown:hover .nav-dropdown-toggle svg { transform: rotate(180deg); }
-    .nav-dropdown-menu { position: absolute; top: calc(100% + 0.25rem); left: 50%; transform: translateX(-50%); background: #0f1420; border: 1px solid var(--border); border-radius: 2px; min-width: 160px; opacity: 0; pointer-events: none; transition: opacity 0.15s; overflow: hidden; padding-top: 0.5rem; }
-    .nav-dropdown-menu.open { opacity: 1; pointer-events: all; }
-    .nav-dropdown.open .nav-dropdown-toggle svg { transform: rotate(180deg); }
-    .nav-dropdown-menu a { display: block; padding: 0.7rem 1.2rem; font-family: 'Barlow Condensed', sans-serif; font-size: 0.82rem; letter-spacing: 0.15em; text-transform: uppercase; color: var(--muted); text-decoration: none; transition: background 0.15s, color 0.15s; border-bottom: 1px solid var(--border); }
-    .nav-dropdown-menu a:last-child { border-bottom: none; }
-    .nav-dropdown-menu a:hover { background: var(--surface); color: var(--ice); }
-    .page-wrap { max-width: 1200px; margin: 0 auto; padding: 9rem 4rem 6rem; }
-    .page-eyebrow { font-family: 'Barlow Condensed', sans-serif; font-size: 0.75rem; letter-spacing: 0.35em; text-transform: uppercase; color: var(--ice); margin-bottom: 0.6rem; }
-    .page-title { font-family: 'Bebas Neue', sans-serif; font-size: clamp(3rem, 7vw, 6rem); letter-spacing: 0.06em; color: var(--white); line-height: 0.9; margin-bottom: 1.5rem; }
-    .page-sub { color: var(--muted); font-size: 0.95rem; line-height: 1.8; max-width: 520px; margin-bottom: 4rem; }
-    .clients-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1px; background: var(--border); border: 1px solid var(--border); }
-    .client-card { background: var(--surface); display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 3rem 2rem; gap: 1.4rem; transition: background 0.25s; position: relative; overflow: hidden; }
-    .client-card::after { content: ''; position: absolute; inset: 0; background: linear-gradient(135deg, var(--ice-dim), transparent); opacity: 0; transition: opacity 0.3s; }
-    .client-card:hover { background: #131825; }
-    .client-card:hover::after { opacity: 1; }
-    .client-logo-box { width: 140px; height: 80px; border: 1.5px dashed var(--border); border-radius: 4px; display: flex; align-items: center; justify-content: center; position: relative; z-index: 1; transition: border-color 0.25s; overflow: hidden; background: var(--bg2); }
-    .client-card:hover .client-logo-box { border-color: var(--ice); border-style: solid; }
-    .client-logo-box img { max-width: 100%; max-height: 100%; object-fit: contain; }
-    .client-logo-placeholder { font-family: 'Barlow Condensed', sans-serif; font-size: 0.65rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--border); }
-    .client-name { font-family: 'Bebas Neue', sans-serif; font-size: 1.3rem; letter-spacing: 0.12em; color: var(--muted); position: relative; z-index: 1; transition: color 0.25s; }
-    .client-card:hover .client-name { color: var(--white); }
-    footer { display: flex; justify-content: space-between; align-items: center; max-width: 1200px; margin: 0 auto; border-top: 1px solid var(--border); }
-    .footer-logo { font-family: 'Bebas Neue', sans-serif; font-size: 1.2rem; letter-spacing: 0.1em; background: linear-gradient(90deg, var(--ice), var(--fire)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
-    .footer-copy { font-size: 0.78rem; color: var(--muted); }
-    @media (max-width: 900px) { .clients-grid { grid-template-columns: repeat(2, 1fr); } }
-    @media (max-width: 768px) { nav { padding: 1.2rem 1.5rem; } .nav-links { display: none; } .page-wrap { padding: 7rem 1.5rem 4rem; } footer { flex-direction: column; gap: 0.5rem; text-align: center; } }
-    @media (max-width: 480px) { .clients-grid { grid-template-columns: 1fr; } }
-
-    @keyframes fadeUp { from { opacity: 0; transform: translateY(24px); } to { opacity: 1; transform: translateY(0); } }
-    .cascade { opacity: 0; animation: fadeUp 0.7s ease forwards; }
-    .cascade-1 { animation-delay: 0.1s; }
-    .cascade-2 { animation-delay: 0.25s; }
-    .cascade-3 { animation-delay: 0.4s; }
-    .cascade-4 { animation-delay: 0.55s; }
-    .cascade-5 { animation-delay: 0.7s; }
-    .cascade-6 { animation-delay: 0.85s; }
-  </style>
-  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><defs><linearGradient id='g' x1='0%25' y1='0%25' x2='100%25' y2='100%25'><stop offset='0%25' stop-color='%235de8ff'/><stop offset='100%25' stop-color='%23ff5c1a'/></linearGradient></defs><rect width='100' height='100' rx='18' fill='%23080a0f'/><text x='50' y='72' font-family='Georgia,serif' font-weight='700' font-size='44' fill='url(%23g)' text-anchor='middle'>NH</text></svg>">
+  <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-920XP9KWHX');</script>
 </head>
 <body>
-  <nav>
-    <div style="display:flex; align-items:center; gap:1rem;">
-      <a href="index.html" class="nav-logo">Icefireide</a>
-      <div id="avail-badge-nav" style="display:inline-flex; align-items:center; gap:0.4rem; padding:0.3rem 0.75rem; border-radius:2px; border:1px solid var(--border); background:var(--surface);">
-        <span id="avail-dot-nav" style="width:7px; height:7px; border-radius:50%; background:var(--muted); flex-shrink:0;"></span>
-        <span id="avail-text-nav" style="font-family:'Barlow Condensed',sans-serif; font-size:0.65rem; letter-spacing:0.2em; text-transform:uppercase; color:var(--muted);">...</span>
-      </div>
+  <header class="nav">
+    <div class="wrap">
+      <a href="index.html" class="wordmark" aria-label="Icefireide, home"><i>Ice</i><b>fire</b>ide</a>
+      <ul class="nav-links">
+        <li><a href="work.html">Work</a></li>
+        <li><a href="tools.html">Tooling</a></li>
+        <li><a href="services.html">Services</a></li>
+        <li><a href="clients.html" aria-current="page">Clients</a></li>
+        <li><a href="contact.html">Contact</a></li>
+      </ul>
+      <span class="avail" data-avail></span>
     </div>
-    <ul class="nav-links">
-      <li><a href="index.html">Home</a></li>
-      <li><a href="services.html">Services</a></li>
-      <li><a href="clients.html" class="active">Clients</a></li>
-      <li class="nav-dropdown">
-        <button class="nav-dropdown-toggle">Work <svg width="10" height="6" viewBox="0 0 10 6" fill="none"><path d="M1 1l4 4 4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg></button>
-        <div class="nav-dropdown-menu">
-          <a href="work.html">Overview</a>
-          <a href="work-2026.html">2026</a>
-          <a href="work-2025.html">2025</a>
-          <a href="work-2024.html">2024</a>
-        </div>
-      </li>
-      <li><a href="tools.html">Tooling</a></li>
-      <li><a href="contact.html">Contact</a></li>
-    </ul>
-  </nav>
+  </header>
 
-  <div class="page-wrap">
-    <p class="page-eyebrow cascade cascade-1">Who I've Worked With</p>
-    <h1 class="page-title cascade cascade-2">Clients</h1>
-    <p class="page-sub cascade cascade-3">Organizations and events I've produced for.</p>
-    <div class="clients-grid cascade cascade-4">
-      <div class="client-card"><div class="client-logo-box"><img src="Risen Logo.webp" alt="Risen" /></div><div class="client-name">Risen</div></div>
-      <div class="client-card"><div class="client-logo-box" style="width:70px;height:92px;"><img src="Aegis Logo.png" alt="Aegis" /></div><div class="client-name">Aegis</div></div>
-      <div class="client-card"><div class="client-logo-box"><img src="D1 Logo.png" alt="Division One" /></div><div class="client-name">Division One</div></div>
-      <div class="client-card"><div class="client-logo-box"><img src="LanFest Logo.png" alt="LANFest" /></div><div class="client-name">LANFest</div></div>
-      <div class="client-card"><div class="client-logo-box"><img src="NECC Logo.png" alt="NECC" /></div><div class="client-name">NECC</div></div>
-      <div class="client-card"><div class="client-logo-box"><img src="LPL English Logo.png" alt="LPL English" /></div><div class="client-name">LPL English</div></div>
-      <div class="client-card"><div class="client-name" style="font-size:1.3rem;">EUniverse</div></div>
-      <div class="client-card"><div class="client-name" style="font-size:1.3rem;">MTB</div></div>
-      <div class="client-card"><div class="client-name" style="font-size:1.3rem;">Creator Cup</div></div>
+  <main>
+    <div class="wrap">
+      <h1>Clients</h1>
+      <p class="lead">Organizations and events I’ve produced for. The shows themselves are all in the <a href="work.html">log</a>.</p>
+
+      <section class="section">
+        <div class="tbl">
+          <table>
+            <thead><tr><th>Client</th><th>What I do for them</th></tr></thead>
+            <tbody>
+              <tr><td><div class="logos"><div><img src="D1 Logo.png" alt="" width="120" height="34">Division One</div></div></td><td>Collegiate league across League of Legends, Valorant and Rocket League. Producer and director on the broadcasts, and the tooling they run on.</td></tr>
+              <tr><td><div class="logos"><div><img src="LPL English Logo.png" alt="" width="120" height="34">LPL English</div></div></td><td>Producer on the overnight English-language coverage of the LPL.</td></tr>
+              <tr><td><div class="logos"><div><img src="mtb-logo.png" alt="" width="120" height="34">MilkTeaBoards</div></div></td><td>Valorant events. Producer, and the Valorant broadcast package was built for them.</td></tr>
+              <tr><td><div class="logos"><div>EUniverse</div></div></td><td>Producer on EEC, LGC Rising and EMEA Masters.</td></tr>
+              <tr><td><div class="logos"><div><img src="LanFest Logo.png" alt="" width="120" height="34">LANFest</div></div></td><td>On-site LAN production.</td></tr>
+              <tr><td><div class="logos"><div><img src="NECC Logo.png" alt="" width="120" height="34">NECC</div></div></td><td>Collegiate broadcasts.</td></tr>
+              <tr><td><div class="logos"><div><img src="Risen Logo.webp" alt="" width="120" height="34">Risen</div></div></td><td>Tournament broadcasts.</td></tr>
+              <tr><td><div class="logos"><div><img src="Aegis Logo.png" alt="" width="120" height="34">Aegis</div></div></td><td>Tournament broadcasts.</td></tr>
+              <tr><td><div class="logos"><div>Creator Cup</div></div></td><td>Event broadcast.</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
     </div>
-  </div>
+  </main>
 
   <footer>
-    <div style="max-width:1200px; margin:0 auto; padding:2.5rem 4rem; width:100%;">
-      <div style="display:grid; grid-template-columns:1fr 1fr; gap:2rem; align-items:start; border-bottom:1px solid var(--border); padding-bottom:2rem; margin-bottom:1.5rem;">
-
-        <!-- Logo + status -->
-        <div style="display:flex; flex-direction:column; gap:1rem;">
-          <span class="footer-logo">Icefireide</span>
-          </div>
-
-        <!-- Nav links -->
-        <div style="display:flex; flex-direction:column; gap:0.6rem;">
-          <p style="font-family:'Barlow Condensed',sans-serif; font-size:0.7rem; letter-spacing:0.25em; text-transform:uppercase; color:var(--muted); margin-bottom:0.4rem;">Pages</p>
-          <a href="index.html" style="font-family:'Barlow Condensed',sans-serif; font-size:0.85rem; letter-spacing:0.12em; text-transform:uppercase; color:var(--muted); text-decoration:none; transition:color 0.2s;" onmouseover="this.style.color='var(--ice)'" onmouseout="this.style.color='var(--muted)'">Home</a>
-          <a href="services.html" style="font-family:'Barlow Condensed',sans-serif; font-size:0.85rem; letter-spacing:0.12em; text-transform:uppercase; color:var(--muted); text-decoration:none; transition:color 0.2s;" onmouseover="this.style.color='var(--ice)'" onmouseout="this.style.color='var(--muted)'">Services</a>
-          <a href="clients.html" style="font-family:'Barlow Condensed',sans-serif; font-size:0.85rem; letter-spacing:0.12em; text-transform:uppercase; color:var(--muted); text-decoration:none; transition:color 0.2s;" onmouseover="this.style.color='var(--ice)'" onmouseout="this.style.color='var(--muted)'">Clients</a>
-          <a href="work.html" style="font-family:'Barlow Condensed',sans-serif; font-size:0.85rem; letter-spacing:0.12em; text-transform:uppercase; color:var(--muted); text-decoration:none; transition:color 0.2s;" onmouseover="this.style.color='var(--ice)'" onmouseout="this.style.color='var(--muted)'">Work</a>
-          <a href="tools.html" style="font-family:'Barlow Condensed',sans-serif; font-size:0.85rem; letter-spacing:0.12em; text-transform:uppercase; color:var(--muted); text-decoration:none; transition:color 0.2s;" onmouseover="this.style.color='var(--ice)'" onmouseout="this.style.color='var(--muted)'">Tooling</a>
-          <a href="contact.html" style="font-family:'Barlow Condensed',sans-serif; font-size:0.85rem; letter-spacing:0.12em; text-transform:uppercase; color:var(--muted); text-decoration:none; transition:color 0.2s;" onmouseover="this.style.color='var(--ice)'" onmouseout="this.style.color='var(--muted)'">Contact</a>
-        </div>
-
-      </div>
-      <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:0.5rem;">
-        <span style="font-size:0.78rem; color:var(--muted);">© 2026 Nicholas Hall. All rights reserved.</span>
-        <a href="https://twitter.com/Icefireideprod" target="_blank" rel="noopener" style="font-family:'Barlow Condensed',sans-serif; font-size:0.75rem; letter-spacing:0.15em; text-transform:uppercase; color:var(--muted); text-decoration:none;">@Icefireideprod</a>
+    <div class="wrap">
+      <div>Nicholas Hall · <a data-email="text" href="#"></a> · Discord Icefireide</div>
+      <div class="links">
+        <a href="work.html">Work</a><a href="tools.html">Tooling</a><a href="services.html">Services</a><a href="clients.html">Clients</a><a href="contact.html">Contact</a><a href="https://twitter.com/Icefireideprod" target="_blank" rel="noopener">@Icefireideprod</a>
       </div>
     </div>
   </footer>
-  <script>
-    (function() {
-      var dropdowns = document.querySelectorAll('.nav-dropdown');
-      dropdowns.forEach(function(dd) {
-        var toggle = dd.querySelector('.nav-dropdown-toggle');
-        var menu = dd.querySelector('.nav-dropdown-menu');
-        var closeTimer;
-        function openMenu() { clearTimeout(closeTimer); dd.classList.add('open'); menu.classList.add('open'); }
-        function scheduleClose() { closeTimer = setTimeout(function() { dd.classList.remove('open'); menu.classList.remove('open'); }, 350); }
-        dd.addEventListener('mouseenter', openMenu);
-        dd.addEventListener('mouseleave', scheduleClose);
-        menu.addEventListener('mouseenter', openMenu);
-        menu.addEventListener('mouseleave', scheduleClose);
-        if (toggle) toggle.addEventListener('click', function(e) {
-          e.stopPropagation();
-          menu.classList.contains('open') ? (dd.classList.remove('open'), menu.classList.remove('open')) : openMenu();
-        });
-        document.addEventListener('click', function() { dd.classList.remove('open'); menu.classList.remove('open'); });
-      });
-    })();
-  </script>
-
-  <script>
-    // Availability status from Google Sheets checkbox (A15 on totals tab)
-    (function() {
-      var CSV = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vR300p3G6_5hn7Ydez7mY6XVhfoWeLUBFpM0C9oJdd__WP8xhVVwZp4bxFZwvxJvODbJ3_o_p-I8EUe/pub?gid=0&single=true&output=csv';
-      fetch(CSV).then(function(r) { return r.text(); }).then(function(text) {
-        var rows = text.trim().split('\n');
-        // J2 = row index 1 (0-based), column J = index 9
-        if (rows.length >= 2) {
-          var val = rows[1].split(',')[9].trim().toUpperCase().replace(/"/g,'');
-          var available = val === 'TRUE';
-          var dot = document.getElementById('avail-dot-nav');
-          var label = document.getElementById('avail-text-nav');
-          if (dot && label) {
-            dot.style.background = available ? '#2ecc71' : '#e74c3c';
-            dot.style.boxShadow = available ? '0 0 8px #2ecc71' : '0 0 8px #e74c3c';
-            label.style.color = available ? '#2ecc71' : '#e74c3c';
-            label.textContent = available ? 'Available for Work' : 'Currently Unavailable';
-          }
-        }
-      }).catch(function() {
-        var label = document.getElementById('avail-text-nav');
-        if (label) label.textContent = 'Get In Touch';
-      });
-    })();
-  </script>
+  <script src="site.js"></script>
 </body>
 </html>
