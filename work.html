@@ -35,7 +35,7 @@
       <section class="section">
         <h2>Hours on air, by game</h2>
         <p class="muted">Total broadcast hours per game, then each season.</p>
-        <div class="state" data-totals-state>Loading the totals…</div>
+        <div class="state" data-totals-state aria-live="polite">Loading the totals…</div>
         <div class="tbl" data-totals-table hidden>
           <table>
             <thead><tr><th>Game</th><th class="num">Hours</th><th class="num">Shows</th><th class="num">2026 h</th><th class="num">2025 h</th><th class="num">2024 h</th></tr></thead>
@@ -70,8 +70,8 @@
           <button type="button" data-year="2024">2024</button>
           <button type="button" data-year="all">All</button>
         </div>
-        <div class="state" data-log-state>Loading the log…</div>
-        <p class="state" data-log-warn hidden></p>
+        <div class="state" data-log-state aria-live="polite">Loading the log…</div>
+        <p class="state" data-log-warn aria-live="polite" hidden></p>
         <div class="tbl" data-log>
           <table>
             <thead><tr><th>Date</th><th>Show</th><th>Game</th><th>Organization</th><th>Role</th><th class="num">Hours</th><th>VOD</th></tr></thead>
