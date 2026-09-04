@@ -36,7 +36,8 @@
     // whitespace. Trim those from the ends only; underscores and dashes are
     // legal inside URLs and YouTube ids.
     if (!s) return '';
-    var c = String(s).trim().replace(/^[*_`\s]+|[*_`\s]+$/g, '').replace(/\s+/g, '');
+    var c = String(s).replace(/[*`\s]/g, '');
+    if (c.length > 2 && c[0] === '_' && c[c.length - 1] === '_') c = c.slice(1, -1); // _url_ italics
     return /^https?:\/\//.test(c) ? c : '';
   }
   function youtubeId(url) {
@@ -130,6 +131,8 @@
     var box = document.querySelector('[data-latest]');
     if (!box) return;
     allShows().then(function (res) {
+      // If any season tab failed, an older show could pose as the latest. Leave the slot empty.
+      if (res.failed) return;
       var hit = res.rows.find(function (r) { return cleanURL(r[6]); });
       if (!hit) return;
       box.querySelector('iframe').src = embedURL(cleanURL(hit[6]));
@@ -185,7 +188,7 @@
         b.addEventListener('click', function () {
           current = b.getAttribute('data-year');
           filters.querySelectorAll('button').forEach(function (x) { x.setAttribute('aria-pressed', x === b ? 'true' : 'false'); });
-          history.replaceState(null, '', current === 'all' ? location.pathname : '#' + current);
+          history.replaceState(null, '', current === 'all' ? location.pathname + location.search : '#' + current);
           render();
         });
       });
