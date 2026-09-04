@@ -32,8 +32,11 @@
     return fetch(url).then(function (r) { if (!r.ok) throw new Error(r.status); return r.text(); }).then(parseCSV);
   }
   function cleanURL(s) {
+    // Sheet cells sometimes arrive wrapped in markdown (*_`) or with stray
+    // whitespace. Trim those from the ends only; underscores and dashes are
+    // legal inside URLs and YouTube ids.
     if (!s) return '';
-    var c = s.replace(/[_*`\s]/g, '');
+    var c = String(s).trim().replace(/^[*_`\s]+|[*_`\s]+$/g, '').replace(/\s+/g, '');
     return /^https?:\/\//.test(c) ? c : '';
   }
   function youtubeId(url) {
@@ -57,24 +60,34 @@
 
   // Rows from all season tabs, deduped (a show pasted into two tabs keeps the copy with hours),
   // newest first.
+  // Resolves to { rows, failed } where failed counts season tabs that did not load.
   var allShowsPromise = null;
   function allShows() {
     if (allShowsPromise) return allShowsPromise;
     var urls = Object.keys(SHEETS.years).map(function (y) { return SHEETS.years[y]; });
-    allShowsPromise = Promise.all(urls.map(function (u) { return fetchCSV(u).catch(function () { return []; }); }))
+    allShowsPromise = Promise.all(urls.map(function (u) { return fetchCSV(u).catch(function () { return null; }); }))
       .then(function (tabs) {
-        var seen = new Map();
-        tabs.forEach(function (rows) {
+        var failed = tabs.filter(function (t) { return t === null; }).length;
+        // A show pasted into two tabs (paid late, wrong season) is the same show:
+        // merge it across tabs, keeping the copy with hours. Rows inside one tab
+        // are always distinct shows, even with the same name on the same date.
+        var seen = new Map(), list = [];
+        tabs.forEach(function (rows, ti) {
+          if (!rows) return;
           rows.slice(1).forEach(function (r) {
             if (!r[0] || !r[1]) return;
-            var key = r[0] + '|' + r[1];
+            var key = [r[0], r[1], r[2], r[3], r[4]].join('|');
             var have = seen.get(key);
-            if (!have || (!have[5] && r[5])) seen.set(key, r);
+            if (have && have.tab !== ti) {
+              if (!have.row[5] && r[5]) { list[list.indexOf(have.row)] = r; have.row = r; }
+              return;
+            }
+            seen.set(key, { tab: ti, row: r });
+            list.push(r);
           });
         });
-        var list = Array.from(seen.values());
         list.sort(function (a, b) { return new Date(b[0]) - new Date(a[0]); });
-        return list;
+        return { rows: list, failed: failed };
       });
     return allShowsPromise;
   }
@@ -116,8 +129,8 @@
   function latest() {
     var box = document.querySelector('[data-latest]');
     if (!box) return;
-    allShows().then(function (list) {
-      var hit = list.find(function (r) { return cleanURL(r[6]); });
+    allShows().then(function (res) {
+      var hit = res.rows.find(function (r) { return cleanURL(r[6]); });
       if (!hit) return;
       box.querySelector('iframe').src = embedURL(cleanURL(hit[6]));
       var cap = box.querySelector('[data-latest-cap]');
@@ -172,15 +185,19 @@
         b.addEventListener('click', function () {
           current = b.getAttribute('data-year');
           filters.querySelectorAll('button').forEach(function (x) { x.setAttribute('aria-pressed', x === b ? 'true' : 'false'); });
-          if (current !== 'all') history.replaceState(null, '', '#' + current);
+          history.replaceState(null, '', current === 'all' ? location.pathname : '#' + current);
           render();
         });
       });
     }
-    allShows().then(function (list) {
-      rows = list;
+    allShows().then(function (res) {
+      rows = res.rows;
       if (!rows.length) throw new Error('empty');
       render();
+      if (res.failed) {
+        var warn = document.querySelector('[data-log-warn]');
+        if (warn) { warn.hidden = false; warn.textContent = 'Part of the log didn’t load (' + res.failed + ' of 3 seasons). Refresh to try again.'; }
+      }
     }).catch(function () { state.hidden = false; state.textContent = 'The show log didn’t load. Try again in a minute.'; });
   }
 
