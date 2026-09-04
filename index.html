@@ -1,367 +1,106 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <!-- Google tag (gtag.js) -->
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Nicholas “Icefireide” Hall · Esports broadcast producer</title>
+  <meta name="description" content="Nicholas “Icefireide” Hall produces esports broadcasts for collegiate and grassroots leagues, and builds the graphics tools they run on. Los Angeles, remote by default.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600&family=Barlow+Semi+Condensed:wght@600;700&display=swap">
+  <link rel="stylesheet" href="site.css">
+  <link rel="icon" href="favicon.svg" type="image/svg+xml">
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-920XP9KWHX"></script>
-  <script>
-    window.dataLayer = window.dataLayer || [];
-    function gtag(){dataLayer.push(arguments);}
-    gtag('js', new Date());
-    gtag('config', 'G-920XP9KWHX');
-  </script>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <meta name="description" content="Nicholas 'Icefireide' Hall — Esports producer and broadcast specialist. Broadcast production, replay operation, and LAN events for competitive gaming."/>
-  <title>Icefireide | Esports Production</title>
-  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow:ital,wght@0,300;0,400;0,600;1,300&family=Barlow+Condensed:wght@400;700&display=swap" rel="stylesheet"/>
-  <style>
-    :root {
-      --bg: #080a0f; --bg2: #0d1018; --surface: #111520; --border: #1e2535;
-      --ice: #5de8ff; --fire: #ff5c1a; --ice-dim: rgba(93,232,255,0.10);
-      --text: #e8edf5; --muted: #6b7a96; --white: #ffffff;
-    }
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-    html { scroll-behavior: smooth; }
-    body { background: var(--bg); color: var(--text); font-family: 'Barlow', sans-serif; font-weight: 300; overflow-x: hidden; }
-    body::before {
-      content: ''; position: fixed; inset: 0; pointer-events: none; z-index: 1000; opacity: 0.35;
-      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
-    }
-    /* NAV */
-    nav { position: fixed; top: 0; left: 0; right: 0; z-index: 100; display: flex; align-items: center; justify-content: space-between; padding: 1.4rem 4rem; background: linear-gradient(to bottom, rgba(8,10,15,0.97), transparent); backdrop-filter: blur(4px); }
-    .nav-logo { font-family: 'Bebas Neue', sans-serif; font-size: 1.6rem; letter-spacing: 0.12em; background: linear-gradient(90deg, var(--ice), var(--fire)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; text-decoration: none; }
-    .nav-links { display: flex; gap: 2.5rem; list-style: none; align-items: center; }
-    .nav-links a { font-family: 'Barlow Condensed', sans-serif; font-size: 0.85rem; letter-spacing: 0.18em; text-transform: uppercase; color: var(--muted); text-decoration: none; transition: color 0.2s; }
-    .nav-links a:hover, .nav-links a.active { color: var(--ice); }
-    .nav-dropdown { position: relative; }
-    .nav-dropdown-toggle { font-family: 'Barlow Condensed', sans-serif; font-size: 0.85rem; letter-spacing: 0.18em; text-transform: uppercase; color: var(--muted); background: none; border: none; cursor: pointer; display: flex; align-items: center; gap: 0.35rem; padding: 0; transition: color 0.2s; }
-    .nav-dropdown:hover .nav-dropdown-toggle { color: var(--ice); }
-    .nav-dropdown-toggle svg { transition: transform 0.2s; }
-    .nav-dropdown:hover .nav-dropdown-toggle svg { transform: rotate(180deg); }
-    .nav-dropdown-menu { position: absolute; top: calc(100% + 0.25rem); left: 50%; transform: translateX(-50%); background: #0f1420; border: 1px solid var(--border); border-radius: 2px; min-width: 160px; opacity: 0; pointer-events: none; transition: opacity 0.15s; overflow: hidden; padding-top: 0.5rem; }
-    .nav-dropdown-menu.open { opacity: 1; pointer-events: all; }
-    .nav-dropdown.open .nav-dropdown-toggle svg { transform: rotate(180deg); }
-    .nav-dropdown-menu a { display: block; padding: 0.7rem 1.2rem; font-family: 'Barlow Condensed', sans-serif; font-size: 0.82rem; letter-spacing: 0.15em; text-transform: uppercase; color: var(--muted); text-decoration: none; transition: background 0.15s, color 0.15s; border-bottom: 1px solid var(--border); }
-    .nav-dropdown-menu a:last-child { border-bottom: none; }
-    .nav-dropdown-menu a:hover { background: var(--surface); color: var(--ice); }
-    /* HERO */
-    #hero { position: relative; min-height: 100vh; display: flex; align-items: center; justify-content: center; overflow: hidden; padding: 0 2rem; }
-    .hero-bg { position: absolute; inset: 0; background: radial-gradient(ellipse 60% 50% at 20% 50%, rgba(93,232,255,0.07), transparent 70%), radial-gradient(ellipse 50% 60% at 80% 50%, rgba(255,92,26,0.07), transparent 70%), var(--bg); }
-    .hero-bg::after { content: ''; position: absolute; inset: 0; background-image: repeating-linear-gradient(-55deg, transparent, transparent 80px, rgba(93,232,255,0.02) 80px, rgba(93,232,255,0.02) 81px); }
-    .hero-content { position: relative; z-index: 2; text-align: center; max-width: 900px; }
-    .hero-eyebrow { font-family: 'Barlow Condensed', sans-serif; font-size: 0.8rem; letter-spacing: 0.35em; text-transform: uppercase; color: var(--ice); margin-bottom: 1.2rem; opacity: 0; animation: fadeUp 0.8s 0.2s forwards; }
-    .hero-name { font-family: 'Bebas Neue', sans-serif; font-size: clamp(4.5rem, 12vw, 10rem); line-height: 0.9; letter-spacing: 0.04em; color: var(--white); opacity: 0; animation: fadeUp 0.8s 0.4s forwards; }
-    .hero-name .ice { color: var(--ice); } .hero-name .fire { color: var(--fire); }
-    .hero-tag { font-family: 'Barlow Condensed', sans-serif; font-size: clamp(1rem, 2.5vw, 1.5rem); letter-spacing: 0.2em; text-transform: uppercase; color: var(--muted); margin-top: 1rem; opacity: 0; animation: fadeUp 0.8s 0.6s forwards; }
-    .hero-divider { width: 60px; height: 2px; background: linear-gradient(90deg, var(--ice), var(--fire)); margin: 2rem auto; opacity: 0; animation: fadeUp 0.8s 0.8s forwards; }
-    .hero-desc { font-size: 1rem; color: var(--muted); line-height: 1.8; max-width: 520px; margin: 0 auto 2.5rem; opacity: 0; animation: fadeUp 0.8s 1s forwards; }
-    .hero-cta { display: inline-flex; gap: 1rem; flex-wrap: wrap; justify-content: center; opacity: 0; animation: fadeUp 0.8s 1.2s forwards; }
-    .btn { font-family: 'Barlow Condensed', sans-serif; font-size: 0.85rem; letter-spacing: 0.2em; text-transform: uppercase; padding: 0.85rem 2.2rem; border-radius: 2px; text-decoration: none; transition: all 0.2s; cursor: pointer; border: none; display: inline-block; }
-    .btn-primary { background: linear-gradient(135deg, var(--ice), #3ab8d4); color: #080a0f; font-weight: 600; }
-    .btn-primary:hover { box-shadow: 0 0 24px rgba(93,232,255,0.4); transform: translateY(-1px); }
-    .btn-outline { background: transparent; color: var(--text); border: 1px solid var(--border); }
-    .btn-outline:hover { border-color: var(--fire); color: var(--fire); transform: translateY(-1px); }
-    .scroll-hint { position: absolute; bottom: 2.5rem; left: 50%; transform: translateX(-50%); display: flex; flex-direction: column; align-items: center; gap: 0.5rem; opacity: 0; animation: fadeUp 1s 1.6s forwards; }
-    .scroll-hint span { font-family: 'Barlow Condensed', sans-serif; font-size: 0.7rem; letter-spacing: 0.25em; text-transform: uppercase; color: var(--muted); }
-    .scroll-line { width: 1px; height: 40px; background: linear-gradient(to bottom, var(--ice), transparent); animation: scrollPulse 2s 2s infinite; }
-    /* ABOUT */
-    #about { padding: 7rem 4rem; max-width: 1200px; margin: 0 auto; }
-    .about-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 6rem; align-items: center; }
-    .about-box { aspect-ratio: 4/5; background: var(--surface); border: 1px solid var(--border); position: relative; overflow: hidden; }
-    .about-box-inner { position: absolute; inset: 0; background: radial-gradient(ellipse at 30% 30%, rgba(93,232,255,0.08), transparent 60%), radial-gradient(ellipse at 70% 70%, rgba(255,92,26,0.08), transparent 60%); display: flex; align-items: center; justify-content: center; }
-    .about-monogram { font-family: 'Bebas Neue', sans-serif; font-size: 9rem; background: linear-gradient(135deg, rgba(93,232,255,0.2), rgba(255,92,26,0.2)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; user-select: none; }
-    .about-visual { position: relative; }
-    .about-accent { position: absolute; bottom: -1rem; right: -1rem; width: 80px; height: 80px; border-right: 2px solid var(--fire); border-bottom: 2px solid var(--fire); }
-    .about-accent-top { position: absolute; top: -1rem; left: -1rem; width: 80px; height: 80px; border-left: 2px solid var(--ice); border-top: 2px solid var(--ice); }
-    .section-label { font-family: 'Barlow Condensed', sans-serif; font-size: 0.75rem; letter-spacing: 0.35em; text-transform: uppercase; color: var(--ice); margin-bottom: 0.6rem; }
-    .section-title { font-family: 'Bebas Neue', sans-serif; font-size: clamp(2.5rem, 5vw, 4rem); letter-spacing: 0.06em; color: var(--white); line-height: 1; margin-bottom: 1rem; }
-    .section-sub { color: var(--muted); font-size: 0.95rem; line-height: 1.8; margin-bottom: 1.5rem; }
-    /* FOOTER */
-    footer { display: flex; justify-content: space-between; align-items: center; max-width: 1200px; margin: 0 auto; border-top: 1px solid var(--border); }
-    .footer-logo { font-family: 'Bebas Neue', sans-serif; font-size: 1.2rem; letter-spacing: 0.1em; background: linear-gradient(90deg, var(--ice), var(--fire)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
-    .footer-copy { font-size: 0.78rem; color: var(--muted); }
-    @keyframes fadeUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
-    @keyframes scrollPulse { 0%, 100% { opacity: 0.3; } 50% { opacity: 1; } }
-    @media (max-width: 768px) { nav { padding: 1.2rem 1.5rem; } .nav-links { display: none; } #about { padding: 4rem 1.5rem; } .about-grid { grid-template-columns: 1fr; gap: 3rem; } footer { flex-direction: column; gap: 0.5rem; text-align: center; } }
-  </style>
-  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><defs><linearGradient id='g' x1='0%25' y1='0%25' x2='100%25' y2='100%25'><stop offset='0%25' stop-color='%235de8ff'/><stop offset='100%25' stop-color='%23ff5c1a'/></linearGradient></defs><rect width='100' height='100' rx='18' fill='%23080a0f'/><text x='50' y='72' font-family='Georgia,serif' font-weight='700' font-size='44' fill='url(%23g)' text-anchor='middle'>NH</text></svg>">
+  <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-920XP9KWHX');</script>
 </head>
 <body>
-  <nav>
-    <div style="display:flex; align-items:center; gap:1rem;">
-      <a href="index.html" class="nav-logo">Icefireide</a>
-      <div id="avail-badge-nav" style="display:inline-flex; align-items:center; gap:0.4rem; padding:0.3rem 0.75rem; border-radius:2px; border:1px solid var(--border); background:var(--surface);">
-        <span id="avail-dot-nav" style="width:7px; height:7px; border-radius:50%; background:var(--muted); flex-shrink:0;"></span>
-        <span id="avail-text-nav" style="font-family:'Barlow Condensed',sans-serif; font-size:0.65rem; letter-spacing:0.2em; text-transform:uppercase; color:var(--muted);">...</span>
-      </div>
+  <header class="nav">
+    <div class="wrap">
+      <a href="index.html" class="wordmark" aria-label="Icefireide, home"><i>Ice</i><b>fire</b>ide</a>
+      <ul class="nav-links">
+        <li><a href="work.html">Work</a></li>
+        <li><a href="tools.html">Tooling</a></li>
+        <li><a href="services.html">Services</a></li>
+        <li><a href="clients.html">Clients</a></li>
+        <li><a href="contact.html">Contact</a></li>
+      </ul>
+      <span class="avail" data-avail></span>
     </div>
-    <ul class="nav-links">
-      <li><a href="index.html" class="active">Home</a></li>
-      <li><a href="services.html">Services</a></li>
-      <li><a href="clients.html">Clients</a></li>
-      <li class="nav-dropdown">
-        <button class="nav-dropdown-toggle">Work <svg width="10" height="6" viewBox="0 0 10 6" fill="none"><path d="M1 1l4 4 4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg></button>
-        <div class="nav-dropdown-menu">
-          <a href="work.html">Overview</a>
-          <a href="work-2026.html">2026</a>
-          <a href="work-2025.html">2025</a>
-          <a href="work-2024.html">2024</a>
-        </div>
-      </li>
-      <li><a href="tools.html">Tooling</a></li>
-      <li><a href="contact.html">Contact</a></li>
-    </ul>
-  </nav>
+  </header>
 
-  <div id="hero">
-    <div class="hero-bg"></div>
-    <div class="hero-content">
-      <p class="hero-eyebrow">Esports Production</p>
-      <h1 class="hero-name"><span class="ice">Ice</span><span class="fire">fire</span>ide</h1>
-      <p class="hero-tag">Nicholas &ldquo;Icefireide&rdquo; Hall</p>
-      <div class="hero-divider"></div>
-      <p class="hero-desc">I produce and direct live esports broadcasts. Leagues, tournaments, finals weekends.</p>
-      <div class="hero-cta">
-        <a href="work.html" class="btn btn-primary">View My Work</a>
-        <a href="contact.html" class="btn btn-outline">Get In Touch</a>
-      </div>
-    </div>
-    <div class="scroll-hint"><span>Scroll</span><div class="scroll-line"></div></div>
-  </div>
-
-  <!-- FEATURED PRODUCTIONS CAROUSEL -->
-  <section style="max-width:1200px; margin:0 auto; padding:5rem 4rem 0;">
-    <p class="section-label cascade cascade-1">Featured Productions</p>
-    <h2 class="section-title cascade cascade-2" style="margin-bottom:2rem;">Highlights</h2>
-    <div class="cascade cascade-3" style="position:relative;">
-      <!-- Carousel track -->
-      <div id="carousel-track" style="position:relative; width:100%; aspect-ratio:16/9; border-radius:2px; overflow:hidden; background:var(--surface); padding:2px; background:linear-gradient(135deg, var(--ice), var(--fire));">
-        <div style="position:relative; width:100%; height:100%; border-radius:1px; overflow:hidden; background:var(--surface);">
-          <iframe id="carousel-iframe" src="https://www.youtube.com/embed/IcmEY9MfYTs" title="Featured VOD" allowfullscreen style="position:absolute;inset:0;width:100%;height:100%;border:none;"></iframe>
-        </div>
-      </div>
-
-      <!-- Title + controls -->
-      <div style="display:flex; align-items:center; justify-content:space-between; margin-top:1rem; flex-wrap:wrap; gap:1rem;">
+  <main>
+    <div class="wrap">
+      <section class="hero">
         <div>
-          <p id="carousel-title" style="font-family:'Bebas Neue',sans-serif; font-size:1.3rem; letter-spacing:0.06em; color:var(--white);">Division One Esports Valorant Grand Finals</p>
-          <p style="font-family:'Barlow Condensed',sans-serif; font-size:0.75rem; letter-spacing:0.2em; text-transform:uppercase; color:var(--fire); margin-top:0.2rem;">Featured</p>
+          <p class="who">Nicholas “Icefireide” Hall · Los Angeles</p>
+          <h1>I produce esports broadcasts, and build the software they run on.</h1>
+          <p class="lead">Collegiate and grassroots leagues, tournaments and finals weekends. Producing, directing, replay and observing, plus the graphics tools that make a three-person crew look like ten.</p>
+          <div class="btns">
+            <a href="services.html" class="btn primary">Services and rates</a>
+            <a href="work.html" class="btn">Every show I’ve done</a>
+          </div>
         </div>
-        <div style="display:flex; align-items:center; gap:1rem;">
-          <!-- Dot indicators -->
-          <div id="carousel-dots" style="display:flex; gap:0.5rem;"></div>
-          <!-- Arrows -->
-          <button onclick="carouselPrev()" style="width:38px; height:38px; border:1px solid var(--border); background:var(--surface); color:var(--text); border-radius:2px; cursor:pointer; display:flex; align-items:center; justify-content:center; transition:all 0.2s;" onmouseover="this.style.borderColor='var(--ice)';this.style.color='var(--ice)'" onmouseout="this.style.borderColor='var(--border)';this.style.color='var(--text)'">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 18l-6-6 6-6"/></svg>
-          </button>
-          <button onclick="carouselNext()" style="width:38px; height:38px; border:1px solid var(--border); background:var(--surface); color:var(--text); border-radius:2px; cursor:pointer; display:flex; align-items:center; justify-content:center; transition:all 0.2s;" onmouseover="this.style.borderColor='var(--ice)';this.style.color='var(--ice)'" onmouseout="this.style.borderColor='var(--border)';this.style.color='var(--text)'">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
-          </button>
+        <div data-latest hidden>
+          <div class="video"><iframe src="" title="Latest show" loading="lazy" allow="accelerometer; encrypted-media; picture-in-picture" allowfullscreen></iframe></div>
+          <div class="video-cap" data-latest-cap></div>
         </div>
-      </div>
-    </div>
-  </section>
+      </section>
 
-  <!-- LATEST VOD -->
-  <section id="latest-vod" style="max-width:1200px; margin:0 auto; padding:4rem 4rem 0;">
-    <div id="vod-container" style="display:none;">
-      <p class="section-label cascade cascade-1">Latest Production</p>
-      <h2 class="section-title cascade cascade-2" id="vod-title" style="margin-bottom:1.5rem;"></h2>
-      <div class="cascade cascade-3" style="position:relative; width:100%; aspect-ratio:16/9; border-radius:2px; overflow:hidden; background:var(--surface); padding:2px; background:linear-gradient(135deg, var(--ice), var(--fire));">
-        <div style="position:relative; width:100%; height:100%; border-radius:1px; overflow:hidden; background:var(--surface);">
-          <iframe id="vod-iframe" src="" title="Latest VOD" allowfullscreen style="position:absolute;inset:0;width:100%;height:100%;border:none;"></iframe>
-        </div>
+      <div class="strip" data-totals-ready hidden>
+        <span><b data-total="hours">—</b> hours on air</span>
+        <span><b data-total="shows">—</b> shows since 2024</span>
+        <span>League of Legends · Valorant · Rocket League · COD Mobile</span>
       </div>
-      <p class="cascade cascade-4" style="margin-top:1rem; font-size:0.8rem; color:var(--muted); font-family:'Barlow Condensed',sans-serif; letter-spacing:0.1em;">
-        Most recent show from my <a href="work.html" style="color:var(--ice); text-decoration:none;">production log</a>
-      </p>
-    </div>
-  </section>
 
-  <section id="about">
-    <div class="about-grid">
-      <div class="about-visual">
-        <div class="about-box"><img src="Headshot.jpg" alt="Nicholas Hall" style="width:100%;height:100%;object-fit:cover;display:block;" /></div>
-        <div class="about-accent-top"></div><div class="about-accent"></div>
-      </div>
-      <div>
-        <p class="section-label">About</p>
-        <h2 class="section-title">Nicholas<br>"Icefireide"<br>Hall</h2>
-        <p class="section-sub">Esports producer and technical director. Most of my work is collegiate and sub-tier-2 competitive gaming &mdash; leagues, tournaments and finals weekends where the crew is small and the producer is also directing, switching and troubleshooting live.</p>
-        <p class="section-sub">I also build the software my broadcasts run on. Graphics control, draft and map-ban displays, roster and stats overlays pulled out of the game&rsquo;s API, all built around the show instead of bent out of a template, and built so one person can actually run them mid-broadcast. It&rsquo;s the part of this job I enjoy most, and it&rsquo;s why my shows tend to look like they had a bigger crew than they did.</p>
-        <p class="section-sub">Currently producing overnight English-language coverage of the LPL alongside collegiate Valorant, League and Rocket League. Based in the Los Angeles area, remote by default and actively looking to do more on-site work.</p>
-        <a href="services.html" class="btn btn-outline" style="margin-top:0.5rem;">View Services →</a>
-      </div>
+      <section class="section">
+        <div class="section-head">
+          <h2>Tooling I’ve built</h2>
+          <p><a href="tools.html">What each tool does, and how to get it</a></p>
+        </div>
+        <p class="lead">Overlays, draft and map-ban displays, control panels. Each one started as something a show needed and most have run every season since. These are the tools running, not mockups.</p>
+        <div class="stills">
+          <figure class="still"><img src="tooling/lol-hud.jpg" alt="League of Legends in-game HUD with team gold, kills and objectives" width="1280" height="720" loading="lazy"><figcaption><b>League of Legends HUD</b><span>Live stats off the game feed</span></figcaption></figure>
+          <figure class="still"><img src="tooling/mtb-veto.jpg" alt="Valorant map veto display with banned and picked maps" width="1280" height="720" loading="lazy"><figcaption><b>Valorant map veto</b><span>Built for MilkTeaBoards</span></figcaption></figure>
+          <figure class="still"><img src="tooling/riftbound-overlay.jpg" alt="Riftbound overlay with rune clusters and the shared victory track" width="1280" height="720" loading="lazy"><figcaption><b>Riftbound overlay</b><span>Runes, victory track, Showdown</span></figcaption></figure>
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="about">
+          <img src="headshot.jpg" alt="Nicholas Hall" width="1000" height="1333" loading="lazy">
+          <div>
+            <h2>About</h2>
+            <p>Esports producer and technical director. Most of my work is collegiate and sub-tier-2 competitive gaming: leagues, tournaments and finals weekends where the crew is small and the producer is also directing, switching and troubleshooting live.</p>
+            <p>I also build the software my broadcasts run on. Graphics control, draft and map-ban displays, roster and stats overlays pulled out of the game’s API, all built around the show instead of bent out of a template, and built so one person can actually run them mid-broadcast. It’s the part of this job I enjoy most, and it’s why my shows tend to look like they had a bigger crew than they did.</p>
+            <p>Right now I’m producing overnight English-language coverage of the LPL alongside collegiate Valorant, League and Rocket League. Based in the Los Angeles area, remote by default, and looking to do more on-site work.</p>
+          </div>
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="section-head">
+          <h2>Who I’ve worked with</h2>
+          <p><a href="clients.html">All clients</a></p>
+        </div>
+        <div class="logos">
+          <div><img src="D1 Logo.png" alt="" width="120" height="34">Division One</div>
+          <div><img src="LPL English Logo.png" alt="" width="120" height="34">LPL English</div>
+          <div><img src="mtb-logo.png" alt="" width="120" height="34">MilkTeaBoards</div>
+          <div><img src="LanFest Logo.png" alt="" width="120" height="34">LANFest</div>
+          <div><img src="NECC Logo.png" alt="" width="120" height="34">NECC</div>
+          <div><img src="Risen Logo.webp" alt="" width="120" height="34">Risen</div>
+        </div>
+      </section>
     </div>
-  </section>
+  </main>
 
   <footer>
-    <div style="max-width:1200px; margin:0 auto; padding:2.5rem 4rem; width:100%;">
-      <div style="display:grid; grid-template-columns:1fr 1fr; gap:2rem; align-items:start; border-bottom:1px solid var(--border); padding-bottom:2rem; margin-bottom:1.5rem;">
-
-        <!-- Logo + status -->
-        <div style="display:flex; flex-direction:column; gap:1rem;">
-          <span class="footer-logo">Icefireide</span>
-          </div>
-
-        <!-- Nav links -->
-        <div style="display:flex; flex-direction:column; gap:0.6rem;">
-          <p style="font-family:'Barlow Condensed',sans-serif; font-size:0.7rem; letter-spacing:0.25em; text-transform:uppercase; color:var(--muted); margin-bottom:0.4rem;">Pages</p>
-          <a href="index.html" style="font-family:'Barlow Condensed',sans-serif; font-size:0.85rem; letter-spacing:0.12em; text-transform:uppercase; color:var(--muted); text-decoration:none; transition:color 0.2s;" onmouseover="this.style.color='var(--ice)'" onmouseout="this.style.color='var(--muted)'">Home</a>
-          <a href="services.html" style="font-family:'Barlow Condensed',sans-serif; font-size:0.85rem; letter-spacing:0.12em; text-transform:uppercase; color:var(--muted); text-decoration:none; transition:color 0.2s;" onmouseover="this.style.color='var(--ice)'" onmouseout="this.style.color='var(--muted)'">Services</a>
-          <a href="clients.html" style="font-family:'Barlow Condensed',sans-serif; font-size:0.85rem; letter-spacing:0.12em; text-transform:uppercase; color:var(--muted); text-decoration:none; transition:color 0.2s;" onmouseover="this.style.color='var(--ice)'" onmouseout="this.style.color='var(--muted)'">Clients</a>
-          <a href="work.html" style="font-family:'Barlow Condensed',sans-serif; font-size:0.85rem; letter-spacing:0.12em; text-transform:uppercase; color:var(--muted); text-decoration:none; transition:color 0.2s;" onmouseover="this.style.color='var(--ice)'" onmouseout="this.style.color='var(--muted)'">Work</a>
-          <a href="tools.html" style="font-family:'Barlow Condensed',sans-serif; font-size:0.85rem; letter-spacing:0.12em; text-transform:uppercase; color:var(--muted); text-decoration:none; transition:color 0.2s;" onmouseover="this.style.color='var(--ice)'" onmouseout="this.style.color='var(--muted)'">Tooling</a>
-          <a href="contact.html" style="font-family:'Barlow Condensed',sans-serif; font-size:0.85rem; letter-spacing:0.12em; text-transform:uppercase; color:var(--muted); text-decoration:none; transition:color 0.2s;" onmouseover="this.style.color='var(--ice)'" onmouseout="this.style.color='var(--muted)'">Contact</a>
-        </div>
-
-      </div>
-      <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:0.5rem;">
-        <span style="font-size:0.78rem; color:var(--muted);">© 2026 Nicholas Hall. All rights reserved.</span>
-        <a href="https://twitter.com/Icefireideprod" target="_blank" rel="noopener" style="font-family:'Barlow Condensed',sans-serif; font-size:0.75rem; letter-spacing:0.15em; text-transform:uppercase; color:var(--muted); text-decoration:none;">@Icefireideprod</a>
+    <div class="wrap">
+      <div>Nicholas Hall · <a data-email="text" href="#"></a> · Discord Icefireide</div>
+      <div class="links">
+        <a href="work.html">Work</a><a href="tools.html">Tooling</a><a href="services.html">Services</a><a href="clients.html">Clients</a><a href="contact.html">Contact</a><a href="https://twitter.com/Icefireideprod" target="_blank" rel="noopener">@Icefireideprod</a>
       </div>
     </div>
   </footer>
-  <script>
-    // ── Featured VOD Carousel ──
-    const FEATURED = [
-      { id: 'IcmEY9MfYTs', title: 'Division One Esports Valorant Grand Finals' },
-      { id: 'buqcU4sN5mc', title: 'Division One Esports League of Legends Grand Finals' },
-      // Add more: { id: 'YOUTUBE_ID', title: 'Event Name' },
-    ];
-
-    let current = 0;
-
-    function renderDots() {
-      const dots = document.getElementById('carousel-dots');
-      dots.innerHTML = '';
-      FEATURED.forEach(function(_, i) {
-        const dot = document.createElement('button');
-        dot.style.cssText = 'width:8px;height:8px;border-radius:50%;border:none;cursor:pointer;transition:all 0.2s;padding:0;background:' + (i === current ? 'var(--ice)' : 'var(--border)');
-        dot.onclick = function() { goTo(i); };
-        dots.appendChild(dot);
-      });
-    }
-
-    function goTo(index) {
-      current = (index + FEATURED.length) % FEATURED.length;
-      const item = FEATURED[current];
-      const iframe = document.getElementById('carousel-iframe');
-      const title = document.getElementById('carousel-title');
-      // Reload iframe with new src
-      iframe.src = 'https://www.youtube.com/embed/' + item.id;
-      title.textContent = item.title;
-      renderDots();
-    }
-
-    function carouselNext() { goTo(current + 1); }
-    function carouselPrev() { goTo(current - 1); }
-
-    // Init dots
-    renderDots();
-  </script>
-  <script>
-    // ── Latest VOD from 2026 sheet (falls back to 2025, then 2024) ──
-    const VOD_SHEETS = [
-      { url: 'https://docs.google.com/spreadsheets/d/e/2PACX-1vR300p3G6_5hn7Ydez7mY6XVhfoWeLUBFpM0C9oJdd__WP8xhVVwZp4bxFZwvxJvODbJ3_o_p-I8EUe/pub?gid=584832786&single=true&output=csv' },
-      { url: 'https://docs.google.com/spreadsheets/d/e/2PACX-1vR300p3G6_5hn7Ydez7mY6XVhfoWeLUBFpM0C9oJdd__WP8xhVVwZp4bxFZwvxJvODbJ3_o_p-I8EUe/pub?gid=1262254364&single=true&output=csv' },
-      { url: 'https://docs.google.com/spreadsheets/d/e/2PACX-1vR300p3G6_5hn7Ydez7mY6XVhfoWeLUBFpM0C9oJdd__WP8xhVVwZp4bxFZwvxJvODbJ3_o_p-I8EUe/pub?gid=106338310&single=true&output=csv' }
-    ];
-
-    function parseCSV(text) {
-      return text.trim().split('\n').slice(1).map(line => {
-        const cols = []; let cur = '', inQ = false;
-        for (const c of line) { if (c === '"') inQ = !inQ; else if (c === ',' && !inQ) { cols.push(cur.trim()); cur = ''; } else cur += c; }
-        cols.push(cur.trim()); return cols;
-      }).filter(r => r.some(c => c));
-    }
-
-    function cleanURL(s) {
-      if (!s) return '';
-      const cleaned = s.replace(/[_*`\s]/g, '');
-      return (cleaned.includes('http://') || cleaned.includes('https://')) ? cleaned : '';
-    }
-
-    function toEmbedURL(url) {
-      // Convert YouTube watch/live URLs to embed format
-      const ytMatch = url.match(/(?:youtube\.com\/(?:watch\?v=|live\/)|youtu\.be\/)([a-zA-Z0-9_-]{11})/);
-      if (ytMatch) return 'https://www.youtube.com/embed/' + ytMatch[1];
-      return url;
-    }
-
-    async function loadLatestVOD() {
-      for (const sheet of VOD_SHEETS) {
-        try {
-          const res = await fetch(sheet.url);
-          if (!res.ok) continue;
-          const rows = parseCSV(await res.text());
-          // Filter rows that have a valid link (col G, index 6)
-          const withLinks = rows.filter(r => cleanURL(r[6] || ''));
-          if (!withLinks.length) continue;
-          // Sort by date (col A, index 0) newest first
-          withLinks.sort((a, b) => {
-            const da = new Date(a[0]), db = new Date(b[0]);
-            return (isNaN(da) || isNaN(db)) ? 0 : db - da;
-          });
-          const latest = withLinks[0];
-          const embedURL = toEmbedURL(cleanURL(latest[6]));
-          const title = latest[1] || 'Latest Production';
-          document.getElementById('vod-title').textContent = title;
-          document.getElementById('vod-iframe').src = embedURL;
-          document.getElementById('vod-container').style.display = 'block';
-          return; // stop once we find one
-        } catch(e) { continue; }
-      }
-    }
-
-    loadLatestVOD();
-  </script>
-  <script>
-    (function() {
-      var dropdowns = document.querySelectorAll('.nav-dropdown');
-      dropdowns.forEach(function(dd) {
-        var toggle = dd.querySelector('.nav-dropdown-toggle');
-        var menu = dd.querySelector('.nav-dropdown-menu');
-        var closeTimer;
-        function openMenu() { clearTimeout(closeTimer); dd.classList.add('open'); menu.classList.add('open'); }
-        function scheduleClose() { closeTimer = setTimeout(function() { dd.classList.remove('open'); menu.classList.remove('open'); }, 350); }
-        dd.addEventListener('mouseenter', openMenu);
-        dd.addEventListener('mouseleave', scheduleClose);
-        menu.addEventListener('mouseenter', openMenu);
-        menu.addEventListener('mouseleave', scheduleClose);
-        if (toggle) toggle.addEventListener('click', function(e) {
-          e.stopPropagation();
-          menu.classList.contains('open') ? (dd.classList.remove('open'), menu.classList.remove('open')) : openMenu();
-        });
-        document.addEventListener('click', function() { dd.classList.remove('open'); menu.classList.remove('open'); });
-      });
-    })();
-  </script>
-
-  <script>
-    // Availability status from Google Sheets checkbox (A15 on totals tab)
-    (function() {
-      var CSV = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vR300p3G6_5hn7Ydez7mY6XVhfoWeLUBFpM0C9oJdd__WP8xhVVwZp4bxFZwvxJvODbJ3_o_p-I8EUe/pub?gid=0&single=true&output=csv';
-      fetch(CSV).then(function(r) { return r.text(); }).then(function(text) {
-        var rows = text.trim().split('\n');
-        // J2 = row index 1 (0-based), column J = index 9
-        if (rows.length >= 2) {
-          var val = rows[1].split(',')[9].trim().toUpperCase().replace(/"/g,'');
-          var available = val === 'TRUE';
-          var dot = document.getElementById('avail-dot-nav');
-          var label = document.getElementById('avail-text-nav');
-          if (dot && label) {
-            dot.style.background = available ? '#2ecc71' : '#e74c3c';
-            dot.style.boxShadow = available ? '0 0 8px #2ecc71' : '0 0 8px #e74c3c';
-            label.style.color = available ? '#2ecc71' : '#e74c3c';
-            label.textContent = available ? 'Available for Work' : 'Currently Unavailable';
-          }
-        }
-      }).catch(function() {
-        var label = document.getElementById('avail-text-nav');
-        if (label) label.textContent = 'Get In Touch';
-      });
-    })();
-  </script>
+  <script src="site.js"></script>
 </body>
 </html>

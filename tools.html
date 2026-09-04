@@ -1,375 +1,133 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <!-- Google tag (gtag.js) -->
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Tooling · Icefireide</title>
+  <meta name="description" content="Broadcast software built by Nicholas “Icefireide” Hall: in-game HUDs, draft and map-ban displays, control panels for League of Legends, Valorant, Rocket League and Riftbound. Shown running, not mocked up.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600&family=Barlow+Semi+Condensed:wght@600;700&display=swap">
+  <link rel="stylesheet" href="site.css">
+  <link rel="icon" href="favicon.svg" type="image/svg+xml">
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-920XP9KWHX"></script>
-  <script>
-    window.dataLayer = window.dataLayer || [];
-    function gtag(){dataLayer.push(arguments);}
-    gtag('js', new Date());
-    gtag('config', 'G-920XP9KWHX');
-  </script>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <meta name="description" content="Broadcast software built in-house by Icefireide — graphics control, draft and map-ban displays, roster and stats overlays wired into game APIs. Captured directly from the tools."/>
-  <title>Tooling | Icefireide</title>
-  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow:ital,wght@0,300;0,400;0,600;1,300&family=Barlow+Condensed:wght@400;700&display=swap" rel="stylesheet"/>
-  <style>
-    :root { --bg: #080a0f; --bg2: #0d1018; --surface: #111520; --border: #1e2535; --ice: #5de8ff; --fire: #ff5c1a; --ice-dim: rgba(93,232,255,0.10); --text: #e8edf5; --muted: #6b7a96; --white: #ffffff; }
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-    body { background: var(--bg); color: var(--text); font-family: 'Barlow', sans-serif; font-weight: 300; overflow-x: hidden; }
-    body::before { content: ''; position: fixed; inset: 0; pointer-events: none; z-index: 1000; opacity: 0.35; background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E"); }
-    nav { position: fixed; top: 0; left: 0; right: 0; z-index: 100; display: flex; align-items: center; justify-content: space-between; padding: 1.4rem 4rem; background: rgba(8,10,15,0.97); backdrop-filter: blur(4px); border-bottom: 1px solid var(--border); }
-    .nav-logo { font-family: 'Bebas Neue', sans-serif; font-size: 1.6rem; letter-spacing: 0.12em; background: linear-gradient(90deg, var(--ice), var(--fire)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; text-decoration: none; }
-    .nav-links { display: flex; gap: 2.5rem; list-style: none; align-items: center; }
-    .nav-links a { font-family: 'Barlow Condensed', sans-serif; font-size: 0.85rem; letter-spacing: 0.18em; text-transform: uppercase; color: var(--muted); text-decoration: none; transition: color 0.2s; }
-    .nav-links a:hover, .nav-links a.active { color: var(--ice); }
-    .nav-dropdown { position: relative; }
-    .nav-dropdown-toggle { font-family: 'Barlow Condensed', sans-serif; font-size: 0.85rem; letter-spacing: 0.18em; text-transform: uppercase; color: var(--muted); background: none; border: none; cursor: pointer; display: flex; align-items: center; gap: 0.35rem; padding: 0; transition: color 0.2s; }
-    .nav-dropdown-toggle:hover { color: var(--ice); }
-    .nav-dropdown-toggle svg { transition: transform 0.2s; }
-    .nav-dropdown:hover .nav-dropdown-toggle svg { transform: rotate(180deg); }
-    .nav-dropdown-menu { position: absolute; top: calc(100% + 0.25rem); left: 50%; transform: translateX(-50%); background: #0f1420; border: 1px solid var(--border); border-radius: 2px; min-width: 160px; opacity: 0; pointer-events: none; transition: opacity 0.15s; overflow: hidden; padding-top: 0.5rem; }
-    .nav-dropdown-menu.open { opacity: 1; pointer-events: all; }
-    .nav-dropdown.open .nav-dropdown-toggle svg { transform: rotate(180deg); }
-    .nav-dropdown-menu a { display: block; padding: 0.7rem 1.2rem; font-family: 'Barlow Condensed', sans-serif; font-size: 0.82rem; letter-spacing: 0.15em; text-transform: uppercase; color: var(--muted); text-decoration: none; transition: background 0.15s, color 0.15s; border-bottom: 1px solid var(--border); }
-    .nav-dropdown-menu a:last-child { border-bottom: none; }
-    .nav-dropdown-menu a:hover, .nav-dropdown-menu a.active { background: var(--surface); color: var(--ice); }
-    .page-wrap { max-width: 1200px; margin: 0 auto; padding: 9rem 4rem 6rem; }
-    .page-eyebrow { font-family: 'Barlow Condensed', sans-serif; font-size: 0.75rem; letter-spacing: 0.35em; text-transform: uppercase; color: var(--ice); margin-bottom: 0.6rem; }
-    .page-title { font-family: 'Bebas Neue', sans-serif; font-size: clamp(3rem, 7vw, 6rem); letter-spacing: 0.06em; color: var(--white); line-height: 0.9; margin-bottom: 1.5rem; }
-    .page-sub { color: var(--muted); font-size: 0.95rem; line-height: 1.8; max-width: 620px; margin-bottom: 3.5rem; }
-    .loading-state { padding: 4rem; text-align: center; color: var(--muted); font-family: 'Barlow Condensed', sans-serif; letter-spacing: 0.1em; }
-    .spinner { width: 28px; height: 28px; border: 2px solid var(--border); border-top-color: var(--ice); border-radius: 50%; animation: spin 0.8s linear infinite; margin: 0 auto 1rem; }
-    /* Tooling gallery */
-    .tooling-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 1.5rem; }
-    .tool-card { background: var(--surface); border: 1px solid var(--border); overflow: hidden; display: flex; flex-direction: column; transition: border-color 0.2s, transform 0.2s; text-decoration: none; }
-    .tool-card:hover { border-color: var(--ice); transform: translateY(-2px); }
-    .tool-shot { display: block; width: 100%; aspect-ratio: 16/9; object-fit: cover; background: var(--bg2); border-bottom: 1px solid var(--border); }
-    .tool-body { padding: 1.4rem 1.5rem 1.6rem; }
-    .tool-client { font-family: 'Barlow Condensed', sans-serif; font-size: 0.68rem; letter-spacing: 0.28em; text-transform: uppercase; color: var(--ice); display: block; margin-bottom: 0.45rem; }
-    .tool-title { font-family: 'Bebas Neue', sans-serif; font-size: 1.3rem; letter-spacing: 0.07em; color: var(--white); margin-bottom: 0.5rem; }
-    .tool-caption { font-size: 0.87rem; color: var(--muted); line-height: 1.75; }
-    .tool-tag { display: inline-block; margin-top: 0.9rem; font-family: 'Barlow Condensed', sans-serif; font-size: 0.68rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--fire); }
-    .kit-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1.5px; border: 1.5px solid var(--border); margin-bottom: 3.5rem; }
-    .kit { background: var(--surface); padding: 2.4rem 2.1rem; position: relative; overflow: hidden; transition: background 0.3s; }
-    .kit::before { content: ''; position: absolute; top: 0; left: 0; width: 3px; height: 0; background: linear-gradient(to bottom, var(--ice), var(--fire)); transition: height 0.4s; }
-    .kit:hover::before { height: 100%; }
-    .kit:hover { background: #131825; }
-    .kit-game { font-family: 'Bebas Neue', sans-serif; font-size: 1.6rem; letter-spacing: 0.08em; color: var(--white); }
-    .kit-credit { font-family: 'Barlow Condensed', sans-serif; font-size: 0.7rem; letter-spacing: 0.24em; text-transform: uppercase; color: var(--ice); margin-top: 0.4rem; }
-    .kit-list { list-style: none; margin-top: 1.3rem; padding-top: 1.3rem; border-top: 1px solid var(--border); }
-    .kit-list li { font-size: 0.87rem; color: var(--muted); line-height: 1.7; padding-left: 1.1rem; position: relative; margin-bottom: 0.5rem; }
-    .kit-list li::before { content: ''; position: absolute; left: 0; top: 0.66em; width: 4px; height: 4px; background: var(--ice); }
-    .video-wrap { border: 1.5px solid var(--border); background: var(--surface); margin-bottom: 1.4rem; }
-    .video-frame { position: relative; width: 100%; padding-top: 56.25%; background: var(--bg2); }
-    .video-frame iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; display: block; }
-    .video-cap { padding: 1.3rem 1.6rem 1.5rem; font-size: 0.88rem; color: var(--muted); line-height: 1.8; border-top: 1px solid var(--border); }
-    .video-cap strong { color: var(--text); font-weight: 600; }
-    .video-cap a { color: var(--ice); text-decoration: none; }
-    .kit-cta { margin: 0 0 4.5rem; padding: 1.9rem 2.1rem; background: var(--bg2); border: 1px solid var(--border); font-size: 0.89rem; color: var(--muted); line-height: 1.9; }
-    .kit-cta strong { color: var(--text); font-weight: 600; }
-    .section-head { margin: 0 0 1.6rem; }
-    .section-eyebrow { font-family: 'Barlow Condensed', sans-serif; font-size: 0.75rem; letter-spacing: 0.35em; text-transform: uppercase; color: var(--ice); margin-bottom: 0.6rem; }
-    .section-title { font-family: 'Bebas Neue', sans-serif; font-size: clamp(1.8rem, 3.5vw, 2.6rem); letter-spacing: 0.06em; color: var(--white); line-height: 1; }
-    .tooling-foot { font-size: 0.82rem; color: var(--muted); line-height: 1.75; margin-top: 2.4rem; max-width: 720px; }
-    footer { display: flex; justify-content: space-between; align-items: center; max-width: 1200px; margin: 0 auto; border-top: 1px solid var(--border); }
-    .footer-logo { font-family: 'Bebas Neue', sans-serif; font-size: 1.2rem; letter-spacing: 0.1em; background: linear-gradient(90deg, var(--ice), var(--fire)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
-    .footer-copy { font-size: 0.78rem; color: var(--muted); }
-    @keyframes spin { to { transform: rotate(360deg); } }
-    @media (max-width: 768px) { nav { padding: 1.2rem 1.5rem; } .nav-links { display: none; } .page-wrap { padding: 7rem 1.5rem 4rem; } footer { flex-direction: column; gap: 0.5rem; text-align: center; } }
-
-    @keyframes fadeUp { from { opacity: 0; transform: translateY(24px); } to { opacity: 1; transform: translateY(0); } }
-    .cascade { opacity: 0; animation: fadeUp 0.7s ease forwards; }
-    .cascade-1 { animation-delay: 0.1s; }
-    .cascade-2 { animation-delay: 0.25s; }
-    .cascade-3 { animation-delay: 0.4s; }
-    .cascade-4 { animation-delay: 0.55s; }
-  </style>
-  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><defs><linearGradient id='g' x1='0%25' y1='0%25' x2='100%25' y2='100%25'><stop offset='0%25' stop-color='%235de8ff'/><stop offset='100%25' stop-color='%23ff5c1a'/></linearGradient></defs><rect width='100' height='100' rx='18' fill='%23080a0f'/><text x='50' y='72' font-family='Georgia,serif' font-weight='700' font-size='44' fill='url(%23g)' text-anchor='middle'>NH</text></svg>">
+  <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-920XP9KWHX');</script>
 </head>
 <body>
-  <nav>
-    <div style="display:flex; align-items:center; gap:1rem;">
-      <a href="index.html" class="nav-logo">Icefireide</a>
-      <div id="avail-badge-nav" style="display:inline-flex; align-items:center; gap:0.4rem; padding:0.3rem 0.75rem; border-radius:2px; border:1px solid var(--border); background:var(--surface);">
-        <span id="avail-dot-nav" style="width:7px; height:7px; border-radius:50%; background:var(--muted); flex-shrink:0;"></span>
-        <span id="avail-text-nav" style="font-family:'Barlow Condensed',sans-serif; font-size:0.65rem; letter-spacing:0.2em; text-transform:uppercase; color:var(--muted);">...</span>
-      </div>
+  <header class="nav">
+    <div class="wrap">
+      <a href="index.html" class="wordmark" aria-label="Icefireide, home"><i>Ice</i><b>fire</b>ide</a>
+      <ul class="nav-links">
+        <li><a href="work.html">Work</a></li>
+        <li><a href="tools.html" aria-current="page">Tooling</a></li>
+        <li><a href="services.html">Services</a></li>
+        <li><a href="clients.html">Clients</a></li>
+        <li><a href="contact.html">Contact</a></li>
+      </ul>
+      <span class="avail" data-avail></span>
     </div>
-    <ul class="nav-links">
-      <li><a href="index.html">Home</a></li>
-      <li><a href="services.html">Services</a></li>
-      <li><a href="clients.html">Clients</a></li>
-      <li class="nav-dropdown">
-        <button class="nav-dropdown-toggle">Work <svg width="10" height="6" viewBox="0 0 10 6" fill="none"><path d="M1 1l4 4 4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg></button>
-        <div class="nav-dropdown-menu">
-          <a href="work.html">Overview</a>
-          <a href="work-2026.html">2026</a>
-          <a href="work-2025.html">2025</a>
-          <a href="work-2024.html">2024</a>
+  </header>
+
+  <main>
+    <div class="wrap">
+      <h1>Tooling</h1>
+      <p class="lead">Software I’ve written for my own shows and for clients. Graphics control, map bans, rosters and stats pulled straight out of the game. Every shot on this page comes off the tool itself, running on mock match data, so it’s what actually goes on air.</p>
+      <p>Two ways to get it: I bring it to a show I’m already producing, or you license it and your own producer runs it. An overlay is an addition to the game, not something that sits on top of it, and everything here is built so one person can drive it mid-broadcast. <a href="services.html#tooling">Prices are on the services page.</a></p>
+
+      <section class="kit" id="lol">
+        <div>
+          <h2>League of Legends</h2>
+          <p class="credit">Runs on Division One’s league broadcasts</p>
+          <ul>
+            <li>In-game HUD with live stats off the game feed</li>
+            <li>Pick/ban draft display</li>
+            <li>Team and player graphics, driven from the league data</li>
+            <li>Google Sheets control: change a cell, it changes on air</li>
+            <li>Observer companion for a dedicated camera op</li>
+          </ul>
         </div>
-      </li>
-      <li><a href="tools.html" class="active">Tooling</a></li>
-      <li><a href="contact.html">Contact</a></li>
-    </ul>
-  </nav>
+        <div class="kit-shots two" data-shots="lol">
+          <figure><img src="tooling/lol-hud.jpg" alt="League of Legends in-game HUD" width="1280" height="720" loading="lazy"><figcaption>In-game HUD, live off the game feed. Shown on a plain backdrop; on air it sits over the game.</figcaption></figure>
+          <figure><img src="tooling/lol-draft.jpg" alt="League of Legends pick and ban draft display" width="1280" height="720" loading="lazy"><figcaption>Pick/ban draft</figcaption></figure>
+          <figure><img src="tooling/lol-control.jpg" alt="League of Legends tool control panel" width="1280" height="720" loading="lazy"><figcaption>Control panel</figcaption></figure>
+          <figure><img src="tooling/lol-template.jpg" alt="League of Legends team graphic" width="1280" height="720" loading="lazy"><figcaption>Team graphic</figcaption></figure>
+        </div>
+      </section>
 
-  <div class="page-wrap">
-    <p class="page-eyebrow cascade cascade-1">Built In-House</p>
-    <h1 class="page-title cascade cascade-2">Tooling</h1>
-    <p class="page-sub cascade cascade-3">Software I&rsquo;ve written for my own shows and for clients. Graphics control, map bans, rosters and stats pulled straight out of the game&rsquo;s API. The shots further down come off the tools themselves rather than off a stream, so this is what actually goes on air.</p>
+      <section class="kit" id="valorant">
+        <div>
+          <h2>Valorant</h2>
+          <p class="credit">Built for MilkTeaBoards, also run on Division One</p>
+          <ul>
+            <li>Map veto carousel and pick/ban</li>
+            <li>Agent select and starting-lineup reveals</li>
+            <li>In-game camera and graphics overlay</li>
+            <li>Post-game scoreboard and head-to-head</li>
+            <li>Match stats database with auto-detect polling</li>
+          </ul>
+        </div>
+        <div class="kit-shots two" data-shots="mtb">
+          <figure><img src="tooling/mtb-veto.jpg" alt="Valorant map veto display" width="1280" height="720" loading="lazy"><figcaption>Map veto mid-ban</figcaption></figure>
+          <figure><img src="tooling/mtb-lineup.jpg" alt="Valorant agent select and lineup reveal" width="1280" height="720" loading="lazy"><figcaption>Agent select</figcaption></figure>
+          <figure><img src="tooling/mtb-postgame.jpg" alt="Valorant post-game scoreboard" width="1280" height="720" loading="lazy"><figcaption>Post-game scoreboard</figcaption></figure>
+          <figure><img src="tooling/mtb-control.jpg" alt="Valorant tool control panel" width="1280" height="720" loading="lazy"><figcaption>Control panel</figcaption></figure>
+        </div>
+      </section>
 
-    <!-- Gallery. Entries whose screenshot is missing remove themselves, so it is
-         always safe to leave an entry listed before its capture exists.
-         To add one: drop the image in /tooling/ and add an entry to TOOLING. -->
+      <section class="kit" id="rocket-league">
+        <div>
+          <h2>Rocket League</h2>
+          <p class="credit">Runs on Division One’s Rocket League broadcasts</p>
+          <ul>
+            <li>Live scoreboard and HUD off game telemetry</li>
+            <li>Post-game results and match history</li>
+            <li>vMix instant replay goal capture, marked automatically</li>
+            <li>Per-goal clip export with an MVP highlight folder</li>
+            <li>Camera picture-in-picture</li>
+          </ul>
+        </div>
+        <div class="kit-shots two" data-shots="rl">
+          <figure><img src="tooling/rl-hud.jpg" alt="Rocket League in-game scoreboard and HUD" width="1280" height="720" loading="lazy"><figcaption>In-game HUD off telemetry, shown on a plain backdrop</figcaption></figure>
+          <figure><img src="tooling/rl-h2h.jpg" alt="Rocket League head-to-head graphic" width="1280" height="720" loading="lazy"><figcaption>Head-to-head graphic</figcaption></figure>
+          <figure><img src="tooling/rl-control.jpg" alt="Rocket League tool control panel" width="1280" height="720" loading="lazy"><figcaption>Control panel</figcaption></figure>
+        </div>
+      </section>
 
-    <div class="section-head cascade cascade-3">
-      <p class="section-eyebrow">See It Running</p>
-      <h2 class="section-title">Riftbound Broadcast Suite</h2>
-    </div>
-    <div class="video-wrap cascade cascade-3">
-      <div class="video-frame">
-        <iframe src="https://www.youtube-nocookie.com/embed/8SGYhcoNFh4?rel=0"
-                title="Riftbound Broadcast Suite"
-                loading="lazy"
-                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                referrerpolicy="strict-origin-when-cross-origin"
-                allowfullscreen></iframe>
-      </div>
-      <p class="video-cap"><strong>The overlay driven live, not a mockup.</strong> Side columns, the shared victory track, and Showdown running through a contested battlefield end to end. <a href="https://youtu.be/8SGYhcoNFh4" target="_blank" rel="noopener">Watch on YouTube &rarr;</a></p>
-          <p class="video-cap" style="font-size:0.76rem; opacity:0.8; border-top:none; padding-top:0;">Riftbound card art shown here is the property of Riot Games, Inc. I do not own it and claim no rights to it; it appears only to demonstrate software I built. Not endorsed by Riot Games, and it does not reflect the views of Riot Games or anyone officially involved in producing or managing Riot Games properties.</p>
-    </div>
+      <section class="kit" id="riftbound">
+        <div>
+          <h2>Riftbound</h2>
+          <p class="credit">Riot’s trading card game</p>
+          <ul>
+            <li>Overlay with each player’s rune pool and a shared victory track</li>
+            <li>Showdown, where two battlefields can be fought over at once</li>
+            <li>Live deck lists rendered from imported decklists</li>
+            <li>Caster camera scene</li>
+            <li>Card library with a pre-show sweep for missing art</li>
+          </ul>
+          <p class="fine">Riftbound card art is the property of Riot Games. It appears here only to show software I built.</p>
+        </div>
+        <div class="kit-shots two" data-shots="riftbound">
+          <figure><img src="tooling/riftbound-overlay.jpg" alt="Riftbound broadcast overlay" width="1280" height="720" loading="lazy"><figcaption>Overlay mid-game: runes, victory track, a Combat Showdown. The empty centre is where the table camera goes.</figcaption></figure>
+          <figure><img src="tooling/riftbound-showdown.jpg" alt="Riftbound overlay during a Showdown" width="1280" height="720" loading="lazy"><figcaption>Showdown across two battlefields</figcaption></figure>
+          <figure><img src="tooling/riftbound-decklist.jpg" alt="Riftbound deck list scene" width="1280" height="720" loading="lazy"><figcaption>Deck list</figcaption></figure>
+          <figure><img src="tooling/riftbound-control.jpg" alt="Riftbound tool control panel" width="1280" height="720" loading="lazy"><figcaption>Control panel</figcaption></figure>
+        </div>
+      </section>
 
-    <div class="kit-grid cascade cascade-4">
-      <div class="kit">
-        <div class="kit-game">League of Legends</div>
-        <div class="kit-credit">Built for Division One</div>
-        <ul class="kit-list">
-          <li>Pick/ban draft display</li>
-          <li>Live match stats off the Riot API</li>
-          <li>Broadcast graphics and team branding</li>
-          <li>Google Sheets control &mdash; change a cell, it changes on air</li>
-          <li>Observer companion for a dedicated camera op</li>
-        </ul>
-      </div>
-      <div class="kit">
-        <div class="kit-game">Valorant</div>
-        <div class="kit-credit">Division One &amp; MilkTeaBoards</div>
-        <ul class="kit-list">
-          <li>Map veto carousel and pick/ban</li>
-          <li>Agent Select and starting-lineup reveals</li>
-          <li>In-game camera and graphics overlay</li>
-          <li>Post-game scoreboard and head-to-head</li>
-          <li>Match stats database with auto-detect polling</li>
-        </ul>
-      </div>
-      <div class="kit">
-        <div class="kit-game">Rocket League</div>
-        <div class="kit-credit">Built for Division One</div>
-        <ul class="kit-list">
-          <li>Live scoreboard and HUD off game telemetry</li>
-          <li>Post-game results and match history</li>
-          <li>vMix Instant Replay goal capture, marked automatically</li>
-          <li>Per-goal clip export with an MVP highlight folder</li>
-          <li>Camera picture-in-picture</li>
-        </ul>
-      </div>
-      <div class="kit">
-        <div class="kit-game">Riftbound</div>
-        <div class="kit-credit">Riot&rsquo;s trading card game</div>
-        <ul class="kit-list">
-          <li>Overlay with side columns and a shared victory track</li>
-          <li>Showdown, where two battlefields can be fought over at once</li>
-          <li>Live deck lists rendered from imported decklists</li>
-          <li>Caster camera scene</li>
-          <li>Card library with a pre-show sweep for missing art</li>
-        </ul>
+      <div class="callout">
+        <p>Want it on your show? Tell me the game and the dates.</p>
+        <a href="contact.html" class="btn primary">Get in touch</a>
       </div>
     </div>
-
-    <div class="kit-cta cascade cascade-4">
-      <p><strong>Two ways to get it.</strong> I bring it to a show I&rsquo;m already producing, or you license it and your own producer runs it. An overlay is an addition to the game &mdash; it shouldn&rsquo;t be overarching into it, and everything here is built to that. <a href="services.html" style="color:var(--ice); text-decoration:none;">Tooling rates are on the services page &rarr;</a></p>
-    </div>
-
-    <div class="section-head cascade cascade-4" id="shots-head" style="display:none;">
-      <p class="section-eyebrow">From The Tools</p>
-      <h2 class="section-title">Screenshots</h2>
-    </div>
-    <div id="tooling-loading" class="loading-state"><div class="spinner"></div>Loading tools&hellip;</div>
-    <div class="tooling-grid cascade cascade-4" id="tooling-grid"></div>
-
-    <!-- Shown only if every entry failed to load, so the page never sits blank
-         and silently pretends there was nothing to show. -->
-    <div id="tooling-empty" class="loading-state" style="display:none;">
-      The gallery didn&rsquo;t load. <a href="contact.html" style="color:var(--ice); text-decoration:none;">Get in touch</a> and I&rsquo;ll walk you through the tools directly.
-    </div>
-
-    <div id="tooling-notes" style="display:none;">
-      <p class="tooling-foot">Each of these started out as something one show needed, and most have been running every season since.</p>
-    </div>
-  </div>
+  </main>
 
   <footer>
-    <div style="max-width:1200px; margin:0 auto; padding:2.5rem 4rem; width:100%;">
-      <div style="display:grid; grid-template-columns:1fr 1fr; gap:2rem; align-items:start; border-bottom:1px solid var(--border); padding-bottom:2rem; margin-bottom:1.5rem;">
-
-        <!-- Logo + status -->
-        <div style="display:flex; flex-direction:column; gap:1rem;">
-          <span class="footer-logo">Icefireide</span>
-          </div>
-
-        <!-- Nav links -->
-        <div style="display:flex; flex-direction:column; gap:0.6rem;">
-          <p style="font-family:'Barlow Condensed',sans-serif; font-size:0.7rem; letter-spacing:0.25em; text-transform:uppercase; color:var(--muted); margin-bottom:0.4rem;">Pages</p>
-          <a href="index.html" style="font-family:'Barlow Condensed',sans-serif; font-size:0.85rem; letter-spacing:0.12em; text-transform:uppercase; color:var(--muted); text-decoration:none; transition:color 0.2s;" onmouseover="this.style.color='var(--ice)'" onmouseout="this.style.color='var(--muted)'">Home</a>
-          <a href="services.html" style="font-family:'Barlow Condensed',sans-serif; font-size:0.85rem; letter-spacing:0.12em; text-transform:uppercase; color:var(--muted); text-decoration:none; transition:color 0.2s;" onmouseover="this.style.color='var(--ice)'" onmouseout="this.style.color='var(--muted)'">Services</a>
-          <a href="clients.html" style="font-family:'Barlow Condensed',sans-serif; font-size:0.85rem; letter-spacing:0.12em; text-transform:uppercase; color:var(--muted); text-decoration:none; transition:color 0.2s;" onmouseover="this.style.color='var(--ice)'" onmouseout="this.style.color='var(--muted)'">Clients</a>
-          <a href="work.html" style="font-family:'Barlow Condensed',sans-serif; font-size:0.85rem; letter-spacing:0.12em; text-transform:uppercase; color:var(--muted); text-decoration:none; transition:color 0.2s;" onmouseover="this.style.color='var(--ice)'" onmouseout="this.style.color='var(--muted)'">Work</a>
-          <a href="tools.html" style="font-family:'Barlow Condensed',sans-serif; font-size:0.85rem; letter-spacing:0.12em; text-transform:uppercase; color:var(--muted); text-decoration:none; transition:color 0.2s;" onmouseover="this.style.color='var(--ice)'" onmouseout="this.style.color='var(--muted)'">Tooling</a>
-          <a href="contact.html" style="font-family:'Barlow Condensed',sans-serif; font-size:0.85rem; letter-spacing:0.12em; text-transform:uppercase; color:var(--muted); text-decoration:none; transition:color 0.2s;" onmouseover="this.style.color='var(--ice)'" onmouseout="this.style.color='var(--muted)'">Contact</a>
-        </div>
-
-      </div>
-      <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:0.5rem;">
-        <span style="font-size:0.78rem; color:var(--muted);">© 2026 Nicholas Hall. All rights reserved.</span>
-        <a href="https://twitter.com/Icefireideprod" target="_blank" rel="noopener" style="font-family:'Barlow Condensed',sans-serif; font-size:0.75rem; letter-spacing:0.15em; text-transform:uppercase; color:var(--muted); text-decoration:none;">@Icefireideprod</a>
+    <div class="wrap">
+      <div>Nicholas Hall · <a data-email="text" href="#"></a> · Discord Icefireide</div>
+      <div class="links">
+        <a href="work.html">Work</a><a href="tools.html">Tooling</a><a href="services.html">Services</a><a href="clients.html">Clients</a><a href="contact.html">Contact</a><a href="https://twitter.com/Icefireideprod" target="_blank" rel="noopener">@Icefireideprod</a>
       </div>
     </div>
   </footer>
-
-  <script>
-    // ── Broadcast Tooling gallery ──────────────────────────────────────────
-    // Drop screenshots into /tooling/ next to this file, then list them here.
-    // Cards whose image is missing are removed automatically, so entries can
-    // sit here before their captures exist.
-    // `link` is optional. Without it a card opens its own screenshot. With it
-    // the card opens that page instead — used for the Riftbound entry, which
-    // has a live interactive demo rather than a still. The image is still what
-    // the card shows.
-    // `tag` is optional and prints a small line under the caption.
-    const TOOLING = [
-      { file: 'tooling/mtb-map-ban.png',      client: 'MilkTeaBoards', title: 'Bo3 Map Ban',        caption: 'Live map ban and pick display driven by the operator panel, with per-team state and side selection reflected on air as it happens.' },
-      { file: 'tooling/mtb-map-entrance.png', client: 'MilkTeaBoards', title: 'Map Entrance',       caption: 'Animated entrance sequence for the selected map, triggered from the control panel and cut to automatically as the segment ends.' },
-      { file: 'tooling/mtb-operator.png',     client: 'MilkTeaBoards', title: 'Operator Panel',     caption: 'The producer-facing control surface. Built to be driven mid-show by someone already directing and switching, not by a dedicated graphics operator.' },
-      { file: 'tooling/d1-lineup.png',        client: 'Division One',  title: 'Team Lineups',       caption: 'Roster graphics populated from the league data rather than typed per show, so week-to-week changes cannot desync from what goes on screen.' },
-      { file: 'tooling/d1-scoreboard.png',    client: 'Division One',  title: 'Series Scoreboard',  caption: 'Series state and score carried across games, so the broadcast stays correct even when a series runs long or a game is remade.' },
-      { file: 'tooling/d1-control.png',       client: 'Division One',  title: 'Control Panel',      caption: 'Single-window control for every graphic in the show, laid out to match the run of show so the next action is always the next button.' },
-    ];
-
-    (function() {
-      var grid    = document.getElementById('tooling-grid');
-      var loading = document.getElementById('tooling-loading');
-      var empty   = document.getElementById('tooling-empty');
-      var notes   = document.getElementById('tooling-notes');
-      if (!grid) return;
-
-      var shown = 0, settled = 0;
-
-      // Every image either loads or errors, so this fires exactly once per
-      // entry. When the last one settles, decide between the gallery and the
-      // failure message — never leave the spinner spinning or the page blank.
-      function settle() {
-        settled++;
-        if (settled < TOOLING.length) return;
-        loading.style.display = 'none';
-        var head = document.getElementById('shots-head');
-        if (shown > 0) {
-          if (head) head.style.display = '';
-          notes.style.display = '';
-        } else {
-          // No captures published yet. That is not a failure, and saying "didn't
-          // load" would be a lie -- hide the section so the video and the
-          // toolkit cards carry the page on their own.
-          grid.style.display = 'none';
-          empty.style.display = 'none';
-        }
-      }
-
-      TOOLING.forEach(function(t) {
-        var a = document.createElement('a');
-        a.className = 'tool-card';
-        a.href = t.link || t.file;
-        a.target = '_blank';
-        a.rel = 'noopener';
-        var img = document.createElement('img');
-        img.className = 'tool-shot';
-        // NOT loading="lazy" — these images decide whether their own card
-        // survives, so they have to be fetched rather than deferred. (In the
-        // old work.html gallery this was lazy inside a display:none section,
-        // which deadlocked: nothing loaded because the section was hidden, and
-        // the section stayed hidden because nothing loaded.)
-        img.loading = 'eager';
-        img.alt = t.client + ' — ' + t.title;
-        img.onerror = function() { a.remove(); settle(); };
-        img.onload  = function() { shown++; settle(); };
-        img.src = t.file;
-        var body = document.createElement('div');
-        body.className = 'tool-body';
-        var c = document.createElement('span');
-        c.className = 'tool-client'; c.textContent = t.client;
-        var h = document.createElement('div');
-        h.className = 'tool-title'; h.textContent = t.title;
-        var p = document.createElement('p');
-        p.className = 'tool-caption'; p.textContent = t.caption;
-        body.appendChild(c); body.appendChild(h); body.appendChild(p);
-        if (t.tag) {
-          var tag = document.createElement('span');
-          tag.className = 'tool-tag'; tag.textContent = t.tag;
-          body.appendChild(tag);
-        }
-        a.appendChild(img); a.appendChild(body);
-        grid.appendChild(a);
-      });
-    })();
-  </script>
-
-  <script>
-    (function() {
-      var dropdowns = document.querySelectorAll('.nav-dropdown');
-      dropdowns.forEach(function(dd) {
-        var toggle = dd.querySelector('.nav-dropdown-toggle');
-        var menu = dd.querySelector('.nav-dropdown-menu');
-        var closeTimer;
-        function openMenu() { clearTimeout(closeTimer); dd.classList.add('open'); menu.classList.add('open'); }
-        function scheduleClose() { closeTimer = setTimeout(function() { dd.classList.remove('open'); menu.classList.remove('open'); }, 350); }
-        dd.addEventListener('mouseenter', openMenu);
-        dd.addEventListener('mouseleave', scheduleClose);
-        menu.addEventListener('mouseenter', openMenu);
-        menu.addEventListener('mouseleave', scheduleClose);
-        if (toggle) toggle.addEventListener('click', function(e) {
-          e.stopPropagation();
-          menu.classList.contains('open') ? (dd.classList.remove('open'), menu.classList.remove('open')) : openMenu();
-        });
-        document.addEventListener('click', function() { dd.classList.remove('open'); menu.classList.remove('open'); });
-      });
-    })();
-  </script>
-
-  <script>
-    // Availability status from Google Sheets checkbox (J2 on totals tab)
-    (function() {
-      var CSV = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vR300p3G6_5hn7Ydez7mY6XVhfoWeLUBFpM0C9oJdd__WP8xhVVwZp4bxFZwvxJvODbJ3_o_p-I8EUe/pub?gid=0&single=true&output=csv';
-      fetch(CSV).then(function(r) { return r.text(); }).then(function(text) {
-        var rows = text.trim().split('\n');
-        // J2 = row index 1 (0-based), column J = index 9
-        if (rows.length >= 2) {
-          var val = rows[1].split(',')[9].trim().toUpperCase().replace(/"/g,'');
-          var available = val === 'TRUE';
-          var dot = document.getElementById('avail-dot-nav');
-          var label = document.getElementById('avail-text-nav');
-          if (dot && label) {
-            dot.style.background = available ? '#2ecc71' : '#e74c3c';
-            dot.style.boxShadow = available ? '0 0 8px #2ecc71' : '0 0 8px #e74c3c';
-            label.style.color = available ? '#2ecc71' : '#e74c3c';
-            label.textContent = available ? 'Available for Work' : 'Currently Unavailable';
-          }
-        }
-      }).catch(function() {
-        var label = document.getElementById('avail-text-nav');
-        if (label) label.textContent = 'Get In Touch';
-      });
-    })();
-  </script>
+  <script src="site.js"></script>
 </body>
 </html>
