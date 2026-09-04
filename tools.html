@@ -12,7 +12,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <meta name="description" content="Broadcast software built in-house by Icefireide — graphics control, draft and map-ban displays, roster and stats overlays wired into game APIs. Captured directly from the tools."/>
-  <title>Broadcast Tooling | Icefireide</title>
+  <title>Tooling | Icefireide</title>
   <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow:ital,wght@0,300;0,400;0,600;1,300&family=Barlow+Condensed:wght@400;700&display=swap" rel="stylesheet"/>
   <style>
     :root { --bg: #080a0f; --bg2: #0d1018; --surface: #111520; --border: #1e2535; --ice: #5de8ff; --fire: #ff5c1a; --ice-dim: rgba(93,232,255,0.10); --text: #e8edf5; --muted: #6b7a96; --white: #ffffff; }
@@ -51,6 +51,27 @@
     .tool-title { font-family: 'Bebas Neue', sans-serif; font-size: 1.3rem; letter-spacing: 0.07em; color: var(--white); margin-bottom: 0.5rem; }
     .tool-caption { font-size: 0.87rem; color: var(--muted); line-height: 1.75; }
     .tool-tag { display: inline-block; margin-top: 0.9rem; font-family: 'Barlow Condensed', sans-serif; font-size: 0.68rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--fire); }
+    .kit-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1.5px; border: 1.5px solid var(--border); margin-bottom: 3.5rem; }
+    .kit { background: var(--surface); padding: 2.4rem 2.1rem; position: relative; overflow: hidden; transition: background 0.3s; }
+    .kit::before { content: ''; position: absolute; top: 0; left: 0; width: 3px; height: 0; background: linear-gradient(to bottom, var(--ice), var(--fire)); transition: height 0.4s; }
+    .kit:hover::before { height: 100%; }
+    .kit:hover { background: #131825; }
+    .kit-game { font-family: 'Bebas Neue', sans-serif; font-size: 1.6rem; letter-spacing: 0.08em; color: var(--white); }
+    .kit-credit { font-family: 'Barlow Condensed', sans-serif; font-size: 0.7rem; letter-spacing: 0.24em; text-transform: uppercase; color: var(--ice); margin-top: 0.4rem; }
+    .kit-list { list-style: none; margin-top: 1.3rem; padding-top: 1.3rem; border-top: 1px solid var(--border); }
+    .kit-list li { font-size: 0.87rem; color: var(--muted); line-height: 1.7; padding-left: 1.1rem; position: relative; margin-bottom: 0.5rem; }
+    .kit-list li::before { content: ''; position: absolute; left: 0; top: 0.66em; width: 4px; height: 4px; background: var(--ice); }
+    .video-wrap { border: 1.5px solid var(--border); background: var(--surface); margin-bottom: 1.4rem; }
+    .video-frame { position: relative; width: 100%; padding-top: 56.25%; background: var(--bg2); }
+    .video-frame iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; display: block; }
+    .video-cap { padding: 1.3rem 1.6rem 1.5rem; font-size: 0.88rem; color: var(--muted); line-height: 1.8; border-top: 1px solid var(--border); }
+    .video-cap strong { color: var(--text); font-weight: 600; }
+    .video-cap a { color: var(--ice); text-decoration: none; }
+    .kit-cta { margin: 0 0 4.5rem; padding: 1.9rem 2.1rem; background: var(--bg2); border: 1px solid var(--border); font-size: 0.89rem; color: var(--muted); line-height: 1.9; }
+    .kit-cta strong { color: var(--text); font-weight: 600; }
+    .section-head { margin: 0 0 1.6rem; }
+    .section-eyebrow { font-family: 'Barlow Condensed', sans-serif; font-size: 0.75rem; letter-spacing: 0.35em; text-transform: uppercase; color: var(--ice); margin-bottom: 0.6rem; }
+    .section-title { font-family: 'Bebas Neue', sans-serif; font-size: clamp(1.8rem, 3.5vw, 2.6rem); letter-spacing: 0.06em; color: var(--white); line-height: 1; }
     .tooling-foot { font-size: 0.82rem; color: var(--muted); line-height: 1.75; margin-top: 2.4rem; max-width: 720px; }
     footer { display: flex; justify-content: space-between; align-items: center; max-width: 1200px; margin: 0 auto; border-top: 1px solid var(--border); }
     .footer-logo { font-family: 'Bebas Neue', sans-serif; font-size: 1.2rem; letter-spacing: 0.1em; background: linear-gradient(90deg, var(--ice), var(--fire)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
@@ -89,20 +110,93 @@
           <a href="work-2024.html">2024</a>
         </div>
       </li>
-      <li><a href="tools.html" class="active">Tools</a></li>
+      <li><a href="tools.html" class="active">Tooling</a></li>
       <li><a href="contact.html">Contact</a></li>
     </ul>
   </nav>
 
   <div class="page-wrap">
     <p class="page-eyebrow cascade cascade-1">Built In-House</p>
-    <h1 class="page-title cascade cascade-2">Broadcast Tooling</h1>
-    <p class="page-sub cascade cascade-3">Software I&rsquo;ve written for my own shows and for clients. Graphics control, map bans, rosters and stats pulled straight out of the game&rsquo;s API. The shots here come off the tools themselves rather than off a stream, so this is what actually goes on air.</p>
+    <h1 class="page-title cascade cascade-2">Tooling</h1>
+    <p class="page-sub cascade cascade-3">Software I&rsquo;ve written for my own shows and for clients. Graphics control, map bans, rosters and stats pulled straight out of the game&rsquo;s API. The shots further down come off the tools themselves rather than off a stream, so this is what actually goes on air.</p>
 
     <!-- Gallery. Entries whose screenshot is missing remove themselves, so it is
          always safe to leave an entry listed before its capture exists.
          To add one: drop the image in /tooling/ and add an entry to TOOLING. -->
-    <div id="tooling-loading" class="loading-state cascade cascade-4"><div class="spinner"></div>Loading tools&hellip;</div>
+
+    <div class="section-head cascade cascade-3">
+      <p class="section-eyebrow">See It Running</p>
+      <h2 class="section-title">Riftbound Broadcast Suite</h2>
+    </div>
+    <div class="video-wrap cascade cascade-3">
+      <div class="video-frame">
+        <iframe src="https://www.youtube-nocookie.com/embed/8SGYhcoNFh4?rel=0"
+                title="Riftbound Broadcast Suite"
+                loading="lazy"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                referrerpolicy="strict-origin-when-cross-origin"
+                allowfullscreen></iframe>
+      </div>
+      <p class="video-cap"><strong>The overlay driven live, not a mockup.</strong> Side columns, the shared victory track, and Showdown running through a contested battlefield end to end. <a href="https://youtu.be/8SGYhcoNFh4" target="_blank" rel="noopener">Watch on YouTube &rarr;</a></p>
+          <p class="video-cap" style="font-size:0.76rem; opacity:0.8; border-top:none; padding-top:0;">Riftbound card art shown here is the property of Riot Games, Inc. I do not own it and claim no rights to it; it appears only to demonstrate software I built. Not endorsed by Riot Games, and it does not reflect the views of Riot Games or anyone officially involved in producing or managing Riot Games properties.</p>
+    </div>
+
+    <div class="kit-grid cascade cascade-4">
+      <div class="kit">
+        <div class="kit-game">League of Legends</div>
+        <div class="kit-credit">Built for Division One</div>
+        <ul class="kit-list">
+          <li>Pick/ban draft display</li>
+          <li>Live match stats off the Riot API</li>
+          <li>Broadcast graphics and team branding</li>
+          <li>Google Sheets control &mdash; change a cell, it changes on air</li>
+          <li>Observer companion for a dedicated camera op</li>
+        </ul>
+      </div>
+      <div class="kit">
+        <div class="kit-game">Valorant</div>
+        <div class="kit-credit">Division One &amp; MilkTeaBoards</div>
+        <ul class="kit-list">
+          <li>Map veto carousel and pick/ban</li>
+          <li>Agent Select and starting-lineup reveals</li>
+          <li>In-game camera and graphics overlay</li>
+          <li>Post-game scoreboard and head-to-head</li>
+          <li>Match stats database with auto-detect polling</li>
+        </ul>
+      </div>
+      <div class="kit">
+        <div class="kit-game">Rocket League</div>
+        <div class="kit-credit">Built for Division One</div>
+        <ul class="kit-list">
+          <li>Live scoreboard and HUD off game telemetry</li>
+          <li>Post-game results and match history</li>
+          <li>vMix Instant Replay goal capture, marked automatically</li>
+          <li>Per-goal clip export with an MVP highlight folder</li>
+          <li>Camera picture-in-picture</li>
+        </ul>
+      </div>
+      <div class="kit">
+        <div class="kit-game">Riftbound</div>
+        <div class="kit-credit">Riot&rsquo;s trading card game</div>
+        <ul class="kit-list">
+          <li>Overlay with side columns and a shared victory track</li>
+          <li>Showdown, where two battlefields can be fought over at once</li>
+          <li>Live deck lists rendered from imported decklists</li>
+          <li>Caster camera scene</li>
+          <li>Card library with a pre-show sweep for missing art</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="kit-cta cascade cascade-4">
+      <p><strong>Two ways to get it.</strong> I bring it to a show I&rsquo;m already producing, or you license it and your own producer runs it. An overlay is an addition to the game &mdash; it shouldn&rsquo;t be overarching into it, and everything here is built to that. <a href="services.html" style="color:var(--ice); text-decoration:none;">Tooling rates are on the services page &rarr;</a></p>
+    </div>
+
+    <div class="section-head cascade cascade-4" id="shots-head" style="display:none;">
+      <p class="section-eyebrow">From The Tools</p>
+      <h2 class="section-title">Screenshots</h2>
+    </div>
+    <div id="tooling-loading" class="loading-state"><div class="spinner"></div>Loading tools&hellip;</div>
     <div class="tooling-grid cascade cascade-4" id="tooling-grid"></div>
 
     <!-- Shown only if every entry failed to load, so the page never sits blank
@@ -113,7 +207,6 @@
 
     <div id="tooling-notes" style="display:none;">
       <p class="tooling-foot">Each of these started out as something one show needed, and most have been running every season since.</p>
-      <p class="tooling-foot" style="font-size:0.76rem; opacity:0.75;">Card art shown in the Riftbound overlay is the property of Riot Games, Inc. I do not own it and claim no rights to it; it appears only to demonstrate software I built. Not endorsed by Riot Games. <a href="tooling/riftbound/" style="color:var(--ice); text-decoration:none;">Full notice</a>.</p>
     </div>
   </div>
 
@@ -133,7 +226,7 @@
           <a href="services.html" style="font-family:'Barlow Condensed',sans-serif; font-size:0.85rem; letter-spacing:0.12em; text-transform:uppercase; color:var(--muted); text-decoration:none; transition:color 0.2s;" onmouseover="this.style.color='var(--ice)'" onmouseout="this.style.color='var(--muted)'">Services</a>
           <a href="clients.html" style="font-family:'Barlow Condensed',sans-serif; font-size:0.85rem; letter-spacing:0.12em; text-transform:uppercase; color:var(--muted); text-decoration:none; transition:color 0.2s;" onmouseover="this.style.color='var(--ice)'" onmouseout="this.style.color='var(--muted)'">Clients</a>
           <a href="work.html" style="font-family:'Barlow Condensed',sans-serif; font-size:0.85rem; letter-spacing:0.12em; text-transform:uppercase; color:var(--muted); text-decoration:none; transition:color 0.2s;" onmouseover="this.style.color='var(--ice)'" onmouseout="this.style.color='var(--muted)'">Work</a>
-          <a href="tools.html" style="font-family:'Barlow Condensed',sans-serif; font-size:0.85rem; letter-spacing:0.12em; text-transform:uppercase; color:var(--muted); text-decoration:none; transition:color 0.2s;" onmouseover="this.style.color='var(--ice)'" onmouseout="this.style.color='var(--muted)'">Tools</a>
+          <a href="tools.html" style="font-family:'Barlow Condensed',sans-serif; font-size:0.85rem; letter-spacing:0.12em; text-transform:uppercase; color:var(--muted); text-decoration:none; transition:color 0.2s;" onmouseover="this.style.color='var(--ice)'" onmouseout="this.style.color='var(--muted)'">Tooling</a>
           <a href="contact.html" style="font-family:'Barlow Condensed',sans-serif; font-size:0.85rem; letter-spacing:0.12em; text-transform:uppercase; color:var(--muted); text-decoration:none; transition:color 0.2s;" onmouseover="this.style.color='var(--ice)'" onmouseout="this.style.color='var(--muted)'">Contact</a>
         </div>
 
@@ -156,7 +249,6 @@
     // the card shows.
     // `tag` is optional and prints a small line under the caption.
     const TOOLING = [
-      { file: 'tooling/riftbound-overlay.webp', link: 'tooling/riftbound/', client: 'Riftbound', title: 'Broadcast Overlay', tag: 'Interactive demo', caption: 'Persistent side columns with a shared victory track, and structural gaps left open for the player cameras. Interactive demo — the real overlay code, driven live in your browser.' },
       { file: 'tooling/mtb-map-ban.png',      client: 'MilkTeaBoards', title: 'Bo3 Map Ban',        caption: 'Live map ban and pick display driven by the operator panel, with per-team state and side selection reflected on air as it happens.' },
       { file: 'tooling/mtb-map-entrance.png', client: 'MilkTeaBoards', title: 'Map Entrance',       caption: 'Animated entrance sequence for the selected map, triggered from the control panel and cut to automatically as the segment ends.' },
       { file: 'tooling/mtb-operator.png',     client: 'MilkTeaBoards', title: 'Operator Panel',     caption: 'The producer-facing control surface. Built to be driven mid-show by someone already directing and switching, not by a dedicated graphics operator.' },
@@ -181,8 +273,17 @@
         settled++;
         if (settled < TOOLING.length) return;
         loading.style.display = 'none';
-        if (shown > 0) { notes.style.display = ''; }
-        else { empty.style.display = ''; }
+        var head = document.getElementById('shots-head');
+        if (shown > 0) {
+          if (head) head.style.display = '';
+          notes.style.display = '';
+        } else {
+          // No captures published yet. That is not a failure, and saying "didn't
+          // load" would be a lie -- hide the section so the video and the
+          // toolkit cards carry the page on their own.
+          grid.style.display = 'none';
+          empty.style.display = 'none';
+        }
       }
 
       TOOLING.forEach(function(t) {
