@@ -103,6 +103,8 @@ figure { margin: 0; }
 .pricing td { padding: 6px 8px 6px 0; }
 .pricing td.num { white-space: nowrap; font-weight: 600; }
 .pricing p { margin: 10px 0 0; }
+.pricing small { display: block; font-size: .88rem; margin-top: 2px; }
+.sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
 
 /* About */
 .about { display: grid; grid-template-columns: 300px 1fr; gap: 40px; align-items: start; }
