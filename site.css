@@ -1,8 +1,8 @@
 /* Icefireide — site styles. One family (Barlow) in two widths, one accent. */
 :root {
-  --bg: #E9EAE6;
-  --panel: #F4F4F1;
-  --line: #CBCEC8;
+  --bg: #DADCD7;
+  --panel: #E7E8E4;
+  --line: #BDC1BB;
   --ink: #1B2026;
   --muted: #5A6470;
   --accent: #1D7B99;
@@ -125,7 +125,7 @@ tr.total td { font-weight: 600; border-top: 1px solid var(--ink); }
 /* Filter buttons (work log) */
 .filters { display: flex; gap: 8px; flex-wrap: wrap; margin: 14px 0 18px; }
 .filters button { font: inherit; padding: 6px 14px; border: 1px solid var(--line); background: var(--panel); color: var(--muted); cursor: pointer; }
-.filters button[aria-pressed="true"] { border-color: var(--ink); color: var(--ink); background: #fff; }
+.filters button[aria-pressed="true"] { border-color: var(--ink); color: var(--ink); background: var(--panel); }
 .state { color: var(--muted); padding: 14px 0; }
 
 /* Services */
