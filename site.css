@@ -6,7 +6,6 @@
   --ink: #1B2026;
   --muted: #5A6470;
   --accent: #1D7B99;
-  --fire: #D4521C;
   --dark: #10161E;
   --dark-line: #27313D;
   --ok: #2E8B4A;
@@ -38,8 +37,6 @@ p.lead { font-size: 1.12rem; color: var(--muted); max-width: 54ch; }
 .nav .wrap { display: flex; align-items: center; justify-content: space-between; gap: 20px; flex-wrap: wrap; padding-top: 16px; padding-bottom: 16px; }
 .wordmark { font-family: 'Barlow Semi Condensed', sans-serif; font-weight: 700; font-size: 1.35rem; letter-spacing: .02em; color: var(--ink); }
 .wordmark:hover { text-decoration: none; }
-.wordmark i { font-style: normal; color: var(--accent); }
-.wordmark b { font-weight: 700; color: var(--fire); }
 .nav-links { display: flex; gap: 22px; list-style: none; margin: 0; padding: 0; flex-wrap: wrap; }
 .nav-links a { color: var(--muted); font-weight: 500; padding: 4px 0; border-bottom: 2px solid transparent; }
 .nav-links a:hover { color: var(--ink); text-decoration: none; }
